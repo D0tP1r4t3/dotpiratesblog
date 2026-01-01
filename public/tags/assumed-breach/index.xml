@@ -2,12 +2,19 @@
 &lt;h3 id="a-netexec-user-enumration">a. netexec User Enumration&lt;/h3>
 &lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">sudo netexec smb &amp;lt;dc-ip&amp;gt; -u &lt;span class="s1">&amp;#39;dotpirate&amp;#39;&lt;/span> -p &lt;span class="s1">&amp;#39;l3tsh4ck!&amp;#39;&lt;/span> --users
 &lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;blockquote>
-&lt;p>Using netexec to enumerate domain users&lt;/p>&lt;/blockquote>
+&lt;p>Using netexec to enumerate domain users&lt;/p>
+&lt;/blockquote>
 &lt;h3 id="b-netexec-group-enumeration">b. netexec Group Enumeration&lt;/h3>
 &lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">sudo netexec smb &amp;lt;dc-ip&amp;gt; -u &lt;span class="s1">&amp;#39;dotpirate&amp;#39;&lt;/span> -p &lt;span class="s1">&amp;#39;l3tsh4ck!&amp;#39;&lt;/span> --groups
 &lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;blockquote>
-&lt;p>Using netexec to enumerate domain groups&lt;/p>&lt;/blockquote>
+&lt;p>Using netexec to enumerate domain groups&lt;/p>
+&lt;/blockquote>
 &lt;h3 id="c-netexec-logged-on-user-enumeration">c. netexec Logged on User Enumeration&lt;/h3>
 &lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">sudo netexec smb &amp;lt;dc-ip&amp;gt; -u &lt;span class="s1">&amp;#39;dotpirate&amp;#39;&lt;/span> -p &lt;span class="s1">&amp;#39;l3tsh4ck!&amp;#39;&lt;/span> --loggedon-users
 &lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;blockquote>
-&lt;p>Check what user are logged on the server at that time&lt;/p></description></item></channel></rss>
+&lt;p>Check what user are logged on the server at that time&lt;/p>
+&lt;/blockquote>
+&lt;h3 id="d-netexec-smb-share-enumeration">d. netexec SMB Share Enumeration&lt;/h3>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">sudo netexec 10.10.10.0/24 smb -u &lt;span class="s1">&amp;#39;dotpirate&amp;#39;&lt;/span> -p &lt;span class="s1">&amp;#39;l3tsh4ck!&amp;#39;&lt;/span> --shares
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;blockquote>
+&lt;p>Check if our user has access to any shares&lt;/p></description></item></channel></rss>

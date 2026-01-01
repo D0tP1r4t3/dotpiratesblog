@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Cheet Sheet on Hacking Blog</title><link>https://hack.com.cy/categories/cheet-sheet/</link><description>Recent content in Cheet Sheet on Hacking Blog</description><generator>Hugo</generator><language>en</language><lastBuildDate>Thu, 01 Jan 2026 02:13:14 +0200</lastBuildDate><atom:link href="https://hack.com.cy/categories/cheet-sheet/index.xml" rel="self" type="application/rss+xml"/><item><title>Basic EC2 Enumeration Cheet Sheet</title><link>https://hack.com.cy/notes/cloud/aws/ec2/ec2/</link><pubDate>Thu, 21 Aug 2025 00:00:00 +0000</pubDate><guid>https://hack.com.cy/notes/cloud/aws/ec2/ec2/</guid><description>&lt;h3 id="1-list-ec2-instances">&lt;strong>1. List EC2 Instances&lt;/strong>&lt;/h3>
 &lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">aws ec2 describe-instances --region &lt;span class="o">[&lt;/span>region&lt;span class="o">]&lt;/span>
 &lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;blockquote>
-&lt;p>Shows instance IDs, public IPs, AMIs, key names, IAM roles, etc.&lt;/p>&lt;/blockquote>
+&lt;p>Shows instance IDs, public IPs, AMIs, key names, IAM roles, etc.&lt;/p>
+&lt;/blockquote>
 &lt;p>Use JMESPath filters for cleaner output:&lt;/p>
 &lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">aws ec2 describe-instances --query &lt;span class="s2">&amp;#34;Reservations[_].Instances[_].[InstanceId,PublicIpAddress,State.Name,KeyName,IamInstanceProfile.Arn]&amp;#34;&lt;/span>
 &lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;hr>
@@ -19,15 +20,18 @@
 &lt;p>Look for open ports, especially &lt;code>0.0.0.0/0&lt;/code> on SSH (22), RDP (3389), or custom ports.&lt;/p></description></item><item><title>Basic Elastic Beanstalk Enumeration Cheet Sheet</title><link>https://hack.com.cy/notes/cloud/aws/elastic-beanstalk/beanstalk/</link><pubDate>Thu, 21 Aug 2025 00:00:00 +0000</pubDate><guid>https://hack.com.cy/notes/cloud/aws/elastic-beanstalk/beanstalk/</guid><description>&lt;h3 id="list-beanstalk-applications">List Beanstalk applications&lt;/h3>
 &lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">aws elasticbeanstalk describe-applications --profile &amp;lt;profile&amp;gt;
 &lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;blockquote>
-&lt;p>Entry point for hunting &lt;strong>app configs and env vars&lt;/strong>.&lt;/p>&lt;/blockquote>
+&lt;p>Entry point for hunting &lt;strong>app configs and env vars&lt;/strong>.&lt;/p>
+&lt;/blockquote>
 &lt;h3 id="list-environments-for-an-app">List environments for an app&lt;/h3>
 &lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">aws elasticbeanstalk describe-environments --application-name &amp;lt;AppName&amp;gt; --profile &amp;lt;profile&amp;gt;
 &lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;blockquote>
-&lt;p>Each environment is a deployed version of the app.&lt;/p>&lt;/blockquote>
+&lt;p>Each environment is a deployed version of the app.&lt;/p>
+&lt;/blockquote>
 &lt;h3 id="get-environment-config">Get environment config&lt;/h3>
 &lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">aws elasticbeanstalk describe-configuration-settings --application-name &amp;lt;AppName&amp;gt; --environment-name &amp;lt;EnvName&amp;gt; --profile &amp;lt;profile&amp;gt;
 &lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;blockquote>
-&lt;p>&lt;strong>🔥 High-value target&lt;/strong>: often leaks &lt;strong>AWS keys, DB creds, API tokens&lt;/strong> in environment variables.&lt;/p>&lt;/blockquote>
+&lt;p>&lt;strong>🔥 High-value target&lt;/strong>: often leaks &lt;strong>AWS keys, DB creds, API tokens&lt;/strong> in environment variables.&lt;/p>
+&lt;/blockquote>
 &lt;h2 id="using-pacu">&lt;strong>Using Pacu&lt;/strong>&lt;/h2>
 &lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">Pacu &lt;span class="o">(&lt;/span>low_priv_sess:imported-low_priv_sess&lt;span class="o">)&lt;/span> &amp;gt; run elasticbeanstalk__enum --regions us-east-1
 &lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div></description></item><item><title>Basic IAM Enumeration Cheet Sheet</title><link>https://hack.com.cy/notes/cloud/aws/iam/iam/</link><pubDate>Thu, 21 Aug 2025 00:00:00 +0000</pubDate><guid>https://hack.com.cy/notes/cloud/aws/iam/iam/</guid><description>&lt;h3 id="1-list-iam-users">&lt;strong>1. List IAM Users&lt;/strong>&lt;/h3>
@@ -72,7 +76,8 @@
 &lt;p>Use this to build a full IAM permissions map. Add &lt;code>--filter&lt;/code> to target roles/users/groups specifically.&lt;/p></description></item><item><title>Basic Lambda Enumeration Cheet Sheet</title><link>https://hack.com.cy/notes/cloud/aws/lambda/lambda/</link><pubDate>Thu, 21 Aug 2025 00:00:00 +0000</pubDate><guid>https://hack.com.cy/notes/cloud/aws/lambda/lambda/</guid><description>&lt;h3 id="-list-all-lambda-functions">&lt;strong>. List All Lambda Functions&lt;/strong>&lt;/h3>
 &lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">aws lambda list-functions --region &lt;span class="o">[&lt;/span>region&lt;span class="o">]&lt;/span>
 &lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;blockquote>
-&lt;p>Shows names, runtimes, ARNs, and last modified dates.&lt;/p>&lt;/blockquote>
+&lt;p>Shows names, runtimes, ARNs, and last modified dates.&lt;/p>
+&lt;/blockquote>
 &lt;hr>
 &lt;h3 id="2-get-detailed-info-on-a-function">&lt;strong>2. Get Detailed Info on a Function&lt;/strong>&lt;/h3>
 &lt;h4 id="a-get-full-function-config-iam-role-runtime-env-vars-etc">a. Get full function config (IAM role, runtime, env vars, etc.)&lt;/h4>
@@ -81,7 +86,8 @@
 &lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl"> 
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> aws lambda get-function --function-name &lt;span class="o">[&lt;/span>&lt;span class="k">function&lt;/span>-name&lt;span class="o">]&lt;/span>
 &lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;blockquote>
-&lt;p>Returns a pre-signed S3 URL to download the function code.&lt;/p>&lt;/blockquote>
+&lt;p>Returns a pre-signed S3 URL to download the function code.&lt;/p>
+&lt;/blockquote>
 &lt;hr>
 &lt;h3 id="3-check-invocation-access">&lt;strong>3. Check Invocation Access&lt;/strong>&lt;/h3>
 &lt;h4 id="a-whowhat-can-invoke-the-function-resource-based-policy">a. Who/what can invoke the function (resource-based policy)?&lt;/h4>

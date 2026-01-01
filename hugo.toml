@@ -83,6 +83,7 @@ enableGitInfo = true
       [languages.en.params.logo]
         logoText = "Hacking Vault"
         logoHomeLink = "/why/"
+        logoImage = "/logo.png"  # Path to your logo image
 
       [languages.en.menu]
         [[languages.en.menu.main]]

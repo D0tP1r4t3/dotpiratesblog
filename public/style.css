@@ -695,3 +695,28 @@ textarea:focus-visible {
     --accent: #00ff00;
   }
 }
+/* ============================================
+   LOGO IMAGE STYLING
+   ============================================ */
+
+.logo-image {
+  height: 40px;
+  width: auto;
+  display: inline-block;
+  vertical-align: middle;
+  filter: drop-shadow(0 0 5px var(--glow-accent));
+  transition: all 0.3s ease;
+}
+
+.logo-image:hover {
+  filter: drop-shadow(0 0 10px var(--accent)) 
+          drop-shadow(0 0 20px var(--accent-secondary));
+  transform: scale(1.05);
+}
+
+/* Mobile logo sizing */
+@media (max-width: 684px) {
+  .logo-image {
+    height: 30px;
+  }
+}

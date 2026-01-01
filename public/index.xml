@@ -2,15 +2,22 @@
 &lt;h3 id="a-netexec-user-enumration">a. netexec User Enumration&lt;/h3>
 &lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">sudo netexec smb &amp;lt;dc-ip&amp;gt; -u &lt;span class="s1">&amp;#39;dotpirate&amp;#39;&lt;/span> -p &lt;span class="s1">&amp;#39;l3tsh4ck!&amp;#39;&lt;/span> --users
 &lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;blockquote>
-&lt;p>Using netexec to enumerate domain users&lt;/p>&lt;/blockquote>
+&lt;p>Using netexec to enumerate domain users&lt;/p>
+&lt;/blockquote>
 &lt;h3 id="b-netexec-group-enumeration">b. netexec Group Enumeration&lt;/h3>
 &lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">sudo netexec smb &amp;lt;dc-ip&amp;gt; -u &lt;span class="s1">&amp;#39;dotpirate&amp;#39;&lt;/span> -p &lt;span class="s1">&amp;#39;l3tsh4ck!&amp;#39;&lt;/span> --groups
 &lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;blockquote>
-&lt;p>Using netexec to enumerate domain groups&lt;/p>&lt;/blockquote>
+&lt;p>Using netexec to enumerate domain groups&lt;/p>
+&lt;/blockquote>
 &lt;h3 id="c-netexec-logged-on-user-enumeration">c. netexec Logged on User Enumeration&lt;/h3>
 &lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">sudo netexec smb &amp;lt;dc-ip&amp;gt; -u &lt;span class="s1">&amp;#39;dotpirate&amp;#39;&lt;/span> -p &lt;span class="s1">&amp;#39;l3tsh4ck!&amp;#39;&lt;/span> --loggedon-users
 &lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;blockquote>
-&lt;p>Check what user are logged on the server at that time&lt;/p></description></item><item><title>Active Directory</title><link>https://hack.com.cy/notes/active-directory/enumeration/no-credentials/</link><pubDate>Sat, 23 Aug 2025 00:00:00 +0000</pubDate><guid>https://hack.com.cy/notes/active-directory/enumeration/no-credentials/</guid><description>&lt;h1 id="-1-initial-enumration-and-identification-">** 1. Initial Enumration and Identification **&lt;/h1>
+&lt;p>Check what user are logged on the server at that time&lt;/p>
+&lt;/blockquote>
+&lt;h3 id="d-netexec-smb-share-enumeration">d. netexec SMB Share Enumeration&lt;/h3>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">sudo netexec 10.10.10.0/24 smb -u &lt;span class="s1">&amp;#39;dotpirate&amp;#39;&lt;/span> -p &lt;span class="s1">&amp;#39;l3tsh4ck!&amp;#39;&lt;/span> --shares
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;blockquote>
+&lt;p>Check if our user has access to any shares&lt;/p></description></item><item><title>Active Directory</title><link>https://hack.com.cy/notes/active-directory/enumeration/no-credentials/</link><pubDate>Sat, 23 Aug 2025 00:00:00 +0000</pubDate><guid>https://hack.com.cy/notes/active-directory/enumeration/no-credentials/</guid><description>&lt;h1 id="-1-initial-enumration-and-identification-">** 1. Initial Enumration and Identification **&lt;/h1>
 &lt;h3 id="a-wireshark">a. Wireshark&lt;/h3>
 &lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">sudo -E wireshark
 &lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;blockquote>
@@ -18,12 +25,14 @@
 &lt;p>Filter for &lt;code>ARP&lt;/code> protocol&lt;/p>
 &lt;p>Look for NETBIOS names&lt;/p>
 &lt;p>Look for DNS and domain names&lt;/p>
-&lt;p>Look for unsecure protocols such as TELNET and FTP&lt;/p>&lt;/blockquote>
+&lt;p>Look for unsecure protocols such as TELNET and FTP&lt;/p>
+&lt;/blockquote>
 &lt;h3 id="b-tcpdump">b. TCPdump&lt;/h3>
 &lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">sudo tcpdump -i eth0 -w capture.pcap
 &lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;blockquote>
 &lt;p>Choose the ethernet we want to sniff on&lt;/p>
-&lt;p>Saves the output in .pcap file&lt;/p>&lt;/blockquote>
+&lt;p>Saves the output in .pcap file&lt;/p>
+&lt;/blockquote>
 &lt;h3 id="c-net-creds">c. Net-Creds&lt;/h3>
 &lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">sudo python net-creds.py -f capture.pcap
 &lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;blockquote>
@@ -41,7 +50,8 @@ Search for credentials in the .pcap file&lt;/p></description></item><item><title
 &lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;blockquote>
 &lt;p>Use base64 to encode the file we want to tranfer&lt;/p>
 &lt;p>Copy the output and paste it to a PowerShell function for decoding&lt;/p>
-&lt;p>Attempt to read the contents of the decoded base64 file&lt;/p>&lt;/blockquote>
+&lt;p>Attempt to read the contents of the decoded base64 file&lt;/p>
+&lt;/blockquote>
 &lt;h3 id="b-from-windows-to-linux">b. From Windows to Linux&lt;/h3>
 &lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-c" data-lang="c">&lt;span class="line">&lt;span class="cl">&lt;span class="p">[&lt;/span>&lt;span class="n">Convert&lt;/span>&lt;span class="p">]&lt;/span>&lt;span class="o">::&lt;/span>&lt;span class="nf">ToBase64String&lt;/span>&lt;span class="p">((&lt;/span>&lt;span class="n">Get&lt;/span>&lt;span class="o">-&lt;/span>&lt;span class="n">Content&lt;/span> &lt;span class="o">-&lt;/span>&lt;span class="n">path&lt;/span> &lt;span class="s">&amp;#34;C:\Users\Public&lt;/span>&lt;span class="se">\f&lt;/span>&lt;span class="s">ile&amp;#34;&lt;/span> &lt;span class="o">-&lt;/span>&lt;span class="n">Encoding&lt;/span> &lt;span class="n">byte&lt;/span>&lt;span class="p">))&lt;/span>
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
@@ -55,7 +65,8 @@ Search for credentials in the .pcap file&lt;/p></description></item><item><title
 &lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">aws sts get-caller-identity --profile &amp;lt;profile&amp;gt;
 &lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;blockquote>
 &lt;p>Returns &lt;strong>Account ID, User ID, and ARN&lt;/strong> of your current identity.&lt;br>
-Confirms if you are a &lt;strong>user&lt;/strong>, a &lt;strong>role&lt;/strong>, or a &lt;strong>temporary session (STS)&lt;/strong>.&lt;/p>&lt;/blockquote>
+Confirms if you are a &lt;strong>user&lt;/strong>, a &lt;strong>role&lt;/strong>, or a &lt;strong>temporary session (STS)&lt;/strong>.&lt;/p>
+&lt;/blockquote>
 &lt;h3 id="get-account-alias">Get account alias&lt;/h3>
 &lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">aws iam list-account-aliases --profile &amp;lt;profile&amp;gt;
 &lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;blockquote>
@@ -63,7 +74,8 @@ Confirms if you are a &lt;strong>user&lt;/strong>, a &lt;strong>role&lt;/strong>
 Useful if multiple accounts are in play.&lt;/p></description></item><item><title>Basic EC2 Enumeration Cheet Sheet</title><link>https://hack.com.cy/notes/cloud/aws/ec2/ec2/</link><pubDate>Thu, 21 Aug 2025 00:00:00 +0000</pubDate><guid>https://hack.com.cy/notes/cloud/aws/ec2/ec2/</guid><description>&lt;h3 id="1-list-ec2-instances">&lt;strong>1. List EC2 Instances&lt;/strong>&lt;/h3>
 &lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">aws ec2 describe-instances --region &lt;span class="o">[&lt;/span>region&lt;span class="o">]&lt;/span>
 &lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;blockquote>
-&lt;p>Shows instance IDs, public IPs, AMIs, key names, IAM roles, etc.&lt;/p>&lt;/blockquote>
+&lt;p>Shows instance IDs, public IPs, AMIs, key names, IAM roles, etc.&lt;/p>
+&lt;/blockquote>
 &lt;p>Use JMESPath filters for cleaner output:&lt;/p>
 &lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">aws ec2 describe-instances --query &lt;span class="s2">&amp;#34;Reservations[_].Instances[_].[InstanceId,PublicIpAddress,State.Name,KeyName,IamInstanceProfile.Arn]&amp;#34;&lt;/span>
 &lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;hr>
@@ -81,15 +93,18 @@ Useful if multiple accounts are in play.&lt;/p></description></item><item><title
 &lt;p>Look for open ports, especially &lt;code>0.0.0.0/0&lt;/code> on SSH (22), RDP (3389), or custom ports.&lt;/p></description></item><item><title>Basic Elastic Beanstalk Enumeration Cheet Sheet</title><link>https://hack.com.cy/notes/cloud/aws/elastic-beanstalk/beanstalk/</link><pubDate>Thu, 21 Aug 2025 00:00:00 +0000</pubDate><guid>https://hack.com.cy/notes/cloud/aws/elastic-beanstalk/beanstalk/</guid><description>&lt;h3 id="list-beanstalk-applications">List Beanstalk applications&lt;/h3>
 &lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">aws elasticbeanstalk describe-applications --profile &amp;lt;profile&amp;gt;
 &lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;blockquote>
-&lt;p>Entry point for hunting &lt;strong>app configs and env vars&lt;/strong>.&lt;/p>&lt;/blockquote>
+&lt;p>Entry point for hunting &lt;strong>app configs and env vars&lt;/strong>.&lt;/p>
+&lt;/blockquote>
 &lt;h3 id="list-environments-for-an-app">List environments for an app&lt;/h3>
 &lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">aws elasticbeanstalk describe-environments --application-name &amp;lt;AppName&amp;gt; --profile &amp;lt;profile&amp;gt;
 &lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;blockquote>
-&lt;p>Each environment is a deployed version of the app.&lt;/p>&lt;/blockquote>
+&lt;p>Each environment is a deployed version of the app.&lt;/p>
+&lt;/blockquote>
 &lt;h3 id="get-environment-config">Get environment config&lt;/h3>
 &lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">aws elasticbeanstalk describe-configuration-settings --application-name &amp;lt;AppName&amp;gt; --environment-name &amp;lt;EnvName&amp;gt; --profile &amp;lt;profile&amp;gt;
 &lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;blockquote>
-&lt;p>&lt;strong>🔥 High-value target&lt;/strong>: often leaks &lt;strong>AWS keys, DB creds, API tokens&lt;/strong> in environment variables.&lt;/p>&lt;/blockquote>
+&lt;p>&lt;strong>🔥 High-value target&lt;/strong>: often leaks &lt;strong>AWS keys, DB creds, API tokens&lt;/strong> in environment variables.&lt;/p>
+&lt;/blockquote>
 &lt;h2 id="using-pacu">&lt;strong>Using Pacu&lt;/strong>&lt;/h2>
 &lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">Pacu &lt;span class="o">(&lt;/span>low_priv_sess:imported-low_priv_sess&lt;span class="o">)&lt;/span> &amp;gt; run elasticbeanstalk__enum --regions us-east-1
 &lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div></description></item><item><title>Basic IAM Enumeration Cheet Sheet</title><link>https://hack.com.cy/notes/cloud/aws/iam/iam/</link><pubDate>Thu, 21 Aug 2025 00:00:00 +0000</pubDate><guid>https://hack.com.cy/notes/cloud/aws/iam/iam/</guid><description>&lt;h3 id="1-list-iam-users">&lt;strong>1. List IAM Users&lt;/strong>&lt;/h3>
@@ -134,7 +149,8 @@ Useful if multiple accounts are in play.&lt;/p></description></item><item><title
 &lt;p>Use this to build a full IAM permissions map. Add &lt;code>--filter&lt;/code> to target roles/users/groups specifically.&lt;/p></description></item><item><title>Basic Lambda Enumeration Cheet Sheet</title><link>https://hack.com.cy/notes/cloud/aws/lambda/lambda/</link><pubDate>Thu, 21 Aug 2025 00:00:00 +0000</pubDate><guid>https://hack.com.cy/notes/cloud/aws/lambda/lambda/</guid><description>&lt;h3 id="-list-all-lambda-functions">&lt;strong>. List All Lambda Functions&lt;/strong>&lt;/h3>
 &lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">aws lambda list-functions --region &lt;span class="o">[&lt;/span>region&lt;span class="o">]&lt;/span>
 &lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;blockquote>
-&lt;p>Shows names, runtimes, ARNs, and last modified dates.&lt;/p>&lt;/blockquote>
+&lt;p>Shows names, runtimes, ARNs, and last modified dates.&lt;/p>
+&lt;/blockquote>
 &lt;hr>
 &lt;h3 id="2-get-detailed-info-on-a-function">&lt;strong>2. Get Detailed Info on a Function&lt;/strong>&lt;/h3>
 &lt;h4 id="a-get-full-function-config-iam-role-runtime-env-vars-etc">a. Get full function config (IAM role, runtime, env vars, etc.)&lt;/h4>
@@ -143,7 +159,8 @@ Useful if multiple accounts are in play.&lt;/p></description></item><item><title
 &lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl"> 
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> aws lambda get-function --function-name &lt;span class="o">[&lt;/span>&lt;span class="k">function&lt;/span>-name&lt;span class="o">]&lt;/span>
 &lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;blockquote>
-&lt;p>Returns a pre-signed S3 URL to download the function code.&lt;/p>&lt;/blockquote>
+&lt;p>Returns a pre-signed S3 URL to download the function code.&lt;/p>
+&lt;/blockquote>
 &lt;hr>
 &lt;h3 id="3-check-invocation-access">&lt;strong>3. Check Invocation Access&lt;/strong>&lt;/h3>
 &lt;h4 id="a-whowhat-can-invoke-the-function-resource-based-policy">a. Who/what can invoke the function (resource-based policy)?&lt;/h4>
@@ -174,7 +191,8 @@ Useful if multiple accounts are in play.&lt;/p></description></item><item><title
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">Default region name &lt;span class="o">[&lt;/span>None&lt;span class="o">]&lt;/span>: us-east-1
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">Default output format &lt;span class="o">[&lt;/span>None&lt;span class="o">]&lt;/span>: json
 &lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;blockquote>
-&lt;p>Created an aws profile with the credentials given&lt;/p>&lt;/blockquote>
+&lt;p>Created an aws profile with the credentials given&lt;/p>
+&lt;/blockquote>
 &lt;h2 id="enumeration-with--low_priv-credentials">Enumeration with &lt;code>low_priv&lt;/code> credentials&lt;/h2>
 &lt;p>&lt;strong>whoami&lt;/strong>&lt;/p>
 &lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">└─$ aws sts get-caller-identity --profile low_priv 
@@ -184,7 +202,8 @@ Useful if multiple accounts are in play.&lt;/p></description></item><item><title
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="s2">&amp;#34;Arn&amp;#34;&lt;/span>: &lt;span class="s2">&amp;#34;arn:aws:iam::289202785296:user/cgid9oc3krm0fl_low_priv_user&amp;#34;&lt;/span>
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">}&lt;/span>
 &lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;blockquote>
-&lt;p>Gives us the username&lt;/p>&lt;/blockquote>
+&lt;p>Gives us the username&lt;/p>
+&lt;/blockquote>
 &lt;h2 id="iam-enumeration-with-pacu-what-privileges-do-our-user-have">IAM Enumeration with pacu (What Privileges do our user have?)&lt;/h2>
 &lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">Pacu &lt;span class="o">(&lt;/span>low_priv:imported-low_priv&lt;span class="o">)&lt;/span> &amp;gt; run iam__bruteforce_permissions --region us-east-1
 &lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;blockquote>
@@ -198,7 +217,8 @@ Useful if multiple accounts are in play.&lt;/p></description></item><item><title
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">Default region name &lt;span class="o">[&lt;/span>None&lt;span class="o">]&lt;/span>: us-east-1
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">Default output format &lt;span class="o">[&lt;/span>None&lt;span class="o">]&lt;/span>: json
 &lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;blockquote>
-&lt;p>-Created an aws profile with the credentials given&lt;/p>&lt;/blockquote>
+&lt;p>-Created an aws profile with the credentials given&lt;/p>
+&lt;/blockquote>
 &lt;h2 id="iam-enumeration-with-sns-credentials">IAM Enumeration with &lt;code>sns&lt;/code> credentials&lt;/h2>
 &lt;p>&lt;strong>whoami&lt;/strong>&lt;/p>
 &lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">└─$ aws sts get-caller-identity --profile sns 
@@ -208,8 +228,19 @@ Useful if multiple accounts are in play.&lt;/p></description></item><item><title
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="s2">&amp;#34;Arn&amp;#34;&lt;/span>: &lt;span class="s2">&amp;#34;arn:aws:iam::289202785296:user/cg-sns-user-cgid6j1kvw51kk&amp;#34;&lt;/span>
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">}&lt;/span>
 &lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;blockquote>
-&lt;p>Got username &lt;strong>cg-sns-user-cgid6j1kvw51kk&lt;/strong>&lt;/p>&lt;/blockquote>
-&lt;p>&lt;strong>List Users Roles Policies and Groups&lt;/strong>&lt;/p></description></item><item><title>echoCTF Bart Writeup: Digest Authentication Bypass to root</title><link>https://hack.com.cy/writeups/echoctf/bart/bart/</link><pubDate>Sun, 17 Aug 2025 00:00:00 +0000</pubDate><guid>https://hack.com.cy/writeups/echoctf/bart/bart/</guid><description>&lt;h1 id="bart">Bart&lt;/h1>
+&lt;p>Got username &lt;strong>cg-sns-user-cgid6j1kvw51kk&lt;/strong>&lt;/p>
+&lt;/blockquote>
+&lt;p>&lt;strong>List Users Roles Policies and Groups&lt;/strong>&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">aws iam list-users --profile sns 
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">aws iam list-roles --profile sns
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">aws iam list-policies --profile sns
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">aws iam list-groups-for-user --user-name cg-sns-user-cgid6j1kvw51kk --profile sns
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="s2">&amp;#34;Groups&amp;#34;&lt;/span>: &lt;span class="o">[]&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">}&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;blockquote>
+&lt;p>We dont have permission to list users, roles, policies but we did for groups which it seems nothing is there&lt;/p></description></item><item><title>echoCTF Bart Writeup: Digest Authentication Bypass to root</title><link>https://hack.com.cy/writeups/echoctf/bart/bart/</link><pubDate>Sun, 17 Aug 2025 00:00:00 +0000</pubDate><guid>https://hack.com.cy/writeups/echoctf/bart/bart/</guid><description>&lt;h1 id="bart">Bart&lt;/h1>
 &lt;h1 id="enumeration">Enumeration&lt;/h1>
 &lt;h2 id="nmap">NMAP&lt;/h2>
 &lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">sudo nmap 10.0.50.0 -A -p- -T4
@@ -576,8 +607,9 @@ If supported by the webserver, can you upload .htaccess files&lt;/p></descriptio
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="k">start&lt;/span> lazagne.exe all
 &lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>Resource: &lt;a href="https://github.com/AlessandroZ/LaZagne/releases/">Binary&lt;/a>&lt;/p></description></item><item><title>echoCTF Dolph Writeup: Nginx to Root via LD_PRELOAD</title><link>https://hack.com.cy/writeups/echoctf/dolph/dolph/</link><pubDate>Wed, 23 Jul 2025 00:00:00 +0000</pubDate><guid>https://hack.com.cy/writeups/echoctf/dolph/dolph/</guid><description>&lt;h2 id="video-walkthrough">Video Walkthrough&lt;/h2>
-&lt;div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;">
- &lt;iframe allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; fullscreen" loading="eager" referrerpolicy="strict-origin-when-cross-origin" src="https://www.youtube.com/embed/k2FNSCH3DDg?autoplay=0&amp;amp;controls=1&amp;amp;end=0&amp;amp;loop=0&amp;amp;mute=0&amp;amp;start=0" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border:0;" title="YouTube video">&lt;/iframe>
+
+ &lt;div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;">
+ &lt;iframe allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen="allowfullscreen" loading="eager" referrerpolicy="strict-origin-when-cross-origin" src="https://www.youtube.com/embed/k2FNSCH3DDg?autoplay=0&amp;amp;controls=1&amp;amp;end=0&amp;amp;loop=0&amp;amp;mute=0&amp;amp;start=0" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border:0;" title="YouTube video">&lt;/iframe>
  &lt;/div>
 
 &lt;p>&lt;a href="https://www.youtube.com/watch?v=k2FNSCH3DDg">&lt;img src="https://img.shields.io/badge/Watch%20on-YouTube-red?logo=youtube" alt="Watch on YouTube">&lt;/a>&lt;/p>
@@ -593,8 +625,9 @@ If supported by the webserver, can you upload .htaccess files&lt;/p></descriptio
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">|&lt;/span>_ Supported Methods: GET HEAD
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">|&lt;/span>_http-title: Tmp uploader
 &lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>It seems that there is an nginx 1.10.3 running on port 80&lt;/p></description></item><item><title>echoCTF Cupidme Writeup: File Upload to Root via SMTP</title><link>https://hack.com.cy/writeups/echoctf/cupidme/cupidme/</link><pubDate>Mon, 14 Jul 2025 00:00:00 +0000</pubDate><guid>https://hack.com.cy/writeups/echoctf/cupidme/cupidme/</guid><description>&lt;h2 id="video-walkthrough">Video Walkthrough&lt;/h2>
-&lt;div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;">
- &lt;iframe allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; fullscreen" loading="eager" referrerpolicy="strict-origin-when-cross-origin" src="https://www.youtube.com/embed/WN2w8sJOLlI?autoplay=0&amp;amp;controls=1&amp;amp;end=0&amp;amp;loop=0&amp;amp;mute=0&amp;amp;start=0" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border:0;" title="YouTube video">&lt;/iframe>
+
+ &lt;div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;">
+ &lt;iframe allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen="allowfullscreen" loading="eager" referrerpolicy="strict-origin-when-cross-origin" src="https://www.youtube.com/embed/WN2w8sJOLlI?autoplay=0&amp;amp;controls=1&amp;amp;end=0&amp;amp;loop=0&amp;amp;mute=0&amp;amp;start=0" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border:0;" title="YouTube video">&lt;/iframe>
  &lt;/div>
 
 &lt;p>&lt;a href="https://www.youtube.com/watch?v=WN2w8sJOLlI">&lt;img src="https://img.shields.io/badge/Watch%20on-YouTube-red?logo=youtube" alt="Watch on YouTube">&lt;/a>&lt;/p>
@@ -610,8 +643,9 @@ If supported by the webserver, can you upload .htaccess files&lt;/p></descriptio
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">|&lt;/span> http-methods: 
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">|&lt;/span>_ Supported Methods: GET HEAD POST
 &lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>Found an nginx webserver version 1.14.2 running on port 80.&lt;/p></description></item><item><title>echoCTF Smithers Writeup: Vulenrable Memcached version to root via Command Injection</title><link>https://hack.com.cy/writeups/echoctf/smithers/smithers/</link><pubDate>Sat, 28 Jun 2025 00:00:00 +0000</pubDate><guid>https://hack.com.cy/writeups/echoctf/smithers/smithers/</guid><description>&lt;h2 id="video-walkthrough">Video Walkthrough&lt;/h2>
-&lt;div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;">
- &lt;iframe allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; fullscreen" loading="eager" referrerpolicy="strict-origin-when-cross-origin" src="https://www.youtube.com/embed/8ZxR4WGVqEQ?autoplay=0&amp;amp;controls=1&amp;amp;end=0&amp;amp;loop=0&amp;amp;mute=0&amp;amp;start=0" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border:0;" title="YouTube video">&lt;/iframe>
+
+ &lt;div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;">
+ &lt;iframe allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen="allowfullscreen" loading="eager" referrerpolicy="strict-origin-when-cross-origin" src="https://www.youtube.com/embed/8ZxR4WGVqEQ?autoplay=0&amp;amp;controls=1&amp;amp;end=0&amp;amp;loop=0&amp;amp;mute=0&amp;amp;start=0" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border:0;" title="YouTube video">&lt;/iframe>
  &lt;/div>
 
 &lt;p>&lt;a href="https://www.youtube.com/watch?v=8ZxR4WGVqEQ">&lt;img src="https://img.shields.io/badge/Watch%20on-YouTube-red?logo=youtube" alt="Watch on YouTube">&lt;/a>&lt;/p>
@@ -627,8 +661,9 @@ If supported by the webserver, can you upload .htaccess files&lt;/p></descriptio
 &lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>Analyzing the NMAP output we can see that we found ports 10888 and 11211 open.
 Port 10888 seems that runs an &lt;code>NGINX&lt;/code> web server.
 Port 11211 its more interesting as the NMAP scan identifies that there is service running called &lt;code>Memcached&lt;/code> and we can see the version of it as well &lt;code>1.5.12&lt;/code>&lt;/p></description></item><item><title>echoCTF Alister Writeup: File Upload to Root via Exposed Credentials</title><link>https://hack.com.cy/writeups/echoctf/alister/alister/</link><pubDate>Wed, 25 Jun 2025 00:00:00 +0000</pubDate><guid>https://hack.com.cy/writeups/echoctf/alister/alister/</guid><description>&lt;h2 id="video-walkthrough">Video Walkthrough&lt;/h2>
-&lt;div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;">
- &lt;iframe allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; fullscreen" loading="eager" referrerpolicy="strict-origin-when-cross-origin" src="https://www.youtube.com/embed/1vaSEr6mfFA?autoplay=0&amp;amp;controls=1&amp;amp;end=0&amp;amp;loop=0&amp;amp;mute=0&amp;amp;start=0" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border:0;" title="YouTube video">&lt;/iframe>
+
+ &lt;div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;">
+ &lt;iframe allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen="allowfullscreen" loading="eager" referrerpolicy="strict-origin-when-cross-origin" src="https://www.youtube.com/embed/1vaSEr6mfFA?autoplay=0&amp;amp;controls=1&amp;amp;end=0&amp;amp;loop=0&amp;amp;mute=0&amp;amp;start=0" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border:0;" title="YouTube video">&lt;/iframe>
  &lt;/div>
 
 &lt;p>&lt;a href="https://www.youtube.com/watch?v=1vaSEr6mfFA&amp;amp;t=1s">&lt;img src="https://img.shields.io/badge/Watch%20on-YouTube-red?logo=youtube" alt="Watch on YouTube">&lt;/a>&lt;/p>
@@ -704,8 +739,9 @@ Port 11211 its more interesting as the NMAP scan identifies that there is servic
 &lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>Analyzing the NMAP scan we can see there are 2 ports open 1337 and 5244.
 Port 1337 is an NGINX webserver and we also get the version &lt;code>1.18.0&lt;/code>
 Port 5244, is unknown at the moment but we can see a lot of output.&lt;/p></description></item><item><title>echoCTF Alister Writeup: File Upload to Root via Exposed Credentials</title><link>https://hack.com.cy/writeups/htb/delivery/delivery/</link><pubDate>Wed, 25 Jun 2025 00:00:00 +0000</pubDate><guid>https://hack.com.cy/writeups/htb/delivery/delivery/</guid><description>&lt;h2 id="video-walkthrough">Video Walkthrough&lt;/h2>
-&lt;div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;">
- &lt;iframe allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; fullscreen" loading="eager" referrerpolicy="strict-origin-when-cross-origin" src="https://www.youtube.com/embed/1vaSEr6mfFA?autoplay=0&amp;amp;controls=1&amp;amp;end=0&amp;amp;loop=0&amp;amp;mute=0&amp;amp;start=0" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border:0;" title="YouTube video">&lt;/iframe>
+
+ &lt;div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;">
+ &lt;iframe allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen="allowfullscreen" loading="eager" referrerpolicy="strict-origin-when-cross-origin" src="https://www.youtube.com/embed/1vaSEr6mfFA?autoplay=0&amp;amp;controls=1&amp;amp;end=0&amp;amp;loop=0&amp;amp;mute=0&amp;amp;start=0" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border:0;" title="YouTube video">&lt;/iframe>
  &lt;/div>
 
 &lt;p>&lt;a href="https://www.youtube.com/watch?v=1vaSEr6mfFA&amp;amp;t=1s">&lt;img src="https://img.shields.io/badge/Watch%20on-YouTube-red?logo=youtube" alt="Watch on YouTube">&lt;/a>&lt;/p>
@@ -781,8 +817,9 @@ Port 5244, is unknown at the moment but we can see a lot of output.&lt;/p></desc
 &lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>Analyzing the NMAP scan we can see there are 2 ports open 1337 and 5244.
 Port 1337 is an NGINX webserver and we also get the version &lt;code>1.18.0&lt;/code>
 Port 5244, is unknown at the moment but we can see a lot of output.&lt;/p></description></item><item><title>echoCTF Contactlens Writeup: File Upload to Root via Command Injection</title><link>https://hack.com.cy/writeups/echoctf/contactlens/contactlens/</link><pubDate>Wed, 25 Jun 2025 00:00:00 +0000</pubDate><guid>https://hack.com.cy/writeups/echoctf/contactlens/contactlens/</guid><description>&lt;h2 id="video-walkthrough">Video Walkthrough&lt;/h2>
-&lt;div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;">
- &lt;iframe allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; fullscreen" loading="eager" referrerpolicy="strict-origin-when-cross-origin" src="https://www.youtube.com/embed/5FD9b_P4jRE?autoplay=0&amp;amp;controls=1&amp;amp;end=0&amp;amp;loop=0&amp;amp;mute=0&amp;amp;start=0" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border:0;" title="YouTube video">&lt;/iframe>
+
+ &lt;div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;">
+ &lt;iframe allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen="allowfullscreen" loading="eager" referrerpolicy="strict-origin-when-cross-origin" src="https://www.youtube.com/embed/5FD9b_P4jRE?autoplay=0&amp;amp;controls=1&amp;amp;end=0&amp;amp;loop=0&amp;amp;mute=0&amp;amp;start=0" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border:0;" title="YouTube video">&lt;/iframe>
  &lt;/div>
 
 &lt;p>&lt;a href="https://www.youtube.com/watch?v=5FD9b_P4jREs">&lt;img src="https://img.shields.io/badge/Watch%20on-YouTube-red?logo=youtube" alt="Watch on YouTube">&lt;/a>&lt;/p>
@@ -808,8 +845,9 @@ Port 5244, is unknown at the moment but we can see a lot of output.&lt;/p></desc
 &lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>The nmap scan shows 2 ports open.
 Port 22 is SSH
 Port 1337, runs an nginx 1.18.0 web server.&lt;/p></description></item><item><title>echoCTF Flanders Writeup: Vulnerable SSH version to Root</title><link>https://hack.com.cy/writeups/echoctf/flanders/flanders/</link><pubDate>Wed, 25 Jun 2025 00:00:00 +0000</pubDate><guid>https://hack.com.cy/writeups/echoctf/flanders/flanders/</guid><description>&lt;h2 id="video-walkthrough">Video Walkthrough&lt;/h2>
-&lt;div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;">
- &lt;iframe allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; fullscreen" loading="eager" referrerpolicy="strict-origin-when-cross-origin" src="https://www.youtube.com/embed/HwbOIk1GpUw?autoplay=0&amp;amp;controls=1&amp;amp;end=0&amp;amp;loop=0&amp;amp;mute=0&amp;amp;start=0" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border:0;" title="YouTube video">&lt;/iframe>
+
+ &lt;div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;">
+ &lt;iframe allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen="allowfullscreen" loading="eager" referrerpolicy="strict-origin-when-cross-origin" src="https://www.youtube.com/embed/HwbOIk1GpUw?autoplay=0&amp;amp;controls=1&amp;amp;end=0&amp;amp;loop=0&amp;amp;mute=0&amp;amp;start=0" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border:0;" title="YouTube video">&lt;/iframe>
  &lt;/div>
 
 &lt;p>&lt;a href="https://www.youtube.com/watch?v=HwbOIk1GpUw">&lt;img src="https://img.shields.io/badge/Watch%20on-YouTube-red?logo=youtube" alt="Watch on YouTube">&lt;/a>&lt;/p>
@@ -837,8 +875,9 @@ Port 1337, runs an nginx 1.18.0 web server.&lt;/p></description></item><item><ti
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">|&lt;/span>_http-title: &lt;span class="m">502&lt;/span> Bad Gateway
 &lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>NMAP results show us that there are 2 nginx webserver running on ports &lt;code>80&lt;/code> and &lt;code>9229&lt;/code>
 Port &lt;code>80&lt;/code> return a web application which has calculation functionality while port &lt;code>9229&lt;/code> gives us back a &lt;code>502 Bad Gateway&lt;/code>&lt;/p></description></item><item><title>echoCTF Badwidth Writeup: Command Injection to Root</title><link>https://hack.com.cy/writeups/echoctf/badwidth/badwidth/</link><pubDate>Tue, 03 Jun 2025 00:00:00 +0000</pubDate><guid>https://hack.com.cy/writeups/echoctf/badwidth/badwidth/</guid><description>&lt;h2 id="video-walkthrough">Video Walkthrough&lt;/h2>
-&lt;div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;">
- &lt;iframe allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; fullscreen" loading="eager" referrerpolicy="strict-origin-when-cross-origin" src="https://www.youtube.com/embed/QZlXwNCp16k?autoplay=0&amp;amp;controls=1&amp;amp;end=0&amp;amp;loop=0&amp;amp;mute=0&amp;amp;start=0" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border:0;" title="YouTube video">&lt;/iframe>
+
+ &lt;div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;">
+ &lt;iframe allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen="allowfullscreen" loading="eager" referrerpolicy="strict-origin-when-cross-origin" src="https://www.youtube.com/embed/QZlXwNCp16k?autoplay=0&amp;amp;controls=1&amp;amp;end=0&amp;amp;loop=0&amp;amp;mute=0&amp;amp;start=0" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border:0;" title="YouTube video">&lt;/iframe>
  &lt;/div>
 
 &lt;p>&lt;a href="https://www.youtube.com/watch?v=QZlXwNCp16k&amp;amp;t=1s">&lt;img src="https://img.shields.io/badge/Watch%20on-YouTube-red?logo=youtube" alt="Watch on YouTube">&lt;/a>&lt;/p>
@@ -880,7 +919,8 @@ Each failure shook my confidence, but I refused to quit. I studied harder, tried
 &lt;p>I’ve been working as a &lt;strong>professional penetration tester&lt;/strong> for the past &lt;strong>two years&lt;/strong>.&lt;br>
 Before that, I completed my &lt;strong>BSc in Computer Networks &amp;amp; Cybersecurity&lt;/strong> and my &lt;strong>MSc in Cybersecurity&lt;/strong> in the UK.&lt;/p></description></item><item><title>Hack.com.cy</title><link>https://hack.com.cy/why/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://hack.com.cy/why/</guid><description>&lt;h1 id="welcome-to-hackcomcy">Welcome to Hack.com.cy&lt;/h1>
 &lt;blockquote>
-&lt;p>&lt;em>A curated collection of hacking knowledge, CTF strategies, and penetration testing resources — by a hacker, for hackers.&lt;/em>&lt;/p>&lt;/blockquote>
+&lt;p>&lt;em>A curated collection of hacking knowledge, CTF strategies, and penetration testing resources — by a hacker, for hackers.&lt;/em>&lt;/p>
+&lt;/blockquote>
 &lt;p>This site is more than a personal journey — it’s a living knowledge base for &lt;strong>penetration testers&lt;/strong>, &lt;strong>red teamers&lt;/strong>, and &lt;strong>CTF enthusiasts&lt;/strong>.&lt;br>
 Here, you’ll find:&lt;/p>
 &lt;ul>

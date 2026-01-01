@@ -6,8 +6,9 @@ Check for the acceptance of double extensions on uploaded files.
 Can we inject special characters (e.i, %00) null byte inejection on filename.
 Can we bypass file type restrictions by forging valid magic bytes.
 If supported by the webserver, can you upload .htaccess files&lt;/p></description></item><item><title>echoCTF Cupidme Writeup: File Upload to Root via SMTP</title><link>https://hack.com.cy/writeups/echoctf/cupidme/cupidme/</link><pubDate>Mon, 14 Jul 2025 00:00:00 +0000</pubDate><guid>https://hack.com.cy/writeups/echoctf/cupidme/cupidme/</guid><description>&lt;h2 id="video-walkthrough">Video Walkthrough&lt;/h2>
-&lt;div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;">
- &lt;iframe allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; fullscreen" loading="eager" referrerpolicy="strict-origin-when-cross-origin" src="https://www.youtube.com/embed/WN2w8sJOLlI?autoplay=0&amp;amp;controls=1&amp;amp;end=0&amp;amp;loop=0&amp;amp;mute=0&amp;amp;start=0" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border:0;" title="YouTube video">&lt;/iframe>
+
+ &lt;div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;">
+ &lt;iframe allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen="allowfullscreen" loading="eager" referrerpolicy="strict-origin-when-cross-origin" src="https://www.youtube.com/embed/WN2w8sJOLlI?autoplay=0&amp;amp;controls=1&amp;amp;end=0&amp;amp;loop=0&amp;amp;mute=0&amp;amp;start=0" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border:0;" title="YouTube video">&lt;/iframe>
  &lt;/div>
 
 &lt;p>&lt;a href="https://www.youtube.com/watch?v=WN2w8sJOLlI">&lt;img src="https://img.shields.io/badge/Watch%20on-YouTube-red?logo=youtube" alt="Watch on YouTube">&lt;/a>&lt;/p>
@@ -23,8 +24,9 @@ If supported by the webserver, can you upload .htaccess files&lt;/p></descriptio
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">|&lt;/span> http-methods: 
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">|&lt;/span>_ Supported Methods: GET HEAD POST
 &lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>Found an nginx webserver version 1.14.2 running on port 80.&lt;/p></description></item><item><title>echoCTF Alister Writeup: File Upload to Root via Exposed Credentials</title><link>https://hack.com.cy/writeups/echoctf/alister/alister/</link><pubDate>Wed, 25 Jun 2025 00:00:00 +0000</pubDate><guid>https://hack.com.cy/writeups/echoctf/alister/alister/</guid><description>&lt;h2 id="video-walkthrough">Video Walkthrough&lt;/h2>
-&lt;div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;">
- &lt;iframe allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; fullscreen" loading="eager" referrerpolicy="strict-origin-when-cross-origin" src="https://www.youtube.com/embed/1vaSEr6mfFA?autoplay=0&amp;amp;controls=1&amp;amp;end=0&amp;amp;loop=0&amp;amp;mute=0&amp;amp;start=0" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border:0;" title="YouTube video">&lt;/iframe>
+
+ &lt;div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;">
+ &lt;iframe allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen="allowfullscreen" loading="eager" referrerpolicy="strict-origin-when-cross-origin" src="https://www.youtube.com/embed/1vaSEr6mfFA?autoplay=0&amp;amp;controls=1&amp;amp;end=0&amp;amp;loop=0&amp;amp;mute=0&amp;amp;start=0" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border:0;" title="YouTube video">&lt;/iframe>
  &lt;/div>
 
 &lt;p>&lt;a href="https://www.youtube.com/watch?v=1vaSEr6mfFA&amp;amp;t=1s">&lt;img src="https://img.shields.io/badge/Watch%20on-YouTube-red?logo=youtube" alt="Watch on YouTube">&lt;/a>&lt;/p>
@@ -100,8 +102,9 @@ If supported by the webserver, can you upload .htaccess files&lt;/p></descriptio
 &lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>Analyzing the NMAP scan we can see there are 2 ports open 1337 and 5244.
 Port 1337 is an NGINX webserver and we also get the version &lt;code>1.18.0&lt;/code>
 Port 5244, is unknown at the moment but we can see a lot of output.&lt;/p></description></item><item><title>echoCTF Alister Writeup: File Upload to Root via Exposed Credentials</title><link>https://hack.com.cy/writeups/htb/delivery/delivery/</link><pubDate>Wed, 25 Jun 2025 00:00:00 +0000</pubDate><guid>https://hack.com.cy/writeups/htb/delivery/delivery/</guid><description>&lt;h2 id="video-walkthrough">Video Walkthrough&lt;/h2>
-&lt;div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;">
- &lt;iframe allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; fullscreen" loading="eager" referrerpolicy="strict-origin-when-cross-origin" src="https://www.youtube.com/embed/1vaSEr6mfFA?autoplay=0&amp;amp;controls=1&amp;amp;end=0&amp;amp;loop=0&amp;amp;mute=0&amp;amp;start=0" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border:0;" title="YouTube video">&lt;/iframe>
+
+ &lt;div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;">
+ &lt;iframe allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen="allowfullscreen" loading="eager" referrerpolicy="strict-origin-when-cross-origin" src="https://www.youtube.com/embed/1vaSEr6mfFA?autoplay=0&amp;amp;controls=1&amp;amp;end=0&amp;amp;loop=0&amp;amp;mute=0&amp;amp;start=0" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border:0;" title="YouTube video">&lt;/iframe>
  &lt;/div>
 
 &lt;p>&lt;a href="https://www.youtube.com/watch?v=1vaSEr6mfFA&amp;amp;t=1s">&lt;img src="https://img.shields.io/badge/Watch%20on-YouTube-red?logo=youtube" alt="Watch on YouTube">&lt;/a>&lt;/p>
@@ -177,8 +180,9 @@ Port 5244, is unknown at the moment but we can see a lot of output.&lt;/p></desc
 &lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>Analyzing the NMAP scan we can see there are 2 ports open 1337 and 5244.
 Port 1337 is an NGINX webserver and we also get the version &lt;code>1.18.0&lt;/code>
 Port 5244, is unknown at the moment but we can see a lot of output.&lt;/p></description></item><item><title>echoCTF Contactlens Writeup: File Upload to Root via Command Injection</title><link>https://hack.com.cy/writeups/echoctf/contactlens/contactlens/</link><pubDate>Wed, 25 Jun 2025 00:00:00 +0000</pubDate><guid>https://hack.com.cy/writeups/echoctf/contactlens/contactlens/</guid><description>&lt;h2 id="video-walkthrough">Video Walkthrough&lt;/h2>
-&lt;div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;">
- &lt;iframe allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; fullscreen" loading="eager" referrerpolicy="strict-origin-when-cross-origin" src="https://www.youtube.com/embed/5FD9b_P4jRE?autoplay=0&amp;amp;controls=1&amp;amp;end=0&amp;amp;loop=0&amp;amp;mute=0&amp;amp;start=0" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border:0;" title="YouTube video">&lt;/iframe>
+
+ &lt;div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;">
+ &lt;iframe allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen="allowfullscreen" loading="eager" referrerpolicy="strict-origin-when-cross-origin" src="https://www.youtube.com/embed/5FD9b_P4jRE?autoplay=0&amp;amp;controls=1&amp;amp;end=0&amp;amp;loop=0&amp;amp;mute=0&amp;amp;start=0" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border:0;" title="YouTube video">&lt;/iframe>
  &lt;/div>
 
 &lt;p>&lt;a href="https://www.youtube.com/watch?v=5FD9b_P4jREs">&lt;img src="https://img.shields.io/badge/Watch%20on-YouTube-red?logo=youtube" alt="Watch on YouTube">&lt;/a>&lt;/p>

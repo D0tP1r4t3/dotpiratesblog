@@ -2,15 +2,22 @@
 &lt;h3 id="a-netexec-user-enumration">a. netexec User Enumration&lt;/h3>
 &lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">sudo netexec smb &amp;lt;dc-ip&amp;gt; -u &lt;span class="s1">&amp;#39;dotpirate&amp;#39;&lt;/span> -p &lt;span class="s1">&amp;#39;l3tsh4ck!&amp;#39;&lt;/span> --users
 &lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;blockquote>
-&lt;p>Using netexec to enumerate domain users&lt;/p>&lt;/blockquote>
+&lt;p>Using netexec to enumerate domain users&lt;/p>
+&lt;/blockquote>
 &lt;h3 id="b-netexec-group-enumeration">b. netexec Group Enumeration&lt;/h3>
 &lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">sudo netexec smb &amp;lt;dc-ip&amp;gt; -u &lt;span class="s1">&amp;#39;dotpirate&amp;#39;&lt;/span> -p &lt;span class="s1">&amp;#39;l3tsh4ck!&amp;#39;&lt;/span> --groups
 &lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;blockquote>
-&lt;p>Using netexec to enumerate domain groups&lt;/p>&lt;/blockquote>
+&lt;p>Using netexec to enumerate domain groups&lt;/p>
+&lt;/blockquote>
 &lt;h3 id="c-netexec-logged-on-user-enumeration">c. netexec Logged on User Enumeration&lt;/h3>
 &lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">sudo netexec smb &amp;lt;dc-ip&amp;gt; -u &lt;span class="s1">&amp;#39;dotpirate&amp;#39;&lt;/span> -p &lt;span class="s1">&amp;#39;l3tsh4ck!&amp;#39;&lt;/span> --loggedon-users
 &lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;blockquote>
-&lt;p>Check what user are logged on the server at that time&lt;/p></description></item><item><title>Active Directory</title><link>https://hack.com.cy/notes/active-directory/enumeration/no-credentials/</link><pubDate>Sat, 23 Aug 2025 00:00:00 +0000</pubDate><guid>https://hack.com.cy/notes/active-directory/enumeration/no-credentials/</guid><description>&lt;h1 id="-1-initial-enumration-and-identification-">** 1. Initial Enumration and Identification **&lt;/h1>
+&lt;p>Check what user are logged on the server at that time&lt;/p>
+&lt;/blockquote>
+&lt;h3 id="d-netexec-smb-share-enumeration">d. netexec SMB Share Enumeration&lt;/h3>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">sudo netexec 10.10.10.0/24 smb -u &lt;span class="s1">&amp;#39;dotpirate&amp;#39;&lt;/span> -p &lt;span class="s1">&amp;#39;l3tsh4ck!&amp;#39;&lt;/span> --shares
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;blockquote>
+&lt;p>Check if our user has access to any shares&lt;/p></description></item><item><title>Active Directory</title><link>https://hack.com.cy/notes/active-directory/enumeration/no-credentials/</link><pubDate>Sat, 23 Aug 2025 00:00:00 +0000</pubDate><guid>https://hack.com.cy/notes/active-directory/enumeration/no-credentials/</guid><description>&lt;h1 id="-1-initial-enumration-and-identification-">** 1. Initial Enumration and Identification **&lt;/h1>
 &lt;h3 id="a-wireshark">a. Wireshark&lt;/h3>
 &lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">sudo -E wireshark
 &lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;blockquote>
@@ -18,16 +25,18 @@
 &lt;p>Filter for &lt;code>ARP&lt;/code> protocol&lt;/p>
 &lt;p>Look for NETBIOS names&lt;/p>
 &lt;p>Look for DNS and domain names&lt;/p>
-&lt;p>Look for unsecure protocols such as TELNET and FTP&lt;/p>&lt;/blockquote>
+&lt;p>Look for unsecure protocols such as TELNET and FTP&lt;/p>
+&lt;/blockquote>
 &lt;h3 id="b-tcpdump">b. TCPdump&lt;/h3>
 &lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">sudo tcpdump -i eth0 -w capture.pcap
 &lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;blockquote>
 &lt;p>Choose the ethernet we want to sniff on&lt;/p>
-&lt;p>Saves the output in .pcap file&lt;/p>&lt;/blockquote>
+&lt;p>Saves the output in .pcap file&lt;/p>
+&lt;/blockquote>
 &lt;h3 id="c-net-creds">c. Net-Creds&lt;/h3>
 &lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">sudo python net-creds.py -f capture.pcap
 &lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;blockquote>
 &lt;p>Install &lt;a href="https://github.com/DanMcInerney/net-creds">net-creds&lt;/a>
 Search for credentials in the .pcap file&lt;/p></description></item><item><title>Active Directory Enumeration - Exploitation</title><link>https://hack.com.cy/notes/active-directory/</link><pubDate>Sat, 23 Aug 2025 00:00:00 +0000</pubDate><guid>https://hack.com.cy/notes/active-directory/</guid><description>&lt;h2 id="active-directory">Active Directory&lt;/h2>
-&lt;h1 id="initial-enumeration-no-credentials">&lt;a href="https://hack.com.cy/notes/active-directory/enumeration/no-credentials/">Initial Enumeration (no credentials)&lt;/a>&lt;/h1>
-&lt;h1 id="initial-enumeration-with-credentials">&lt;a href="https://hack.com.cy/notes/active-directory/enumeration/with-credentials/">Initial Enumeration (with credentials)&lt;/a>&lt;/h1></description></item></channel></rss>
+&lt;h1 id="initial-enumeration-no-credentialsnotesactive20directoryenumerationno20credentials">&lt;a href="https://hack.com.cy/notes/active-directory/enumeration/no-credentials/">Initial Enumeration (no credentials)&lt;/a>&lt;/h1>
+&lt;h1 id="initial-enumeration-with-credentialsnotesactive20directoryenumerationwith20credentials">&lt;a href="https://hack.com.cy/notes/active-directory/enumeration/with-credentials/">Initial Enumeration (with credentials)&lt;/a>&lt;/h1></description></item></channel></rss>

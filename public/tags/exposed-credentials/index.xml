@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Exposed Credentials on Hacking Blog</title><link>https://hack.com.cy/tags/exposed-credentials/</link><description>Recent content in Exposed Credentials on Hacking Blog</description><generator>Hugo</generator><language>en</language><lastBuildDate>Thu, 01 Jan 2026 02:13:14 +0200</lastBuildDate><atom:link href="https://hack.com.cy/tags/exposed-credentials/index.xml" rel="self" type="application/rss+xml"/><item><title>echoCTF Alister Writeup: File Upload to Root via Exposed Credentials</title><link>https://hack.com.cy/writeups/echoctf/alister/alister/</link><pubDate>Wed, 25 Jun 2025 00:00:00 +0000</pubDate><guid>https://hack.com.cy/writeups/echoctf/alister/alister/</guid><description>&lt;h2 id="video-walkthrough">Video Walkthrough&lt;/h2>
-&lt;div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;">
- &lt;iframe allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; fullscreen" loading="eager" referrerpolicy="strict-origin-when-cross-origin" src="https://www.youtube.com/embed/1vaSEr6mfFA?autoplay=0&amp;amp;controls=1&amp;amp;end=0&amp;amp;loop=0&amp;amp;mute=0&amp;amp;start=0" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border:0;" title="YouTube video">&lt;/iframe>
+
+ &lt;div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;">
+ &lt;iframe allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen="allowfullscreen" loading="eager" referrerpolicy="strict-origin-when-cross-origin" src="https://www.youtube.com/embed/1vaSEr6mfFA?autoplay=0&amp;amp;controls=1&amp;amp;end=0&amp;amp;loop=0&amp;amp;mute=0&amp;amp;start=0" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border:0;" title="YouTube video">&lt;/iframe>
  &lt;/div>
 
 &lt;p>&lt;a href="https://www.youtube.com/watch?v=1vaSEr6mfFA&amp;amp;t=1s">&lt;img src="https://img.shields.io/badge/Watch%20on-YouTube-red?logo=youtube" alt="Watch on YouTube">&lt;/a>&lt;/p>
@@ -76,8 +77,9 @@
 &lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>Analyzing the NMAP scan we can see there are 2 ports open 1337 and 5244.
 Port 1337 is an NGINX webserver and we also get the version &lt;code>1.18.0&lt;/code>
 Port 5244, is unknown at the moment but we can see a lot of output.&lt;/p></description></item><item><title>echoCTF Alister Writeup: File Upload to Root via Exposed Credentials</title><link>https://hack.com.cy/writeups/htb/delivery/delivery/</link><pubDate>Wed, 25 Jun 2025 00:00:00 +0000</pubDate><guid>https://hack.com.cy/writeups/htb/delivery/delivery/</guid><description>&lt;h2 id="video-walkthrough">Video Walkthrough&lt;/h2>
-&lt;div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;">
- &lt;iframe allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; fullscreen" loading="eager" referrerpolicy="strict-origin-when-cross-origin" src="https://www.youtube.com/embed/1vaSEr6mfFA?autoplay=0&amp;amp;controls=1&amp;amp;end=0&amp;amp;loop=0&amp;amp;mute=0&amp;amp;start=0" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border:0;" title="YouTube video">&lt;/iframe>
+
+ &lt;div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;">
+ &lt;iframe allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen="allowfullscreen" loading="eager" referrerpolicy="strict-origin-when-cross-origin" src="https://www.youtube.com/embed/1vaSEr6mfFA?autoplay=0&amp;amp;controls=1&amp;amp;end=0&amp;amp;loop=0&amp;amp;mute=0&amp;amp;start=0" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border:0;" title="YouTube video">&lt;/iframe>
  &lt;/div>
 
 &lt;p>&lt;a href="https://www.youtube.com/watch?v=1vaSEr6mfFA&amp;amp;t=1s">&lt;img src="https://img.shields.io/badge/Watch%20on-YouTube-red?logo=youtube" alt="Watch on YouTube">&lt;/a>&lt;/p>

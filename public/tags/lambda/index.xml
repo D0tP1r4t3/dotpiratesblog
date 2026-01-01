@@ -5,21 +5,23 @@
 &lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">aws sts get-caller-identity --profile &amp;lt;profile&amp;gt;
 &lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;blockquote>
 &lt;p>Returns &lt;strong>Account ID, User ID, and ARN&lt;/strong> of your current identity.&lt;br>
-Confirms if you are a &lt;strong>user&lt;/strong>, a &lt;strong>role&lt;/strong>, or a &lt;strong>temporary session (STS)&lt;/strong>.&lt;/p>&lt;/blockquote>
+Confirms if you are a &lt;strong>user&lt;/strong>, a &lt;strong>role&lt;/strong>, or a &lt;strong>temporary session (STS)&lt;/strong>.&lt;/p>
+&lt;/blockquote>
 &lt;h3 id="get-account-alias">Get account alias&lt;/h3>
 &lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">aws iam list-account-aliases --profile &amp;lt;profile&amp;gt;
 &lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;blockquote>
 &lt;p>Displays the friendly &lt;strong>account alias&lt;/strong> (instead of numeric ID).&lt;br>
 Useful if multiple accounts are in play.&lt;/p></description></item><item><title>Basic AWS Penetration Testing</title><link>https://hack.com.cy/notes/cloud/aws/</link><pubDate>Thu, 21 Aug 2025 00:00:00 +0000</pubDate><guid>https://hack.com.cy/notes/cloud/aws/</guid><description>&lt;h2 id="techniques">Techniques&lt;/h2>
-&lt;h1 id="all-in-one">&lt;a href="https://hack.com.cy/notes/cloud/aws/all-in-one/all-in-one/">All-in-one&lt;/a>&lt;/h1>
-&lt;h1 id="iam">&lt;a href="https://hack.com.cy/notes/cloud/aws/iam/iam/">IAM&lt;/a>&lt;/h1>
-&lt;h1 id="s3">&lt;a href="https://hack.com.cy/notes/cloud/aws/s3/s3/">S3&lt;/a>&lt;/h1>
-&lt;h1 id="ec2">&lt;a href="https://hack.com.cy/notes/cloud/aws/ec2/ec2/">EC2&lt;/a>&lt;/h1>
-&lt;h1 id="lambda">&lt;a href="https://hack.com.cy/notes/cloud/aws/lambda/lambda/">Lambda&lt;/a>&lt;/h1>
-&lt;h1 id="beanstalk">&lt;a href="https://hack.com.cy/notes/cloud/aws/elastic-beanstalk/beanstalk/">Beanstalk&lt;/a>&lt;/h1></description></item><item><title>Basic Lambda Enumeration Cheet Sheet</title><link>https://hack.com.cy/notes/cloud/aws/lambda/lambda/</link><pubDate>Thu, 21 Aug 2025 00:00:00 +0000</pubDate><guid>https://hack.com.cy/notes/cloud/aws/lambda/lambda/</guid><description>&lt;h3 id="-list-all-lambda-functions">&lt;strong>. List All Lambda Functions&lt;/strong>&lt;/h3>
+&lt;h1 id="all-in-onenotescloudawsall-in-oneall-in-one">&lt;a href="https://hack.com.cy/notes/cloud/aws/all-in-one/all-in-one/">All-in-one&lt;/a>&lt;/h1>
+&lt;h1 id="iamnotescloudawsiamiam">&lt;a href="https://hack.com.cy/notes/cloud/aws/iam/iam/">IAM&lt;/a>&lt;/h1>
+&lt;h1 id="s3notescloudawss3s3">&lt;a href="https://hack.com.cy/notes/cloud/aws/s3/s3/">S3&lt;/a>&lt;/h1>
+&lt;h1 id="ec2notescloudawsec2ec2">&lt;a href="https://hack.com.cy/notes/cloud/aws/ec2/ec2/">EC2&lt;/a>&lt;/h1>
+&lt;h1 id="lambdanotescloudawslambdalambda">&lt;a href="https://hack.com.cy/notes/cloud/aws/lambda/lambda/">Lambda&lt;/a>&lt;/h1>
+&lt;h1 id="beanstalknotescloudawselastic20beanstalkbeanstalk">&lt;a href="https://hack.com.cy/notes/cloud/aws/elastic-beanstalk/beanstalk/">Beanstalk&lt;/a>&lt;/h1></description></item><item><title>Basic Lambda Enumeration Cheet Sheet</title><link>https://hack.com.cy/notes/cloud/aws/lambda/lambda/</link><pubDate>Thu, 21 Aug 2025 00:00:00 +0000</pubDate><guid>https://hack.com.cy/notes/cloud/aws/lambda/lambda/</guid><description>&lt;h3 id="-list-all-lambda-functions">&lt;strong>. List All Lambda Functions&lt;/strong>&lt;/h3>
 &lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">aws lambda list-functions --region &lt;span class="o">[&lt;/span>region&lt;span class="o">]&lt;/span>
 &lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;blockquote>
-&lt;p>Shows names, runtimes, ARNs, and last modified dates.&lt;/p>&lt;/blockquote>
+&lt;p>Shows names, runtimes, ARNs, and last modified dates.&lt;/p>
+&lt;/blockquote>
 &lt;hr>
 &lt;h3 id="2-get-detailed-info-on-a-function">&lt;strong>2. Get Detailed Info on a Function&lt;/strong>&lt;/h3>
 &lt;h4 id="a-get-full-function-config-iam-role-runtime-env-vars-etc">a. Get full function config (IAM role, runtime, env vars, etc.)&lt;/h4>
@@ -28,11 +30,12 @@ Useful if multiple accounts are in play.&lt;/p></description></item><item><title
 &lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl"> 
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> aws lambda get-function --function-name &lt;span class="o">[&lt;/span>&lt;span class="k">function&lt;/span>-name&lt;span class="o">]&lt;/span>
 &lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;blockquote>
-&lt;p>Returns a pre-signed S3 URL to download the function code.&lt;/p>&lt;/blockquote>
+&lt;p>Returns a pre-signed S3 URL to download the function code.&lt;/p>
+&lt;/blockquote>
 &lt;hr>
 &lt;h3 id="3-check-invocation-access">&lt;strong>3. Check Invocation Access&lt;/strong>&lt;/h3>
 &lt;h4 id="a-whowhat-can-invoke-the-function-resource-based-policy">a. Who/what can invoke the function (resource-based policy)?&lt;/h4>
 &lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">aws lambda get-policy --function-name &lt;span class="o">[&lt;/span>&lt;span class="k">function&lt;/span>-name&lt;span class="o">]&lt;/span>
 &lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;blockquote>
 &lt;p>Look for &lt;code>&amp;quot;Principal&amp;quot;: &amp;quot;*&amp;quot;&lt;/code> or cross-account permissions.&lt;/p></description></item><item><title>Pentesting Cloud</title><link>https://hack.com.cy/notes/cloud/</link><pubDate>Thu, 21 Aug 2025 00:00:00 +0000</pubDate><guid>https://hack.com.cy/notes/cloud/</guid><description>&lt;h2 id="cloud">Cloud&lt;/h2>
-&lt;h1 id="aws">&lt;a href="https://hack.com.cy/notes/cloud/aws/">AWS&lt;/a>&lt;/h1></description></item></channel></rss>
+&lt;h1 id="awsnotescloudaws">&lt;a href="https://hack.com.cy/notes/cloud/aws/">AWS&lt;/a>&lt;/h1></description></item></channel></rss>

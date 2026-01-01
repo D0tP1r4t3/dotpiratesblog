@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Command Injection on Hacking Blog</title><link>https://hack.com.cy/tags/command-injection/</link><description>Recent content in Command Injection on Hacking Blog</description><generator>Hugo</generator><language>en</language><lastBuildDate>Thu, 01 Jan 2026 02:13:14 +0200</lastBuildDate><atom:link href="https://hack.com.cy/tags/command-injection/index.xml" rel="self" type="application/rss+xml"/><item><title>echoCTF Smithers Writeup: Vulenrable Memcached version to root via Command Injection</title><link>https://hack.com.cy/writeups/echoctf/smithers/smithers/</link><pubDate>Sat, 28 Jun 2025 00:00:00 +0000</pubDate><guid>https://hack.com.cy/writeups/echoctf/smithers/smithers/</guid><description>&lt;h2 id="video-walkthrough">Video Walkthrough&lt;/h2>
-&lt;div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;">
- &lt;iframe allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; fullscreen" loading="eager" referrerpolicy="strict-origin-when-cross-origin" src="https://www.youtube.com/embed/8ZxR4WGVqEQ?autoplay=0&amp;amp;controls=1&amp;amp;end=0&amp;amp;loop=0&amp;amp;mute=0&amp;amp;start=0" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border:0;" title="YouTube video">&lt;/iframe>
+
+ &lt;div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;">
+ &lt;iframe allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen="allowfullscreen" loading="eager" referrerpolicy="strict-origin-when-cross-origin" src="https://www.youtube.com/embed/8ZxR4WGVqEQ?autoplay=0&amp;amp;controls=1&amp;amp;end=0&amp;amp;loop=0&amp;amp;mute=0&amp;amp;start=0" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border:0;" title="YouTube video">&lt;/iframe>
  &lt;/div>
 
 &lt;p>&lt;a href="https://www.youtube.com/watch?v=8ZxR4WGVqEQ">&lt;img src="https://img.shields.io/badge/Watch%20on-YouTube-red?logo=youtube" alt="Watch on YouTube">&lt;/a>&lt;/p>
@@ -16,8 +17,9 @@
 &lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>Analyzing the NMAP output we can see that we found ports 10888 and 11211 open.
 Port 10888 seems that runs an &lt;code>NGINX&lt;/code> web server.
 Port 11211 its more interesting as the NMAP scan identifies that there is service running called &lt;code>Memcached&lt;/code> and we can see the version of it as well &lt;code>1.5.12&lt;/code>&lt;/p></description></item><item><title>echoCTF Contactlens Writeup: File Upload to Root via Command Injection</title><link>https://hack.com.cy/writeups/echoctf/contactlens/contactlens/</link><pubDate>Wed, 25 Jun 2025 00:00:00 +0000</pubDate><guid>https://hack.com.cy/writeups/echoctf/contactlens/contactlens/</guid><description>&lt;h2 id="video-walkthrough">Video Walkthrough&lt;/h2>
-&lt;div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;">
- &lt;iframe allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; fullscreen" loading="eager" referrerpolicy="strict-origin-when-cross-origin" src="https://www.youtube.com/embed/5FD9b_P4jRE?autoplay=0&amp;amp;controls=1&amp;amp;end=0&amp;amp;loop=0&amp;amp;mute=0&amp;amp;start=0" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border:0;" title="YouTube video">&lt;/iframe>
+
+ &lt;div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;">
+ &lt;iframe allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen="allowfullscreen" loading="eager" referrerpolicy="strict-origin-when-cross-origin" src="https://www.youtube.com/embed/5FD9b_P4jRE?autoplay=0&amp;amp;controls=1&amp;amp;end=0&amp;amp;loop=0&amp;amp;mute=0&amp;amp;start=0" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border:0;" title="YouTube video">&lt;/iframe>
  &lt;/div>
 
 &lt;p>&lt;a href="https://www.youtube.com/watch?v=5FD9b_P4jREs">&lt;img src="https://img.shields.io/badge/Watch%20on-YouTube-red?logo=youtube" alt="Watch on YouTube">&lt;/a>&lt;/p>
@@ -43,8 +45,9 @@ Port 11211 its more interesting as the NMAP scan identifies that there is servic
 &lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>The nmap scan shows 2 ports open.
 Port 22 is SSH
 Port 1337, runs an nginx 1.18.0 web server.&lt;/p></description></item><item><title>echoCTF Badwidth Writeup: Command Injection to Root</title><link>https://hack.com.cy/writeups/echoctf/badwidth/badwidth/</link><pubDate>Tue, 03 Jun 2025 00:00:00 +0000</pubDate><guid>https://hack.com.cy/writeups/echoctf/badwidth/badwidth/</guid><description>&lt;h2 id="video-walkthrough">Video Walkthrough&lt;/h2>
-&lt;div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;">
- &lt;iframe allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; fullscreen" loading="eager" referrerpolicy="strict-origin-when-cross-origin" src="https://www.youtube.com/embed/QZlXwNCp16k?autoplay=0&amp;amp;controls=1&amp;amp;end=0&amp;amp;loop=0&amp;amp;mute=0&amp;amp;start=0" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border:0;" title="YouTube video">&lt;/iframe>
+
+ &lt;div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;">
+ &lt;iframe allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen="allowfullscreen" loading="eager" referrerpolicy="strict-origin-when-cross-origin" src="https://www.youtube.com/embed/QZlXwNCp16k?autoplay=0&amp;amp;controls=1&amp;amp;end=0&amp;amp;loop=0&amp;amp;mute=0&amp;amp;start=0" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border:0;" title="YouTube video">&lt;/iframe>
  &lt;/div>
 
 &lt;p>&lt;a href="https://www.youtube.com/watch?v=QZlXwNCp16k&amp;amp;t=1s">&lt;img src="https://img.shields.io/badge/Watch%20on-YouTube-red?logo=youtube" alt="Watch on YouTube">&lt;/a>&lt;/p>

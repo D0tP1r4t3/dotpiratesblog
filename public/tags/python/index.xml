@@ -11,7 +11,8 @@
 &lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;blockquote>
 &lt;p>Use base64 to encode the file we want to tranfer&lt;/p>
 &lt;p>Copy the output and paste it to a PowerShell function for decoding&lt;/p>
-&lt;p>Attempt to read the contents of the decoded base64 file&lt;/p>&lt;/blockquote>
+&lt;p>Attempt to read the contents of the decoded base64 file&lt;/p>
+&lt;/blockquote>
 &lt;h3 id="b-from-windows-to-linux">b. From Windows to Linux&lt;/h3>
 &lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-c" data-lang="c">&lt;span class="line">&lt;span class="cl">&lt;span class="p">[&lt;/span>&lt;span class="n">Convert&lt;/span>&lt;span class="p">]&lt;/span>&lt;span class="o">::&lt;/span>&lt;span class="nf">ToBase64String&lt;/span>&lt;span class="p">((&lt;/span>&lt;span class="n">Get&lt;/span>&lt;span class="o">-&lt;/span>&lt;span class="n">Content&lt;/span> &lt;span class="o">-&lt;/span>&lt;span class="n">path&lt;/span> &lt;span class="s">&amp;#34;C:\Users\Public&lt;/span>&lt;span class="se">\f&lt;/span>&lt;span class="s">ile&amp;#34;&lt;/span> &lt;span class="o">-&lt;/span>&lt;span class="n">Encoding&lt;/span> &lt;span class="n">byte&lt;/span>&lt;span class="p">))&lt;/span>
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
