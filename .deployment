@@ -1,0 +1,3 @@
+[config]
+# Hugo build configuration for Hostinger
+command = hugo --minify
