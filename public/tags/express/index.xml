@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Express on Hacking Blog</title><link>https://hack.com.cy/tags/express/</link><description>Recent content in Express on Hacking Blog</description><generator>Hugo</generator><language>en</language><lastBuildDate>Thu, 01 Jan 2026 02:13:14 +0200</lastBuildDate><atom:link href="https://hack.com.cy/tags/express/index.xml" rel="self" type="application/rss+xml"/><item><title>echoCTF Aryabhata Writeup: From Server Site Expression Injection to root</title><link>https://hack.com.cy/writeups/echoctf/aryabhata/aryabhata/</link><pubDate>Tue, 03 Jun 2025 00:00:00 +0000</pubDate><guid>https://hack.com.cy/writeups/echoctf/aryabhata/aryabhata/</guid><description>&lt;p>Start by port scanning the target machine.&lt;/p>
+&lt;h1 id="enumeration">Enumeration&lt;/h1>
+&lt;h2 id="nmap">NMAP&lt;/h2>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">sudo nmap -nvv -p- 10.0.50.0 -T4 -A -oA nmap/writeup
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="nmap-output">NMAP OUTPUT&lt;/h2>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">PORT STATE SERVICE REASON VERSION
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">80/tcp open http syn-ack ttl &lt;span class="m">63&lt;/span> nginx 1.10.3
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">|&lt;/span>_http-server-header: nginx/1.10.3
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">|&lt;/span>_http-title: Welcome to Aryabhata
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">9229/tcp open http syn-ack ttl &lt;span class="m">63&lt;/span> nginx 1.10.3
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">|&lt;/span>_http-server-header: nginx/1.10.3
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">|&lt;/span>_http-title: &lt;span class="m">502&lt;/span> Bad Gateway
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>NMAP results show us that there are 2 nginx webserver running on ports &lt;code>80&lt;/code> and &lt;code>9229&lt;/code>
+Port &lt;code>80&lt;/code> return a web application which has calculation functionality while port &lt;code>9229&lt;/code> gives us back a &lt;code>502 Bad Gateway&lt;/code>&lt;/p></description></item></channel></rss>

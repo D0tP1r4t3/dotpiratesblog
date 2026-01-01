@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Hacking Blog</title><link>https://hack.com.cy/writeups/echoctf/barney/</link><description>Recent content on Hacking Blog</description><generator>Hugo</generator><language>en</language><atom:link href="https://hack.com.cy/writeups/echoctf/barney/index.xml" rel="self" type="application/rss+xml"/><item><title>echoCTF Barney Writeup: File Upload to root via sudo foo</title><link>https://hack.com.cy/writeups/echoctf/barney/barney/</link><pubDate>Fri, 15 Aug 2025 00:00:00 +0000</pubDate><guid>https://hack.com.cy/writeups/echoctf/barney/barney/</guid><description>&lt;h1 id="enumeration">Enumeration&lt;/h1>
+&lt;p>Start by port scanning the target machine.
+And reading the description of the box that highlight the keyword &lt;code>beer&lt;/code> and the following:
+&lt;code>Provide a steady supply of beer and you may get something more than a BURRRRRRPPPP!&lt;/code>&lt;/p>
+&lt;h2 id="nmap">NMAP&lt;/h2>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">sudo nmap -nvv -p- 10.0.50.0 -T4 -sC -sV
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="nmap-output">NMAP Output&lt;/h2>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">PORT STATE SERVICE REASON VERSION
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">80/tcp open http syn-ack ttl &lt;span class="m">63&lt;/span> Apache httpd 2.4.38 &lt;span class="o">((&lt;/span>Debian&lt;span class="o">))&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">|&lt;/span> http-methods: 
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">|&lt;/span>_ Supported Methods: GET HEAD POST
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>Found an Apache webserver version 2.4.38 running on port 80.&lt;/p></description></item></channel></rss>

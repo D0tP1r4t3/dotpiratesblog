@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Authentication Bypass on Hacking Blog</title><link>https://hack.com.cy/tags/authentication-bypass/</link><description>Recent content in Authentication Bypass on Hacking Blog</description><generator>Hugo</generator><language>en</language><lastBuildDate>Thu, 01 Jan 2026 02:13:14 +0200</lastBuildDate><atom:link href="https://hack.com.cy/tags/authentication-bypass/index.xml" rel="self" type="application/rss+xml"/><item><title>echoCTF Bart Writeup: Digest Authentication Bypass to root</title><link>https://hack.com.cy/writeups/echoctf/bart/bart/</link><pubDate>Sun, 17 Aug 2025 00:00:00 +0000</pubDate><guid>https://hack.com.cy/writeups/echoctf/bart/bart/</guid><description>&lt;h1 id="bart">Bart&lt;/h1>
+&lt;h1 id="enumeration">Enumeration&lt;/h1>
+&lt;h2 id="nmap">NMAP&lt;/h2>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">sudo nmap 10.0.50.0 -A -p- -T4
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="nmap-output">NMAP OUTPUT&lt;/h2>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">8080/tcp open http-proxy
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">|&lt;/span> http-auth: 
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">|&lt;/span> HTTP/1.1 &lt;span class="m">401&lt;/span> Unauthorized&lt;span class="se">\x&lt;/span>0D
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">|&lt;/span>_ Digest &lt;span class="nv">algorithm&lt;/span>&lt;span class="o">=&lt;/span>MD5 &lt;span class="nv">stale&lt;/span>&lt;span class="o">=&lt;/span>FALSE &lt;span class="nv">opaque&lt;/span>&lt;span class="o">=&lt;/span>799d5 &lt;span class="nv">realm&lt;/span>&lt;span class="o">=&lt;/span>example.com &lt;span class="nv">qop&lt;/span>&lt;span class="o">=&lt;/span>auth &lt;span class="nv">domain&lt;/span>&lt;span class="o">=&lt;/span>/ &lt;span class="nv">nonce&lt;/span>&lt;span class="o">=&lt;/span>YzY0NTMwYTI4NDJmMjFhMDpleGFtcGxlLmNvbToxOThiODA0MWYyNjo2
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">|&lt;/span> fingerprint-strings: 
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">|&lt;/span> FourOhFourRequest: 
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">|&lt;/span> HTTP/1.0 &lt;span class="m">401&lt;/span> Unauthorized
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">|&lt;/span> Vary: Accept-Encoding
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">|&lt;/span> X-Frame-Options: SAMEORIGIN
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">|&lt;/span> Content-Type: text/html
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">|&lt;/span> X-Content-Type-Options: nosniff
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">|&lt;/span> Date: Sun, &lt;span class="m">17&lt;/span> Aug &lt;span class="m">2025&lt;/span> 12:29:48 GMT
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">|&lt;/span> Cache-Control: no-cache
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">|&lt;/span> Content-Length: &lt;span class="m">229&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">|&lt;/span> X-XSS-Protection: 1&lt;span class="p">;&lt;/span> &lt;span class="nv">mode&lt;/span>&lt;span class="o">=&lt;/span>block
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">|&lt;/span> Connection: close
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">|&lt;/span> WWW-Authenticate: Digest &lt;span class="nv">realm&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s2">&amp;#34;example.com&amp;#34;&lt;/span>, &lt;span class="nv">domain&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s2">&amp;#34;/&amp;#34;&lt;/span>, &lt;span class="nv">qop&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s2">&amp;#34;auth&amp;#34;&lt;/span>, &lt;span class="nv">nonce&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s2">&amp;#34;YzY0NTMwYTI4NDJmMjFhMDpleGFtcGxlLmNvbToxOThiODAxZTMyMTo0&amp;#34;&lt;/span>, &lt;span class="nv">opaque&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s2">&amp;#34;799d5&amp;#34;&lt;/span>, &lt;span class="nv">algorithm&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s2">&amp;#34;MD5&amp;#34;&lt;/span>, &lt;span class="nv">stale&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s2">&amp;#34;FALSE&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">|&lt;/span> Accept-Ranges: bytes
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">|&lt;/span> &amp;lt;!DOCTYPE html&amp;gt;
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">|&lt;/span> &amp;lt;head&amp;gt;
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">|&lt;/span> &amp;lt;title&amp;gt;Unauthorized&amp;lt;/title&amp;gt;
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">|&lt;/span> &amp;lt;link &lt;span class="nv">rel&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s2">&amp;#34;shortcut icon&amp;#34;&lt;/span> &lt;span class="nv">href&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s2">&amp;#34;data:image/x-icon;,&amp;#34;&lt;/span> &lt;span class="nv">type&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s2">&amp;#34;image/x-icon&amp;#34;&lt;/span>&amp;gt;
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">|&lt;/span> &amp;lt;/head&amp;gt;
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">|&lt;/span> &amp;lt;body&amp;gt;
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">|&lt;/span> &amp;lt;h2&amp;gt;Access Error: &lt;span class="m">401&lt;/span> -- Unauthorized&amp;lt;/h2&amp;gt;
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">|&lt;/span> &amp;lt;pre&amp;gt;&amp;lt;/pre&amp;gt;
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">|&lt;/span> &amp;lt;/body&amp;gt;
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">|&lt;/span> &amp;lt;/html&amp;gt;
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">|&lt;/span> GetRequest: 
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">|&lt;/span> HTTP/1.0 &lt;span class="m">401&lt;/span> Unauthorized
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">|&lt;/span> Vary: Accept-Encoding
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">|&lt;/span> X-Frame-Options: SAMEORIGIN
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">|&lt;/span> Content-Type: text/html
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">|&lt;/span> X-Content-Type-Options: nosniff
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">|&lt;/span> Date: Sun, &lt;span class="m">17&lt;/span> Aug &lt;span class="m">2025&lt;/span> 12:29:47 GMT
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">|&lt;/span> Cache-Control: no-cache
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">|&lt;/span> Content-Length: &lt;span class="m">229&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">|&lt;/span> X-XSS-Protection: 1&lt;span class="p">;&lt;/span> &lt;span class="nv">mode&lt;/span>&lt;span class="o">=&lt;/span>block
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">|&lt;/span> Connection: close
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">|&lt;/span> WWW-Authenticate: Digest &lt;span class="nv">realm&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s2">&amp;#34;example.com&amp;#34;&lt;/span>, &lt;span class="nv">domain&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s2">&amp;#34;/&amp;#34;&lt;/span>, &lt;span class="nv">qop&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s2">&amp;#34;auth&amp;#34;&lt;/span>, &lt;span class="nv">nonce&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s2">&amp;#34;YzY0NTMwYTI4NDJmMjFhMDpleGFtcGxlLmNvbToxOThiODAxZTE4Mjoz&amp;#34;&lt;/span>, &lt;span class="nv">opaque&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s2">&amp;#34;799d5&amp;#34;&lt;/span>, &lt;span class="nv">algorithm&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s2">&amp;#34;MD5&amp;#34;&lt;/span>, &lt;span class="nv">stale&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s2">&amp;#34;FALSE&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">|&lt;/span> Accept-Ranges: bytes
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">|&lt;/span> &amp;lt;!DOCTYPE html&amp;gt;
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">|&lt;/span> &amp;lt;head&amp;gt;
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">|&lt;/span> &amp;lt;title&amp;gt;Unauthorized&amp;lt;/title&amp;gt;
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">|&lt;/span> &amp;lt;link &lt;span class="nv">rel&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s2">&amp;#34;shortcut icon&amp;#34;&lt;/span> &lt;span class="nv">href&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s2">&amp;#34;data:image/x-icon;,&amp;#34;&lt;/span> &lt;span class="nv">type&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s2">&amp;#34;image/x-icon&amp;#34;&lt;/span>&amp;gt;
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">|&lt;/span> &amp;lt;/head&amp;gt;
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">|&lt;/span> &amp;lt;body&amp;gt;
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">|&lt;/span> &amp;lt;h2&amp;gt;Access Error: &lt;span class="m">401&lt;/span> -- Unauthorized&amp;lt;/h2&amp;gt;
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">|&lt;/span> &amp;lt;pre&amp;gt;&amp;lt;/pre&amp;gt;
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">|&lt;/span> &amp;lt;/body&amp;gt;
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">|&lt;/span> &amp;lt;/html&amp;gt;
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">|&lt;/span> HTTPOptions: 
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">|&lt;/span> HTTP/1.0 &lt;span class="m">405&lt;/span> Method Not Allowed
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">|&lt;/span> Vary: Accept-Encoding
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">|&lt;/span> X-Frame-Options: SAMEORIGIN
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">|&lt;/span> Content-Type: text/html
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">|&lt;/span> X-Content-Type-Options: nosniff
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">|&lt;/span> Date: Sun, &lt;span class="m">17&lt;/span> Aug &lt;span class="m">2025&lt;/span> 12:29:47 GMT
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">|&lt;/span> Cache-Control: no-cache
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">|&lt;/span> Content-Length: &lt;span class="m">241&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">|&lt;/span> X-XSS-Protection: 1&lt;span class="p">;&lt;/span> &lt;span class="nv">mode&lt;/span>&lt;span class="o">=&lt;/span>block
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">|&lt;/span> Connection: close
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">|&lt;/span> Accept-Ranges: bytes
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">|&lt;/span> &amp;lt;!DOCTYPE html&amp;gt;
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">|&lt;/span> &amp;lt;head&amp;gt;
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">|&lt;/span> &amp;lt;title&amp;gt;Method Not Allowed&amp;lt;/title&amp;gt;
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">|&lt;/span> &amp;lt;link &lt;span class="nv">rel&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s2">&amp;#34;shortcut icon&amp;#34;&lt;/span> &lt;span class="nv">href&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s2">&amp;#34;data:image/x-icon;,&amp;#34;&lt;/span> &lt;span class="nv">type&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s2">&amp;#34;image/x-icon&amp;#34;&lt;/span>&amp;gt;
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">|&lt;/span> &amp;lt;/head&amp;gt;
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">|&lt;/span> &amp;lt;body&amp;gt;
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">|&lt;/span> &amp;lt;h2&amp;gt;Access Error: &lt;span class="m">405&lt;/span> -- Method Not Allowed&amp;lt;/h2&amp;gt;
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">|&lt;/span> &amp;lt;pre&amp;gt;&amp;lt;/pre&amp;gt;
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">|&lt;/span> &amp;lt;/body&amp;gt;
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">|&lt;/span>_ &amp;lt;/html&amp;gt;
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>The NMAP scan found an open port on &lt;code>8080&lt;/code> and it seems that is a webserver.&lt;/p></description></item><item><title>echoCTF Smithers Writeup: Vulenrable Memcached version to root via Command Injection</title><link>https://hack.com.cy/writeups/echoctf/smithers/smithers/</link><pubDate>Sat, 28 Jun 2025 00:00:00 +0000</pubDate><guid>https://hack.com.cy/writeups/echoctf/smithers/smithers/</guid><description>&lt;h2 id="video-walkthrough">Video Walkthrough&lt;/h2>
+&lt;div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;">
+ &lt;iframe allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; fullscreen" loading="eager" referrerpolicy="strict-origin-when-cross-origin" src="https://www.youtube.com/embed/8ZxR4WGVqEQ?autoplay=0&amp;amp;controls=1&amp;amp;end=0&amp;amp;loop=0&amp;amp;mute=0&amp;amp;start=0" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border:0;" title="YouTube video">&lt;/iframe>
+ &lt;/div>
+
+&lt;p>&lt;a href="https://www.youtube.com/watch?v=8ZxR4WGVqEQ">&lt;img src="https://img.shields.io/badge/Watch%20on-YouTube-red?logo=youtube" alt="Watch on YouTube">&lt;/a>&lt;/p>
+&lt;h1 id="smithers">Smithers&lt;/h1>
+&lt;h1 id="enumeration">Enumeration&lt;/h1>
+&lt;h2 id="nmap-port-scan">NMAP Port Scan&lt;/h2>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">sudo nmap -vv -p- 10.0.50.0 -T4 -sC -sV -oA nmap/allports
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="output">Output&lt;/h2>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">PORT STATE SERVICE REASON VERSION
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">10888/tcp open http syn-ack ttl &lt;span class="m">63&lt;/span> nginx
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">|&lt;/span>_http-title: Network Tools
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">11211/tcp open memcached syn-ack ttl &lt;span class="m">63&lt;/span> Memcached 1.5.12 &lt;span class="o">(&lt;/span>uptime &lt;span class="m">625&lt;/span> seconds&lt;span class="o">)&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>Analyzing the NMAP output we can see that we found ports 10888 and 11211 open.
+Port 10888 seems that runs an &lt;code>NGINX&lt;/code> web server.
+Port 11211 its more interesting as the NMAP scan identifies that there is service running called &lt;code>Memcached&lt;/code> and we can see the version of it as well &lt;code>1.5.12&lt;/code>&lt;/p></description></item><item><title>echoCTF Flanders Writeup: Vulnerable SSH version to Root</title><link>https://hack.com.cy/writeups/echoctf/flanders/flanders/</link><pubDate>Wed, 25 Jun 2025 00:00:00 +0000</pubDate><guid>https://hack.com.cy/writeups/echoctf/flanders/flanders/</guid><description>&lt;h2 id="video-walkthrough">Video Walkthrough&lt;/h2>
+&lt;div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;">
+ &lt;iframe allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; fullscreen" loading="eager" referrerpolicy="strict-origin-when-cross-origin" src="https://www.youtube.com/embed/HwbOIk1GpUw?autoplay=0&amp;amp;controls=1&amp;amp;end=0&amp;amp;loop=0&amp;amp;mute=0&amp;amp;start=0" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border:0;" title="YouTube video">&lt;/iframe>
+ &lt;/div>
+
+&lt;p>&lt;a href="https://www.youtube.com/watch?v=HwbOIk1GpUw">&lt;img src="https://img.shields.io/badge/Watch%20on-YouTube-red?logo=youtube" alt="Watch on YouTube">&lt;/a>&lt;/p>
+&lt;h1 id="flanders">Flanders&lt;/h1>
+&lt;h1 id="enumeration">Enumeration&lt;/h1>
+&lt;h2 id="nmap-port-scan">NMAP Port Scan&lt;/h2>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">sudo nmap -vv -p- 10.0.50.0 -T4 -sC -sV -oA nmap/allports
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="output">Output&lt;/h2>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">PORT STATE SERVICE REASON VERSION
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">6022/tcp open ssh syn-ack ttl &lt;span class="m">63&lt;/span> libssh 0.8.1 &lt;span class="o">(&lt;/span>protocol 2.0&lt;span class="o">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">|&lt;/span> ssh-hostkey: 
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">|&lt;/span> &lt;span class="m">2048&lt;/span> 9c:42:2e:fa:60:30:95:dd:a0:60:80:1f:fd:ae:77:86 &lt;span class="o">(&lt;/span>RSA&lt;span class="o">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">|&lt;/span>_ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDF7bYwrFoV/ukt+Dv8+2ZbdxEoyYGkvq8tEO7cbR9jTl96QN//1v8lOw4o0b26uA7wHBWs5+zPZm6SeGIazx+Bj3mih6Oofm/9HU+FLHTCb+uo5kaG6v8g7gwjkoFNyx/rn+G+BKAMY6op4+6P6CqFFv1yfEhVWWqItla0kmfp3jwD1HCd/i0OxFsUN335RYeokeLqrG1kpoyVlsiqHMZWbz7DUDE2BjTVy1WcZAJtukCa7OHJKMZuh/AVCrCUuTrA3TRHJdl4+AR1GpI+UscHwmwZRsRsVAwgjC7v93fdD+zmrTth15XH7vXYkUK/ZAyaK8cAJOg2lCeNCwuw5OWh
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>Analyzing the NMAP output we can see that we found port 6022 open, and it seems that is SSH. We can also view the version of the SSH service (libss 0.8.1).&lt;/p></description></item></channel></rss>

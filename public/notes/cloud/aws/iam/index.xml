@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Hacking Blog</title><link>https://hack.com.cy/notes/cloud/aws/iam/</link><description>Recent content on Hacking Blog</description><generator>Hugo</generator><language>en</language><atom:link href="https://hack.com.cy/notes/cloud/aws/iam/index.xml" rel="self" type="application/rss+xml"/><item><title>Basic IAM Enumeration Cheet Sheet</title><link>https://hack.com.cy/notes/cloud/aws/iam/iam/</link><pubDate>Thu, 21 Aug 2025 00:00:00 +0000</pubDate><guid>https://hack.com.cy/notes/cloud/aws/iam/iam/</guid><description>&lt;h3 id="1-list-iam-users">&lt;strong>1. List IAM Users&lt;/strong>&lt;/h3>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">aws iam list-users
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;hr>
+&lt;h3 id="2-get-user-permissions">&lt;strong>2. Get User Permissions&lt;/strong>&lt;/h3>
+&lt;h4 id="a-list-attached-managed-policies">a. List attached managed policies&lt;/h4>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">aws iam list-attached-user-policies --user-name &lt;span class="o">[&lt;/span>user-name&lt;span class="o">]&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h4 id="b-list-inline-policies">b. List inline policies&lt;/h4>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">aws iam list-user-policies --user-name &lt;span class="o">[&lt;/span>user-name&lt;span class="o">]&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h4 id="c-get-inline-policy-details">c. Get inline policy details&lt;/h4>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">aws iam get-user-policy --user-name &lt;span class="o">[&lt;/span>user-name&lt;span class="o">]&lt;/span> --policy-name &lt;span class="o">[&lt;/span>policy-name&lt;span class="o">]&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;hr>
+&lt;h3 id="3-list-iam-groups-and-permissions">&lt;strong>3. List IAM Groups and Permissions&lt;/strong>&lt;/h3>
+&lt;h4 id="a-list-groups-for-a-user">a. List groups for a user&lt;/h4>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">aws iam list-groups-for-user --user-name &lt;span class="o">[&lt;/span>user-name&lt;span class="o">]&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h4 id="b-list-group-policies">b. List group policies&lt;/h4>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">aws iam list-attached-group-policies --group-name &lt;span class="o">[&lt;/span>group-name&lt;span class="o">]&lt;/span> aws iam list-group-policies --group-name &lt;span class="o">[&lt;/span>group-name&lt;span class="o">]&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h4 id="c-get-inline-group-policy-details">c. Get inline group policy details&lt;/h4>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">aws iam get-group-policy --group-name &lt;span class="o">[&lt;/span>group-name&lt;span class="o">]&lt;/span> --policy-name &lt;span class="o">[&lt;/span>policy-name&lt;span class="o">]&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;hr>
+&lt;h3 id="4-list-iam-roles-and-permissions">&lt;strong>4. List IAM Roles and Permissions&lt;/strong>&lt;/h3>
+&lt;h4 id="a-list-all-roles">a. List all roles&lt;/h4>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">aws iam list-roles
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h4 id="b-get-role-details-trust-policy">b. Get role details (trust policy)&lt;/h4>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">aws iam get-role --role-name &lt;span class="o">[&lt;/span>role-name&lt;span class="o">]&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h4 id="c-list-attached-policies">c. List attached policies&lt;/h4>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">aws iam list-attached-role-policies --role-name &lt;span class="o">[&lt;/span>role-name&lt;span class="o">]&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h4 id="d-list-inline-policies">d. List inline policies&lt;/h4>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">aws iam list-role-policies --role-name &lt;span class="o">[&lt;/span>role-name&lt;span class="o">]&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h4 id="e-get-inline-role-policy-details">e. Get inline role policy details&lt;/h4>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">aws iam get-role-policy --role-name &lt;span class="o">[&lt;/span>role-name&lt;span class="o">]&lt;/span> --policy-name &lt;span class="o">[&lt;/span>policy-name&lt;span class="o">]&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;hr>
+&lt;h3 id="5-get-and-decode-policy-documents">&lt;strong>5. Get and Decode Policy Documents&lt;/strong>&lt;/h3>
+&lt;h4 id="a-get-a-managed-policy-document-by-arn-or-name">a. Get a managed policy document (by ARN or name)&lt;/h4>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">aws iam get-policy --policy-arn &lt;span class="o">[&lt;/span>policy-arn&lt;span class="o">]&lt;/span> aws iam get-policy-version --policy-arn &lt;span class="o">[&lt;/span>policy-arn&lt;span class="o">]&lt;/span> --version-id &lt;span class="o">[&lt;/span>version-id&lt;span class="o">]&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;hr>
+&lt;h3 id="6-view-full-iam-snapshot">&lt;strong>6. View Full IAM Snapshot&lt;/strong>&lt;/h3>
+&lt;h4 id="a-dump-all-iam-permissions-users-roles-groups-policies">a. Dump all IAM permissions (users, roles, groups, policies)&lt;/h4>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">aws iam get-account-authorization-details
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;blockquote>
+&lt;p>Use this to build a full IAM permissions map. Add &lt;code>--filter&lt;/code> to target roles/users/groups specifically.&lt;/p></description></item></channel></rss>

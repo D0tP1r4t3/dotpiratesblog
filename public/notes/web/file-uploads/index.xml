@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Hacking Blog</title><link>https://hack.com.cy/notes/web/file-uploads/</link><description>Recent content on Hacking Blog</description><generator>Hugo</generator><language>en</language><atom:link href="https://hack.com.cy/notes/web/file-uploads/index.xml" rel="self" type="application/rss+xml"/><item><title>Exploting File Upload Functionality</title><link>https://hack.com.cy/notes/web/file-uploads/file-uploads/</link><pubDate>Fri, 15 Aug 2025 00:00:00 +0000</pubDate><guid>https://hack.com.cy/notes/web/file-uploads/file-uploads/</guid><description>&lt;p>Checklist:
+What framework are we traying to attack.
+Check where the validation happens (front-end or back-end).
+Can we bypass blacklist extension filters via capitalization or is there any other extension we can uplaod.
+Check for the acceptance of double extensions on uploaded files.
+Can we inject special characters (e.i, %00) null byte inejection on filename.
+Can we bypass file type restrictions by forging valid magic bytes.
+If supported by the webserver, can you upload .htaccess files&lt;/p></description></item></channel></rss>

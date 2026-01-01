@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Hacking Blog</title><link>https://hack.com.cy/notes/cloud/aws/lambda/</link><description>Recent content on Hacking Blog</description><generator>Hugo</generator><language>en</language><atom:link href="https://hack.com.cy/notes/cloud/aws/lambda/index.xml" rel="self" type="application/rss+xml"/><item><title>Basic Lambda Enumeration Cheet Sheet</title><link>https://hack.com.cy/notes/cloud/aws/lambda/lambda/</link><pubDate>Thu, 21 Aug 2025 00:00:00 +0000</pubDate><guid>https://hack.com.cy/notes/cloud/aws/lambda/lambda/</guid><description>&lt;h3 id="-list-all-lambda-functions">&lt;strong>. List All Lambda Functions&lt;/strong>&lt;/h3>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">aws lambda list-functions --region &lt;span class="o">[&lt;/span>region&lt;span class="o">]&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;blockquote>
+&lt;p>Shows names, runtimes, ARNs, and last modified dates.&lt;/p>&lt;/blockquote>
+&lt;hr>
+&lt;h3 id="2-get-detailed-info-on-a-function">&lt;strong>2. Get Detailed Info on a Function&lt;/strong>&lt;/h3>
+&lt;h4 id="a-get-full-function-config-iam-role-runtime-env-vars-etc">a. Get full function config (IAM role, runtime, env vars, etc.)&lt;/h4>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">aws lambda get-function-configuration --function-name &lt;span class="o">[&lt;/span>&lt;span class="k">function&lt;/span>-name&lt;span class="o">]&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h4 id="b-get-code-download-url--deployment-details">b. Get code download URL + deployment details&lt;/h4>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl"> 
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> aws lambda get-function --function-name &lt;span class="o">[&lt;/span>&lt;span class="k">function&lt;/span>-name&lt;span class="o">]&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;blockquote>
+&lt;p>Returns a pre-signed S3 URL to download the function code.&lt;/p>&lt;/blockquote>
+&lt;hr>
+&lt;h3 id="3-check-invocation-access">&lt;strong>3. Check Invocation Access&lt;/strong>&lt;/h3>
+&lt;h4 id="a-whowhat-can-invoke-the-function-resource-based-policy">a. Who/what can invoke the function (resource-based policy)?&lt;/h4>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">aws lambda get-policy --function-name &lt;span class="o">[&lt;/span>&lt;span class="k">function&lt;/span>-name&lt;span class="o">]&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;blockquote>
+&lt;p>Look for &lt;code>&amp;quot;Principal&amp;quot;: &amp;quot;*&amp;quot;&lt;/code> or cross-account permissions.&lt;/p></description></item></channel></rss>

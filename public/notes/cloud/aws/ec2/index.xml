@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Hacking Blog</title><link>https://hack.com.cy/notes/cloud/aws/ec2/</link><description>Recent content on Hacking Blog</description><generator>Hugo</generator><language>en</language><atom:link href="https://hack.com.cy/notes/cloud/aws/ec2/index.xml" rel="self" type="application/rss+xml"/><item><title>Basic EC2 Enumeration Cheet Sheet</title><link>https://hack.com.cy/notes/cloud/aws/ec2/ec2/</link><pubDate>Thu, 21 Aug 2025 00:00:00 +0000</pubDate><guid>https://hack.com.cy/notes/cloud/aws/ec2/ec2/</guid><description>&lt;h3 id="1-list-ec2-instances">&lt;strong>1. List EC2 Instances&lt;/strong>&lt;/h3>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">aws ec2 describe-instances --region &lt;span class="o">[&lt;/span>region&lt;span class="o">]&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;blockquote>
+&lt;p>Shows instance IDs, public IPs, AMIs, key names, IAM roles, etc.&lt;/p>&lt;/blockquote>
+&lt;p>Use JMESPath filters for cleaner output:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">aws ec2 describe-instances --query &lt;span class="s2">&amp;#34;Reservations[_].Instances[_].[InstanceId,PublicIpAddress,State.Name,KeyName,IamInstanceProfile.Arn]&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;hr>
+&lt;h3 id="2-get-detailed-info-on-a-specific-instance">&lt;strong>2. Get Detailed Info on a Specific Instance&lt;/strong>&lt;/h3>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">aws ec2 describe-instances --instance-ids &lt;span class="o">[&lt;/span>i-xxxxxxxxxxxxxxx&lt;span class="o">]&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;hr>
+&lt;h3 id="3-identify-iam-role-attached-to-the-instance">&lt;strong>3. Identify IAM Role Attached to the Instance&lt;/strong>&lt;/h3>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">aws ec2 describe-instances --query &lt;span class="s2">&amp;#34;Reservations[*].Instances[*].IamInstanceProfile.Arn&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>Then grab role name and enumerate permissions:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">aws iam get-instance-profile --instance-profile-name &lt;span class="o">[&lt;/span>name&lt;span class="o">]&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;hr>
+&lt;h3 id="4-list-security-groups">&lt;strong>4. List Security Groups&lt;/strong>&lt;/h3>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">aws ec2 describe-security-groups
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;blockquote>
+&lt;p>Look for open ports, especially &lt;code>0.0.0.0/0&lt;/code> on SSH (22), RDP (3389), or custom ports.&lt;/p></description></item></channel></rss>

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Hacking Blog</title><link>https://hack.com.cy/writeups/echoctf/badwidth/</link><description>Recent content on Hacking Blog</description><generator>Hugo</generator><language>en</language><atom:link href="https://hack.com.cy/writeups/echoctf/badwidth/index.xml" rel="self" type="application/rss+xml"/><item><title>echoCTF Badwidth Writeup: Command Injection to Root</title><link>https://hack.com.cy/writeups/echoctf/badwidth/badwidth/</link><pubDate>Tue, 03 Jun 2025 00:00:00 +0000</pubDate><guid>https://hack.com.cy/writeups/echoctf/badwidth/badwidth/</guid><description>&lt;h2 id="video-walkthrough">Video Walkthrough&lt;/h2>
+&lt;div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;">
+ &lt;iframe allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; fullscreen" loading="eager" referrerpolicy="strict-origin-when-cross-origin" src="https://www.youtube.com/embed/QZlXwNCp16k?autoplay=0&amp;amp;controls=1&amp;amp;end=0&amp;amp;loop=0&amp;amp;mute=0&amp;amp;start=0" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border:0;" title="YouTube video">&lt;/iframe>
+ &lt;/div>
+
+&lt;p>&lt;a href="https://www.youtube.com/watch?v=QZlXwNCp16k&amp;amp;t=1s">&lt;img src="https://img.shields.io/badge/Watch%20on-YouTube-red?logo=youtube" alt="Watch on YouTube">&lt;/a>&lt;/p>
+&lt;h1 id="badwidth">Badwidth&lt;/h1>
+&lt;h1 id="enumeration">Enumeration&lt;/h1>
+&lt;h2 id="nmap-port-scan">NMAP Port Scan&lt;/h2>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">sudo nmap -nvv -p- 10.0.50.0 -T4 -sC -sV
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="output">Output&lt;/h2>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">PORT STATE SERVICE REASON VERSION
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">1337/tcp open http syn-ack ttl &lt;span class="m">63&lt;/span> Node.js Express framework
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">|&lt;/span>_http-title: Site doesn&lt;span class="err">&amp;#39;&lt;/span>t have a title &lt;span class="o">(&lt;/span>text/plain&lt;span class="p">;&lt;/span> &lt;span class="nv">charset&lt;/span>&lt;span class="o">=&lt;/span>utf-8&lt;span class="o">)&lt;/span>.
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">|&lt;/span> http-methods: 
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">|&lt;/span>_ Supported Methods: POST GET HEAD
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>Analyzing the NMAP scan we can see there is 1 port open 1337.
+It seems that its a webserver using &lt;code>Node.js Express framework&lt;/code>.&lt;/p></description></item></channel></rss>

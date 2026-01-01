@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Event Log Readers on Hacking Blog</title><link>https://hack.com.cy/tags/event-log-readers/</link><description>Recent content in Event Log Readers on Hacking Blog</description><generator>Hugo</generator><language>en</language><lastBuildDate>Thu, 01 Jan 2026 02:13:14 +0200</lastBuildDate><atom:link href="https://hack.com.cy/tags/event-log-readers/index.xml" rel="self" type="application/rss+xml"/><item><title>Abusing Windows Groups</title><link>https://hack.com.cy/notes/privilege-escalation/windows/groups/groups/</link><pubDate>Fri, 08 Aug 2025 00:00:00 +0000</pubDate><guid>https://hack.com.cy/notes/privilege-escalation/windows/groups/groups/</guid><description>&lt;h1 id="abusing-windows-group-privileges">Abusing Windows Group Privileges&lt;/h1>
+&lt;p>Understanding and leveraging Windows group privileges is a critical aspect of system security and penetration testing. This guide delves into the capabilities and potential abuse of several key Windows groups, including their privileges and methods of exploitation.&lt;/p>
+&lt;hr>
+&lt;hr>
+&lt;h2 id="-windows-built-in-groups-">** Windows Built-in Groups **&lt;/h2>
+&lt;p>&lt;strong>Overview&lt;/strong>: Windows built-in groups come with predefined privileges. A detailed list of these groups and their functionalities is available:&lt;/p>
+&lt;ul>
+&lt;li>&lt;a href="https://ss64.com/nt/syntax-security_groups.html">Windows Built-in Groups&lt;/a>&lt;/li>
+&lt;li>&lt;a href="https://docs.microsoft.com/en-us/windows-server/identity/ad-ds/plan/security-best-practices/appendix-b--privileged-accounts-and-groups-in-active-directory">Privileged Accounts and Groups in Active Directory&lt;/a>&lt;/li>
+&lt;/ul>
+&lt;hr>
+&lt;hr>
+&lt;h1 id="backup-operators">Backup Operators&lt;/h1>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-powershell" data-lang="powershell">&lt;span class="line">&lt;span class="cl">&lt;span class="c">## List our current group membership&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="n">whoami&lt;/span> &lt;span class="p">/&lt;/span>&lt;span class="n">groups&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c">## Assuming we are in the `Backup Operators` group&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c">## Memebers of this group grant the following privilages:&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">-&lt;/span> &lt;span class="n">SeBckup&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">-&lt;/span> &lt;span class="n">SeRestore&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c">## SeBackup&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="n">Allows&lt;/span> &lt;span class="n">us&lt;/span> &lt;span class="n">to&lt;/span> &lt;span class="nb">copy &lt;/span>&lt;span class="n">a&lt;/span> &lt;span class="n">file&lt;/span> &lt;span class="n">from&lt;/span> &lt;span class="n">a&lt;/span> &lt;span class="n">folder&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">even&lt;/span> &lt;span class="k">if&lt;/span> &lt;span class="n">there&lt;/span> &lt;span class="n">are&lt;/span> &lt;span class="n">access&lt;/span> &lt;span class="n">controls&lt;/span> &lt;span class="k">in&lt;/span> &lt;span class="n">place&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="n">ACE&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="n">ACL&lt;/span>&lt;span class="p">).&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="references">References&lt;/h2>
+&lt;p>## We can use the following &lt;code>PoC&lt;/code> to exploit &lt;code>SeBackupPrivilege&lt;/code>
+(1) &lt;a href="https://github.com/giuliano108/SeBackupPrivilege">PoC&lt;/a>&lt;/p></description></item></channel></rss>

@@ -1,0 +1,25 @@
+:root {
+  /* Primary Backgrounds */
+  --background: #0a0e14;
+  --background-secondary: #151a21;
+
+  /* Primary Foregrounds */
+  --foreground: #e6edf3;
+  --foreground-dim: #8b949e;
+
+  /* Accent Colors */
+  --accent: #00ff41;
+  --accent-secondary: #00d9ff;
+  --accent-danger: #ff006e;
+  --accent-warning: #ffbe0b;
+
+  /* Code Block Colors */
+  --code-bg: #0d1117;
+  --code-border: #30363d;
+  --code-accent: #58a6ff;
+
+  /* Effect Colors */
+  --glow-accent: rgba(0, 255, 65, 0.3);
+  --glow-secondary: rgba(0, 217, 255, 0.3);
+  --shadow-primary: rgba(0, 0, 0, 0.5);
+}

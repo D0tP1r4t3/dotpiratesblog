@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>S3 Bucket on Hacking Blog</title><link>https://hack.com.cy/tags/s3-bucket/</link><description>Recent content in S3 Bucket on Hacking Blog</description><generator>Hugo</generator><language>en</language><lastBuildDate>Thu, 01 Jan 2026 02:13:14 +0200</lastBuildDate><atom:link href="https://hack.com.cy/tags/s3-bucket/index.xml" rel="self" type="application/rss+xml"/><item><title>Basic S3 Bucket Enumeration Cheet Sheet</title><link>https://hack.com.cy/notes/cloud/aws/s3/s3/</link><pubDate>Thu, 21 Aug 2025 00:00:00 +0000</pubDate><guid>https://hack.com.cy/notes/cloud/aws/s3/s3/</guid><description>&lt;h3 id="1-list-buckets-in-the-authenticated-account">&lt;strong>1. List Buckets in the Authenticated Account&lt;/strong>&lt;/h3>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">aws s3 ls
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;hr>
+&lt;h3 id="2-check-if-a-bucket-exists-no-auth">&lt;strong>2. Check if a Bucket Exists (No Auth)&lt;/strong>&lt;/h3>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">aws s3 ls s3://&lt;span class="o">[&lt;/span>bucket-name&lt;span class="o">]&lt;/span> --no-sign-request
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;hr>
+&lt;h3 id="3-list-contents-of-a-public-or-accessible-bucket">&lt;strong>3. List Contents of a Public or Accessible Bucket&lt;/strong>&lt;/h3>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">aws s3 ls s3://&lt;span class="o">[&lt;/span>bucket-name&lt;span class="o">]&lt;/span>/&lt;span class="o">[&lt;/span>optional-path&lt;span class="o">]&lt;/span> --no-sign-request
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;hr>
+&lt;h3 id="4-download-an-object">&lt;strong>4. Download an Object&lt;/strong>&lt;/h3>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">aws s3 cp s3://&lt;span class="o">[&lt;/span>bucket-name&lt;span class="o">]&lt;/span>/&lt;span class="o">[&lt;/span>key&lt;span class="o">]&lt;/span> &lt;span class="o">[&lt;/span>local-file&lt;span class="o">]&lt;/span> --no-sign-request
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;hr>
+&lt;h3 id="5-upload-a-file-test-write-access">&lt;strong>5. Upload a File (Test Write Access)&lt;/strong>&lt;/h3>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">aws s3 cp test.txt s3://&lt;span class="o">[&lt;/span>bucket-name&lt;span class="o">]&lt;/span>/test.txt
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;blockquote>
+&lt;p>Only works if write access is allowed.&lt;/p></description></item></channel></rss>

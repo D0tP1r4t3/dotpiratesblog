@@ -11,7 +11,7 @@ Thumbs.db
 desktop.ini
 
 # Hugo
-/public/
+# /public/  # Commented out - we need to commit public folder for Hostinger
 /resources/_gen/
 .hugo_build.lock
 

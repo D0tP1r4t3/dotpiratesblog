@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>My personal Methdology against Windows PE on Hacking Blog</title><link>https://hack.com.cy/notes/privilege-escalation/windows/mymethodology/</link><description>Recent content in My personal Methdology against Windows PE on Hacking Blog</description><generator>Hugo</generator><language>en</language><atom:link href="https://hack.com.cy/notes/privilege-escalation/windows/mymethodology/index.xml" rel="self" type="application/rss+xml"/><item><title/><link>https://hack.com.cy/notes/privilege-escalation/windows/mymethodology/mymethodology/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://hack.com.cy/notes/privilege-escalation/windows/mymethodology/mymethodology/</guid><description>&lt;h1 id="quick-wins">Quick Wins&lt;/h1>
+&lt;h2 id="powershell-history">Powershell History&lt;/h2>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-cmd" data-lang="cmd">&lt;span class="line">&lt;span class="cl"># Powershell 5.0 in Windows 10, PowerShell stores command history to the file
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"># Checking Powershell History
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">PS C:\dotpirate&lt;span class="p">&amp;gt;&lt;/span> Get-History
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"># PowerShell v5, v5.1, and v7 is included
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"># Retrieve the history from PSReadline
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">PS C:\dotpirate&lt;span class="p">&amp;gt;&lt;/span> (Get-PSReadLineOption).HistorySavePath
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">PS C:\dotpirate&lt;span class="p">&amp;gt;&lt;/span> gc (Get-PSReadLineOption).HistorySavePath
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="k">type&lt;/span> C:\Users\dotpirate\AppData\Roaming\Microsoft\Windows\PowerShell\PSReadLine\ConsoleHost_history.txt
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">cat &lt;span class="s2">&amp;#34;C:\Users\dotpirate\AppData\Roaming\Microsoft\Windows\PowerShell\PSReadLine\ConsoleHost_history.txt&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="always-installed-elevated">Always Installed Elevated&lt;/h2>
+&lt;blockquote>
+&lt;p>Check if its enabled (if &lt;code>0x1&lt;/code> appears we are good to go )&lt;/p></description></item></channel></rss>

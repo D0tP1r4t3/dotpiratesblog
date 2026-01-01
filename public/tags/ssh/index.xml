@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>SSH on Hacking Blog</title><link>https://hack.com.cy/tags/ssh/</link><description>Recent content in SSH on Hacking Blog</description><generator>Hugo</generator><language>en</language><lastBuildDate>Thu, 01 Jan 2026 02:13:14 +0200</lastBuildDate><atom:link href="https://hack.com.cy/tags/ssh/index.xml" rel="self" type="application/rss+xml"/><item><title>Transfering files using SSH Protocol with scp</title><link>https://hack.com.cy/notes/file-transfers/ssh/ssh/</link><pubDate>Tue, 12 Aug 2025 00:00:00 +0000</pubDate><guid>https://hack.com.cy/notes/file-transfers/ssh/ssh/</guid><description>&lt;p>Utilizing scp to upload and download files and directories from or on the target system.&lt;/p>
+&lt;h1 id="uploading-filesdirectories">Uploading Files/Directories&lt;/h1>
+&lt;h2 id="upload-a-file">Upload a File&lt;/h2>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">scp upc.sh victim@192.168.179.214:/home/victim
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="upload-a-directory">Upload a Directory&lt;/h2>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">scp -r unix-privesc-check victim@192.168.179.214:/home/victim
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;hr>
+&lt;h1 id="downloading-filesdirectories">Downloading Files/Directories&lt;/h1>
+&lt;h2 id="download-a-file">Download a File&lt;/h2>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">scp victim@192.168.179.214:/home/victim/upc.sh upc.sh 
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="download-a-directory">Download a Directory&lt;/h2>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">scp -r victim@192.168.179.214:/home/victim/unix-privesc-check unix-privesc-check 
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div></description></item></channel></rss>
