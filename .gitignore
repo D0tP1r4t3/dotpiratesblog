@@ -1,0 +1,20 @@
+# IDE files
+.vs/
+.vscode/
+*.swp
+*.swo
+*~
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Hugo
+/public/
+/resources/_gen/
+.hugo_build.lock
+
+# Temporary files
+*.bak
+*.tmp

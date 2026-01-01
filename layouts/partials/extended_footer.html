@@ -1,0 +1,19 @@
+{{- /* Extended footer for custom additions */ -}}
+
+<!-- Search Overlay -->
+<div id="search-overlay">
+  <div class="search-container">
+    <input
+      type="search"
+      id="search-input"
+      placeholder="Search writeups, notes, and more..."
+      autocomplete="off"
+      aria-label="Search"
+    />
+    <div class="search-hint">
+      Press <kbd>ESC</kbd> to close or <kbd>/</kbd> to open search
+    </div>
+    <div id="search-results"></div>
+  </div>
+  <button class="search-close" onclick="hideSearch()" aria-label="Close search">×</button>
+</div>

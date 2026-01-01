@@ -1,0 +1,115 @@
+baseurl = "https://hack.com.cy/"
+languageCode = "en-us"
+# Add it only if you keep the theme in the `themes` directory.
+# Remove it if you use the theme as a remote Hugo Module.
+theme = "terminal"
+pagerSize = 17
+enableGitInfo = true
+
+# Enable JSON output for search functionality
+[outputs]
+  home = ["HTML", "RSS", "JSON"]
+  section = ["HTML", "RSS"]
+
+
+[params]
+  # dir name of your main content (default is `content/posts`).
+  # the list of set content will show up on your index page (baseurl).
+  contentTypeName = "posts"
+
+  # if you set this to 0, only submenu trigger will be visible
+  showMenuItems = 4
+
+  # show selector to switch language
+  showLanguageSelector = false
+
+  # set theme to full screen width
+  fullWidthTheme = false
+
+  # center theme with default width
+  centerTheme = true
+
+  # if your resource directory contains an image called `cover.(jpg|png|webp)`,
+  # then the file will be used as a cover automatically.
+  # With this option you don't have to put the `cover` param in a front-matter.
+  autoCover = true
+
+  # set post to show the last updated
+  # If you use git, you can set `enableGitInfo` to `true` and then post will automatically get the last updated
+  showLastUpdated = true
+
+  # Provide a string as a prefix for the last update date. By default, it looks like this: 2020-xx-xx [Updated: 2020-xx-xx] :: Author
+  updatedDatePrefix = "Updated"
+
+  # whether to show a page's estimated reading time
+  readingTime = true
+
+  # whether to show a table of contents
+  # can be overridden in a page's front-matter
+  Toc = true
+
+  # set title for the table of contents
+  # can be overridden in a page's front-matter
+  TocTitle = "Contents"
+
+
+[params.twitter]
+  # set Twitter handles for Twitter cards
+  # see https://developer.twitter.com/en/docs/tweets/optimize-with-cards/guides/getting-started#card-and-content-attribution
+  # do not include @
+  creator = "Christoforos Leontiou"
+  site = ""
+
+[languages]
+  [languages.en]
+    languageName = "English"
+    title = "Hacking Blog"
+
+    [languages.en.params]
+      subtitle = "CTF Writeups, Notes & Hacking Journey"
+      owner = "dotpirate"
+      keywords = "CTF, hacking, cybersecurity, notes, writeups"
+      copyright = "© 2025 dotpirate"
+      menuMore = "Show more"
+      readMore = "Read more"
+      readOtherPosts = "Read other posts"
+      newerPosts = "Newer posts"
+      olderPosts = "Older posts"
+      missingContentMessage = "Page not found..."
+      missingBackButtonLabel = "Back to home page"
+      minuteReadingTime = "min read"
+      words = "words"
+
+      [languages.en.params.logo]
+        logoText = "Hacking Vault"
+        logoHomeLink = "/why/"
+
+      [languages.en.menu]
+        [[languages.en.menu.main]]
+          identifier = "why"
+          name = "Why"
+          url = "/why/"
+          weight = 1
+
+        [[languages.en.menu.main]]
+          identifier = "whoami"
+          name = "Whoami"
+          url = "/whoami/"
+          weight = 2
+
+        [[languages.en.menu.main]]
+          identifier = "writeups"
+          name = "Writeups"
+          url = "/writeups/"
+          weight = 3
+
+        [[languages.en.menu.main]]
+          identifier = "notes"
+          name = "Notes"
+          url = "/notes/"
+          weight = 4
+
+[markup]
+  [markup.highlight]
+    noClasses = false
+    style = "monokai"

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="{{ $.Site.Language }}">
+<head>
+  {{ block "title" . }}
+    <title>{{ if .IsHome }}{{ $.Site.Title }}{{ else }}{{ .Title }} :: {{ $.Site.Title }}{{ end }}</title>
+  {{ end }}
+  {{ partial "head.html" . }}
+</head>
+<body>
+{{ $container := cond ($.Site.Params.FullWidthTheme | default false) "container full" (cond ($.Site.Params.CenterTheme | default false) "container center" "container") }}
+
+<div class="{{- $container -}}{{- cond ($.Site.Params.oneHeadingSize | default false) " headings--one-size" "" }}">
+
+  {{ partial "header.html" . }}
+
+  <div class="content">
+    {{ block "main" . }}
+    {{ end }}
+  </div>
+
+  <!-- Sidebar 
+  <aside style="width: 250px; flex-shrink: 0; border-right: 1px solid #ddd; padding-right: 15px;">
+    <nav>
+      <h3>Table of Contents</h3>
+      {{ .TableOfContents }}
+    </nav>
+  </aside>
+
+  <!-- Main Content
+  <div class="content" style="flex-grow: 1;">
+    {{ block "main" . }}
+    {{ end }}
+  </div>-->
+
+  {{ block "footer" . }}
+    {{ partial "footer.html" . }}
+  {{ end }}
+</div>
+
+</body>
+</html>

@@ -1,0 +1,46 @@
+{{ $site := .Site }}
+
+<nav class="site-nav">
+  <h2 class="site-nav-title">Contents</h2>
+
+  <ul class="site-nav-list">
+    {{ range $sect := $site.Sections }}
+      <li class="site-section">
+        <a href="{{ $sect.Permalink }}">{{ $sect.Title }}</a>
+
+        {{ if gt (len $sect.Sections) 0 }}
+          <ul class="site-subsections">
+            {{ range $sub := $sect.Sections }}
+              <li>
+                <a href="{{ $sub.Permalink }}">{{ $sub.Title }}</a>
+
+                {{ if gt (len $sub.Pages) 0 }}
+                  <ul class="site-pages">
+                    {{ range $p := $sub.Pages.ByTitle }}
+                      <li><a href="{{ $p.Permalink }}">{{ $p.Title }}</a></li>
+                    {{ end }}
+                  </ul>
+                {{ end }}
+              </li>
+            {{ end }}
+          </ul>
+
+        {{ else if gt (len $sect.Pages) 0 }}
+          <ul class="site-pages">
+            {{ range $p := $sect.Pages.ByTitle }}
+              <li><a href="{{ $p.Permalink }}">{{ $p.Title }}</a></li>
+            {{ end }}
+          </ul>
+        {{ end }}
+      </li>
+    {{ end }}
+  </ul>
+
+  {{/* Optional: per-page TOC below the global navigation */}}
+  {{ with .TableOfContents }}
+  <div class="page-toc">
+    <h3>On this page</h3>
+    {{ . }}
+  </div>
+  {{ end }}
+</nav>

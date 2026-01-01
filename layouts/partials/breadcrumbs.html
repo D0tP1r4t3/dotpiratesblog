@@ -1,0 +1,104 @@
+{{- if not .IsHome -}}
+<nav class="breadcrumbs" aria-label="Breadcrumb">
+  <ol class="breadcrumb-list">
+    <li class="breadcrumb-item">
+      <a href="{{ .Site.BaseURL }}" class="breadcrumb-link">
+        <span class="breadcrumb-icon">~</span>Home
+      </a>
+    </li>
+
+    {{- $parents := slice -}}
+    {{- $current := . -}}
+
+    {{- range $i, $e := .Ancestors.Reverse -}}
+      {{- if ne .Kind "home" -}}
+        {{- $parents = $parents | append . -}}
+      {{- end -}}
+    {{- end -}}
+
+    {{- range $parents -}}
+      <li class="breadcrumb-separator">/</li>
+      <li class="breadcrumb-item">
+        <a href="{{ .Permalink }}" class="breadcrumb-link">
+          {{ .Title }}
+        </a>
+      </li>
+    {{- end -}}
+
+    <li class="breadcrumb-separator">/</li>
+    <li class="breadcrumb-item breadcrumb-current" aria-current="page">
+      <span class="breadcrumb-text">{{ .Title }}</span>
+    </li>
+  </ol>
+</nav>
+
+<style>
+/* Breadcrumb Navigation */
+.breadcrumbs {
+  margin: 20px 0 30px 0;
+  padding: 10px 15px;
+  background: var(--background-secondary);
+  border-left: 3px solid var(--accent);
+  border-right: 1px solid var(--code-border);
+  border-top: 1px solid var(--code-border);
+  border-bottom: 1px solid var(--code-border);
+}
+
+.breadcrumb-list {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  gap: 8px;
+  font-size: 0.9rem;
+}
+
+.breadcrumb-item {
+  display: inline-flex;
+  align-items: center;
+}
+
+.breadcrumb-link {
+  color: var(--accent-secondary);
+  text-decoration: none;
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.breadcrumb-link:hover {
+  color: var(--accent);
+  text-shadow: 0 0 5px var(--glow-accent);
+}
+
+.breadcrumb-icon {
+  color: var(--accent);
+  font-weight: bold;
+}
+
+.breadcrumb-separator {
+  color: var(--code-border);
+  user-select: none;
+}
+
+.breadcrumb-current .breadcrumb-text {
+  color: var(--foreground);
+  font-weight: bold;
+}
+
+/* Mobile adjustments */
+@media (max-width: 684px) {
+  .breadcrumbs {
+    font-size: 0.85rem;
+    overflow-x: auto;
+  }
+
+  .breadcrumb-list {
+    flex-wrap: nowrap;
+  }
+}
+</style>
+{{- end -}}
