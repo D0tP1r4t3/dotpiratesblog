@@ -15,7 +15,8 @@ enableGitInfo = true
 [params]
   # dir name of your main content (default is `content/posts`).
   # the list of set content will show up on your index page (baseurl).
-  contentTypeName = "posts"
+  # Disabled to use custom homepage template instead
+  # contentTypeName = "posts"
 
   # if you set this to 0, only submenu trigger will be visible
   showMenuItems = 4
