@@ -99,7 +99,6 @@
       {{ range first 8 (where .Site.RegularPages "Section" "notes") }}
         <article class="note-item">
           <a href="{{ .Permalink }}" class="note-link">
-            <span class="note-icon">📝</span>
             <span class="note-title">{{ .Title }}</span>
             {{ with .Params.categories }}
               <span class="note-category">{{ index . 0 }}</span>
@@ -330,10 +329,6 @@
   padding: 12px 15px;
   text-decoration: none;
   color: var(--foreground);
-}
-
-.note-icon {
-  font-size: 1.2rem;
 }
 
 .note-title {
