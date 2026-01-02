@@ -10,6 +10,11 @@
 <!-- Additional Performance Hint -->
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 
+<!-- Homepage specific CSS -->
+{{ if .IsHome }}
+<link rel="stylesheet" href="{{ "homepage.css" | absURL }}">
+{{ end }}
+
 <!-- Fuse.js for search functionality -->
 <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.6.2/dist/fuse.min.js"></script>
 
